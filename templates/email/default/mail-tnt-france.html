@@ -25,12 +25,20 @@
             {if count($parcel_responses) > 1}
                 <p>{intl l="You can check the status of your packages at any time here :"}</p>
                 {foreach from=$parcel_responses key=k item=parcel_response}
+                    <br />
+                    {foreach from=$parcel_response.order_products item=order_product}
+                    - {$order_product.order_product_title}<br />
+                    {/foreach}
                     {intl l="Package %number :" number="{math equation='x + 1' x=$k}"}&nbsp;{$parcel_response.TrackingUrl}<br/>
                     {intl l="Ref package"}&nbsp;:&nbsp;{$parcel_response.Id}<br /><br />
                 {/foreach}
             {else}
                 <p>{intl l="You can check the status of your package at any time here :"}</p>
                 {foreach from=$parcel_responses item=parcel_response}
+                    <br />
+                    {foreach from=$parcel_response.order_products item=order_product}
+                    - {$order_product.order_product_title}<br />
+                    {/foreach}
                     {$parcel_response.TrackingUrl}<br/>
                 {/foreach}
             {/if}

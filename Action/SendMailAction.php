@@ -12,16 +12,13 @@
 
 namespace TNTFrance\Action;
 
+use Propel\Runtime\ActiveQuery\Criteria;
+use Thelia\Model\Map\OrderProductTableMap;
 use Thelia\Model\Order;
-use Thelia\Model\OrderStatusQuery;
-use Thelia\Model\OrderVersionQuery;
 use TNTFrance\Event\Module\TNTFranceEvents;
 use TNTFrance\Event\Module\TNTFrancePrintExpeditionEvent;
 use TNTFrance\Model\TntOrderParcelResponseQuery;
-use TNTFrance\TNTFrance;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Thelia\Core\Event\Order\OrderEvent;
-use Thelia\Core\Event\TheliaEvents;
 use Thelia\Mailer\MailerFactory;
 
 /**
@@ -66,6 +63,18 @@ class SendMailAction implements EventSubscriberInterface
 
             /** @var \TNTFrance\Model\TntOrderParcelResponse $response */
             foreach ($responses as $response) {
+                //Get all the concerned orderProducts
+                $listConcernedOrderProduct = TntOrderParcelResponseQuery::create()
+                    ->useOrderProductQuery()
+                    ->endUse()
+                    ->filterByFileName($response->getFileName(), Criteria::LIKE)
+                    ->groupByOrderProductId()
+                    ->withColumn(OrderProductTableMap::TITLE, 'order_product_title')
+                    ->find()
+                    ->toArray()
+                ;
+
+                $response->setVirtualColumn('order_products', $listConcernedOrderProduct);
                 $parcelResponses[] = $response->toArray();
             }
 
