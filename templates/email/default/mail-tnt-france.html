@@ -1,0 +1,39 @@
+{extends file="email-layout.tpl"}
+
+{* Subject  *}
+{block name="email-subject"}
+    {default_translation_domain domain="tntfrance.email.default"}
+    {default_locale locale={$locale}}
+    {intl l="Your order %ref has been shipped" ref={$REF}}
+{/block}
+
+{* Title  *}
+{block name="email-title"}
+    {default_translation_domain domain="tntfrance.email.default"}
+    {default_locale locale={$locale}}
+    {intl l="Hi,"}
+{/block}
+
+{* Content  *}
+{block name="email-content"}
+    {default_translation_domain domain="tntfrance.email.default"}
+    {default_locale locale={$locale}}
+
+    {loop name="order.invoice" type="order" id={$order_id} customer="*" limit="1" backend_context="1"}
+        <p>{intl l="Your order %ref has been shipped with TNTFrance." ref={$REF}}</p>
+        {if !empty($parcel_responses)}
+            {if count($parcel_responses) > 1}
+                <p>{intl l="You can check the status of your packages at any time here :"}</p>
+                {foreach from=$parcel_responses key=k item=parcel_response}
+                    {intl l="Package %number :" number="{math equation='x + 1' x=$k}"}&nbsp;{$parcel_response.TrackingUrl}<br/>
+                    {intl l="Ref package"}&nbsp;:&nbsp;{$parcel_response.Id}<br /><br />
+                {/foreach}
+            {else}
+                <p>{intl l="You can check the status of your package at any time here :"}</p>
+                {foreach from=$parcel_responses item=parcel_response}
+                    {$parcel_response.TrackingUrl}<br/>
+                {/foreach}
+            {/if}
+        {/if}
+    {/loop}
+{/block}

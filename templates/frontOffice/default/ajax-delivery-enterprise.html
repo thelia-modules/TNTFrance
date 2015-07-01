@@ -1,0 +1,23 @@
+{extends 'ajax-delivery-layout.tpl'}
+
+{block name="title"}{intl l='Enterprise delivery'}{/block}
+
+{block name="form"}
+    <div class="row">
+    {if $params.cities}
+        <div class="form-group col-sm-4">
+            <label for="tnt-city">{intl l='Select your city'}</label>
+            <select name="tnt_city" id="tnt_city" class="form-control tnt-control">
+                {$selectedCity = $data.city}
+                {foreach $params.cities as $city}
+                    <option value="{$city}" {if $city == $selectedCity}checked="checked"{/if}>{$city}</option>
+                {/foreach}
+            </select>
+        </div>
+    {/if}
+    <div class="form-group col-sm-12">
+        <label for="tnt_instructions">{intl l='Instructions'}</label>
+        <textarea name="tnt_instructions" id="tnt_instructions" value="{$data.tnt_instructions}" row="3" class="form-control tnt-control"></textarea>
+    </div>
+    </div>
+{/block}

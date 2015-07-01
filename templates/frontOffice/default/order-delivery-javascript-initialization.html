@@ -1,0 +1,458 @@
+<script type="text/javascript">
+
+(function ($) {
+
+    var tntFranceId = '{$tnt_france_id}';
+    var tntFranceUrl = '{url path="/module/TNTFrance"}';
+    var tntFranceMessages = {ldelim}
+        'notValid': "{intl l='TNT France is not configured correctly' d='tntfrance.fo.default'}",
+        'selectDepot': "{intl l='Please select a depot' d='tntfrance.fo.default'}",
+        'selectDop': "{intl l='Please select a drop off point' d='tntfrance.fo.default'}"
+    {rdelim};
+
+    {literal}
+    var TntFrance = (function () {
+
+        // privates
+        var defaults = {
+                'id': 0,
+                'url': '',
+                'loaded': false,
+                'selected': false,
+                'container': '#tntfrance-services',
+                'servicesRadio': 'input#tnt_service',
+                'serviceCode': 'input#tnt_serviceCode',
+                'serviceContainer': '#tntfrance-service-content-',
+                'serviceSave': '.tnt-save-configuration',
+                'map': 'tnt-map',
+                'messages' : {}
+            },
+            config = {};
+
+        var $moduleRadio = null,
+            $container = null,
+            $serviceContainer = null,
+            $places = null,
+            currentService = null,
+            map = null,
+            mapMarkers = null;
+
+        function loadService() {
+
+            var service = $(config.servicesRadio).val();
+            if (service == "") {
+                service = $container.find('.tntfrance-panel').first().data('service');
+                $container.find('.tntfrance-panel').first().parent().addClass('active');
+                $(config.servicesRadio).val(service);
+            }
+
+            if (currentService != null) {
+                removeService(currentService);
+            }
+
+            currentService = service;
+
+            $( config.serviceContainer + service ).load(
+                config.url + '/service/' + service,
+                function() { 
+                    updateService(service); 
+                    if (service === "ENTERPRISE" || service === "INDIVIDUAL"){
+                        $('.js-tnt-save-configuration').click();
+                    }
+                }
+            );
+        }
+
+        function updateService( service ) {
+
+            $serviceContainer = $(config.serviceContainer + service);
+
+            $serviceContainer.parent().addClass('active');
+
+            // test if there is a configuration to save
+            $serviceSave = $serviceContainer.find(config.serviceSave);
+            if ($serviceSave.length > 0) {
+                $serviceSave.on('click', saveConfiguration);
+            }
+
+            $hasMap = $serviceContainer.find('#' + config.map);
+            if ($hasMap.length > 0) {
+                initializeMap();
+
+                if (service == 'DEPOT') {
+                    $serviceContainer.find('.js-tnt-search-depot').on('click', updateDepot);
+                    updateDepot();
+                } else if(service == 'DROPOFFPOINT') {
+                    $serviceContainer.find('.js-tnt-search-dropoffpoint').on('click', updateDropOffPoint);
+                    updateDropOffPoint();
+                }
+
+            }
+
+        }
+
+        function removeService( currentService ) {
+            if ($serviceSave.length > 0) {
+                $serviceSave.off('click', saveConfiguration);
+            }
+
+            $serviceContainer.html('');
+        }
+
+        function saveConfiguration() {
+            var data = {};
+
+            $container.find('.tnt-control').each(function() {
+                data[$(this).attr("name")] = $(this).val()
+            });
+
+            if ((currentService == 'DEPOT' && ! $('#tnt_pexcode').val()) || (currentService == 'DROPOFFPOINT' && ! $('#tnt_xettcode').val())) {
+                alert( currentService == 'DEPOT' ? config.messages.selectDepot : config.messages.selectDop)
+                return false;
+            }
+
+            $.ajax({
+                method: "POST",
+                url: config.url + '/save',
+                data: data
+            })
+            .done(function( feasibility ) {
+                var html = feasibility.content;
+                var count = $('input[name="tnt_serviceCode"]', html).length;
+                displayFeasibility(feasibility);
+                /*
+                if (count === 1){
+                    $('.btn-checkout-next').click();
+                }
+                */
+
+            });
+        }
+
+        function updateDepot() {
+            var department = $('#tnt_department').val();
+
+            $.ajax({
+                method: "GET",
+                url: config.url + '/searchDepot/' + encodeURIComponent(department)
+            })
+            .done(function( data ) {
+                $serviceContainer.find('.tnt-places').html(data);
+                $places = $serviceContainer.find('.tnt-places > .tnt-place');
+
+                updateMap();
+            });
+        }
+
+        function updateDropOffPoint() {
+            var $zipCode = $('#tnt_zipCode');
+            var $city = $('#tnt_city');
+
+            $city.off("change", searchDropOffPoint);
+
+            $.ajax({
+                method: "GET",
+                dataType: 'json',
+                url: config.url + '/searchCities/' + encodeURIComponent($zipCode.val())
+            })
+            .done(function( data ) {
+                var select = $city.get(0),
+                    city = $city.data('city'),
+                    selectedIndex = 0,
+                    i = 0;
+
+                select.options.length = 0;
+
+                if (data.length > 0) {
+                    for (; i < data.length ; i++) {
+                        if (city == data[i]) {
+                            selectedIndex = i;
+                        }
+                        select.options[select.options.length] = new Option(data[i], data[i]);
+                    }
+                    select.selectedIndex = selectedIndex;
+
+                    $city.on("change", searchDropOffPoint);
+                    searchDropOffPoint();
+                }
+            });
+        }
+
+        function searchDropOffPoint() {
+            var zipCode = $('#tnt_zipCode').val(),
+                city = $('#tnt_city').val();
+
+            $.ajax({
+                method: "GET",
+                url: config.url + '/searchDropOffPoint/'
+                    + encodeURIComponent(zipCode) + '/'
+                    + encodeURIComponent(city)
+            }).done(function( data ) {
+                $serviceContainer.find('.tnt-places').html(data);
+                $places = $serviceContainer.find('.tnt-places > .tnt-place');
+
+                updateMap();
+            });
+        }
+
+        function initializeMap() {
+            if (map != null) {
+                map.remove();
+                mapMarkers = null;
+            }
+
+            map = L.map('tnt-map').setView([45.77752, 3.08026], 14);
+
+            mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
+
+            L.tileLayer(
+                'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                {
+                    attribution: 'Map data &copy; ' + mapLink,
+                    maxZoom: 18
+                }
+            ).addTo(map);
+
+        }
+
+        function updateMap() {
+
+            // remove markers
+            if (mapMarkers != null) {
+                map.removeLayer(mapMarkers);
+                mapMarkers = null;
+            }
+
+            if ($places.length == 0) {
+                $('#' + config.map).hide();
+                // todo display an alert
+                return;
+            }
+
+            map.setView(getCenterPoint(), 14);
+
+            mapMarkers = new L.FeatureGroup();
+
+            $places.each(function () {
+                var marker = L.marker([$(this).data('lat'), $(this).data('lng')])
+                    .bindPopup($(this).html())
+                    .addTo(map)
+                    .on('popupopen', function(e){
+                        var $sel = $(this);
+                        var $content = $(e.popup._contentNode);
+                        var $place = $content.find('.js-tnt-place-select');
+                        var id = $place.data('id');
+                        TntFrance.selectPlace($place.get(0));
+                        scrollToPlace(id);               
+                        TntFrance.saveConfiguration($place.get(0));
+                    });
+                mapMarkers.addLayer(marker);
+            });
+
+            $('#' + config.map).show();
+        }
+
+        function getCenterPoint( data ) {
+            var center = {
+                lat: 0,
+                lng: 0
+            };
+
+            if ($places.length > 0) {
+                $places.each(function () {
+                    center.lat += $(this).data('lat');
+                    center.lng += $(this).data('lng');
+                });
+                center.lat /= $places.length;
+                center.lng /= $places.length;
+            }
+
+            return center;
+        }
+
+        function scrollToPlace (id){
+            $('.tnt-place').removeClass('tnt-place-selected');
+            var parent = $('.tnt-places');
+            var parH = parent[0].scrollHeight;
+            var that = $('#tnt-place-'+id);
+
+            var thatH = that[0].offsetTop;
+            that.addClass('tnt-place-selected');
+            $(parent).animate({ scrollTop: thatH }, 500);
+        }
+
+        function selectPlace(el) {
+            var $el = $(el);
+
+            if (currentService == 'DEPOT') {
+                $('#tnt_pexcode').val($el.data('id'));
+                $('#tnt_depot_zipcode').val($el.data('zipcode'));
+                $('#tnt_depot_city').val($el.data('city'));
+                $('#tnt_depot_address').val($el.attr('data-serialize'));
+            } else {
+                $('#tnt_xettcode').val($el.data('id'));
+                $('#tnt_dop_zipcode').val($el.data('zipcode'));
+                $('#tnt_dop_city').val($el.data('city'));
+                $('#tnt_dop_address').val($el.attr('data-serialize'));
+            }
+            $places.removeClass('tnt-place-selected');
+            $('#tnt-place-' + $el.data('id')).addClass('tnt-place-selected');
+        }
+
+        function validateService(el) {
+            return true;
+        }
+        
+        function displayFeasibility(feasibility) {
+            /*
+            if (feasibility.status == 0) {
+                $('#tnt-validate-delivery').addClass('hidden');
+            } else {
+                $('#tnt-validate-delivery').removeClass('hidden');
+            }
+            */
+            $('#tnt-faisability').html(feasibility.content);
+        }
+        
+
+        function hasValidMethod() {
+
+            var valid = true;
+
+            if ($('#delivery-method_' + config.id).prop('checked')) {
+
+                if ($('.tnt_serviceCode').length > 0 && ! $('.tnt_serviceCode').val()) {
+                    valid = false;
+                }
+            }
+
+            return valid;
+        }
+
+        // Return an object exposed to the public
+        return {
+
+            // initialize
+            initialize: function( params ) {
+                config = $.extend({}, defaults, params);
+            },
+
+            refresh: function() {
+                $moduleRadio = $('#delivery-method_' + config.id);
+                $container = $(config.container);
+
+                if ($moduleRadio.length > 0) {
+
+                    config.loaded = true;
+
+                    config.selected = $moduleRadio.prop("checked");
+
+                    if (config.selected) {
+                        $container.removeClass('hidden');
+                        // check if a service is selected.
+                        /*
+                        if ($(config.servicesRadio + ':checked').length == 0) {
+                            $(config.servicesRadio).eq(0).prop('checked', true);
+                        }
+                        */
+
+                    } else {
+                        $container.addClass('hidden');
+                    }
+
+                    $(config.servicesRadio).on('change', loadService);
+
+                    loadService();
+                } else {
+                    config.loaded = false;
+                }
+            },
+            selectPlace: selectPlace,
+            saveConfiguration: saveConfiguration,
+            validateService: validateService,
+            hasValidMethod: hasValidMethod
+        };
+    })();
+
+    window.TntFrance = TntFrance;
+
+    $(document).ready(function () {
+        $('#delivery-module-list-block')
+            .on('show.bs.tab', ".tntfrance-panel", function(e) {
+                var $sel = $(e.target);
+                $('#tnt_service').val($sel.data('service'));
+                TntFrance.refresh();
+                    console.log('guigit');
+                    console.log($(this));
+            })
+            .on('click', ".js-tnt-place-select", function(e) {
+                var $sel = $(this);
+                e.preventDefault();
+
+                TntFrance.selectPlace($sel.get(0));
+                var id = $(this).data('id');
+                scrollToPlace(id);                
+            })
+            .on('click', ".js-tnt-save-configuration", function(e) {
+                var $sel = $(this);
+                e.preventDefault();
+
+                TntFrance.saveConfiguration($sel.get(0));
+            })
+            .on('click', ".js-tnt-select", function(e) {
+                var $sel = $(this);
+                TntFrance.saveConfiguration();
+                TntFrance.validateService($sel.get(0));
+            });
+
+            $('.btn-save-delivery').on('click', function(e){
+                e.preventDefault();
+                var $sel = $(this);
+                TntFrance.validateService($sel.get(0));
+            });
+
+        $('.btn-checkout-next').on('click', function(e) {
+           if ( ! TntFrance.hasValidMethod()) {
+               alert(tntFranceMessages['notValid']);
+               e.preventDefault();
+           }
+        });
+
+        function scrollToPlace (id){
+
+          var parent = $('.tnt-places');
+          var parH = parent[0].scrollHeight;
+          var that = $('#tnt-place-'+id);
+          var thatH = that[0].offsetTop;
+         $(parent).animate({ scrollTop: thatH }, 500);
+         $('.js-tnt-save-configuration').click();
+        }
+
+        TntFrance.initialize({
+            id: tntFranceId,
+            url: tntFranceUrl,
+            messages: tntFranceMessages
+        });
+        TntFrance.refresh();
+    });
+
+$('.js-change-delivery-address').change(function(e) {
+    if (this.checked) {
+        $.ajax({
+            method: "GET",
+            url: tntFranceUrl + '/setDeliveryAddress',
+            data: {
+                address: this.value
+            }
+        }).done(function( data ) {
+            // boom bada boom
+        });
+    }
+});
+
+
+
+    {/literal}
+
+})(jQuery);
+</script>

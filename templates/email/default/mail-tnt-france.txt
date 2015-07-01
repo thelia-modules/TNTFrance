@@ -1,0 +1,31 @@
+{default_translation_domain domain="tntfrance.email.default"}
+{default_locale locale={$locale}}
+
+{intl l="Hi,"}
+
+{loop name="order.invoice" type="order" id=$order_id customer="*" limit="1" backend_context="1"}
+    {intl l="Your order %ref has been shipped with TNTFrance." ref={$REF}}
+
+    {if !empty($parcel_responses)}
+        {if count($parcel_responses) > 1}
+            {intl l="You can check the status of your packages at any time here :"}
+
+            {foreach from=$parcel_responses item=parcel_response}
+
+                {intl l="Package %number :" number={$parcel_response.Id}} {$parcel_response.TrackingUrl}
+
+            {/foreach}
+        {else}
+            {intl l="You can check the status of your package at any time here :"}
+            {foreach from=$parcel_responses item=parcel_response}
+
+                {$parcel_response.TrackingUrl}
+
+            {/foreach}
+        {/if}
+    {/if}
+{/loop}
+
+{intl l="Feel free to contact us for any further information."}
+
+{intl l="Best Regards."}

@@ -1,0 +1,249 @@
+{default_translation_domain domain='tntfrance.bo.default'}
+
+{if $data.tnt_service == 'INDIVIDUAL'}
+    {loop type="order_address" name="order-delivery-address" id=$address_id}
+        <tr>
+            <th>{intl l="Type"}</th>
+            <td>{intl l='Home delivery'}</td>
+        </tr>
+        <tr data-field-class="js-title" data-value="{$TITLE}">
+            <th>{intl l="Title"}</th>
+            <td>{loop type="title" name="order-delivery-address-title" id=$TITLE}{$LONG}{/loop}</td>
+        </tr>
+        <tr data-field-class="js-company">
+            <th>{intl l="Company"}</th>
+            <td>{$COMPANY}</td>
+        </tr>
+        <tr data-field-class="js-firstname">
+            <th>{intl l="Firstname"}</th>
+            <td>{$FIRSTNAME}</td>
+        </tr>
+        <tr data-field-class="js-lastname">
+            <th>{intl l="Lastname"}</th>
+            <td>{$LASTNAME}</td>
+        </tr>
+        <tr data-field-class="js-address1">
+            <th>{intl l="Street address"}</th>
+            <td>{$ADDRESS1}</td>
+        </tr>
+        <tr data-field-class="js-address2">
+            <th>{intl l="Additional address"}</th>
+            <td>{$ADDRESS2}</td>
+        </tr>
+        <tr data-field-class="js-address3">
+            <th>{intl l="Additional address"}</th>
+            <td>{$ADDRESS3}</td>
+        </tr>
+        <tr data-field-class="js-zipcode">
+            <th>{intl l="Zip code"}</th>
+            <td>{$ZIPCODE}</td>
+        </tr>
+        <tr data-field-class="js-city">
+            <th>{intl l="City"}</th>
+            <td>{$CITY}</td>
+        </tr>
+        <tr data-field-class="js-country" data-value="{$COUNTRY}">
+            <th>{intl l="Country"}</th>
+            <td>{loop type="country" name="order-delivery-address-country" id=$COUNTRY}{$TITLE}{/loop}</td>
+        </tr>
+        <tr data-field-class="js-phone">
+            <th>{intl l="Phone"}</th>
+            <td>{$PHONE}</td>
+        </tr>
+        {if $data.tnt_accessCode}<tr>
+            <th>{intl l='Access code:'}</th>
+            <td>{$data.tnt_accessCode}</td>
+        </tr>{/if}
+        {if $data.tnt_floorNumber}<tr>
+            <th>{intl l='Floor number:'}</th>
+            <td>{$data.tnt_floorNumber}</td>
+        </tr>{/if}
+        {if $data.tnt_buldingId}<tr>
+            <th>{intl l='Bulding id:'}</th>
+            <td>{$data.tnt_buldingId}</td>
+        </tr>{/if}
+    {/loop}
+
+{elseif $data.tnt_service == 'ENTERPRISE'}
+
+    {loop type="order_address" name="order-delivery-address" id=$address_id}
+        <tr>
+            <th>{intl l="Type"}</th>
+            <td>{intl l='Enterprise delivery'}</td>
+        </tr>
+        <tr data-field-class="js-title" data-value="{$TITLE}">
+            <th>{intl l="Title"}</th>
+            <td>{loop type="title" name="order-delivery-address-title" id=$TITLE}{$LONG}{/loop}</td>
+        </tr>
+        <tr data-field-class="js-company">
+            <th>{intl l="Company"}</th>
+            <td>{$COMPANY}</td>
+        </tr>
+        <tr data-field-class="js-firstname">
+            <th>{intl l="Firstname"}</th>
+            <td>{$FIRSTNAME}</td>
+        </tr>
+        <tr data-field-class="js-lastname">
+            <th>{intl l="Lastname"}</th>
+            <td>{$LASTNAME}</td>
+        </tr>
+        <tr data-field-class="js-address1">
+            <th>{intl l="Street address"}</th>
+            <td>{$ADDRESS1}</td>
+        </tr>
+        <tr data-field-class="js-address2">
+            <th>{intl l="Additional address"}</th>
+            <td>{$ADDRESS2}</td>
+        </tr>
+        <tr data-field-class="js-address3">
+            <th>{intl l="Additional address"}</th>
+            <td>{$ADDRESS3}</td>
+        </tr>
+        <tr data-field-class="js-zipcode">
+            <th>{intl l="Zip code"}</th>
+            <td>{$ZIPCODE}</td>
+        </tr>
+        <tr data-field-class="js-city">
+            <th>{intl l="City"}</th>
+            <td>{$CITY}</td>
+        </tr>
+        <tr data-field-class="js-country" data-value="{$COUNTRY}">
+            <th>{intl l="Country"}</th>
+            <td>{loop type="country" name="order-delivery-address-country" id=$COUNTRY}{$TITLE}{/loop}</td>
+        </tr>
+        <tr data-field-class="js-phone">
+            <th>{intl l="Phone"}</th>
+            <td>{$PHONE}</td>
+        </tr>
+        {if $data.tnt_accessCode}<tr>
+            <th>{intl l='Access code:'}</th>
+            <td>{$data.tnt_accessCode}</td>
+            </tr>{/if}
+        {if $data.tnt_floorNumber}<tr>
+            <th>{intl l='Floor number:'}</th>
+            <td>{$data.tnt_floorNumber}</td>
+            </tr>{/if}
+        {if $data.tnt_buldingId}<tr>
+            <th>{intl l='Bulding id:'}</th>
+            <td>{$data.tnt_buldingId}</td>
+            </tr>{/if}
+    {/loop}
+
+{elseif $data.tnt_service == 'DEPOT'}
+
+    <tr>
+        <th>{intl l="Type"}</th>
+        <td>{intl l='TNT Depot'}</td>
+    </tr>
+    <tr>
+        <th colspan="2">{intl l='Contact informations'}</th>
+    </tr>
+
+    <tr data-field-class="js-firstname">
+        <th>{intl l="Firstname"}</th>
+        <td>{$data.tnt_contactFirstName}</td>
+    </tr>
+    <tr data-field-class="js-lastname">
+        <th>{intl l="Lastname"}</th>
+        <td>{$data.tnt_contactLastName}</td>
+    </tr>
+    <tr>
+        <th>{intl l="Instructions"}</th>
+        <td>{$data.tnt_instructions}</td>
+    </tr>
+    <tr data-field-class="js-phone">
+        <th>{intl l="Phone"}</th>
+        <td>{$data.tnt_phoneNumber}</td>
+    </tr>
+
+    {$address=$data.tnt_depot_address}
+    <tr>
+        <th colspan="2">{intl l='Depot informations:'}</th>
+    </tr>
+
+    <tr>
+        <th>{intl l="Code"}</th>
+        <td>{$data.tnt_pexcode}</td>
+    </tr>
+    <tr data-field-class="js-address1">
+        <th>{intl l="Company"}</th>
+        <td>{$address->name}</td>
+    </tr>
+    <tr data-field-class="js-address1">
+        <th>{intl l="Street address"}</th>
+        <td>{$address->address1}</td>
+    </tr>
+    <tr data-field-class="js-address2">
+        <th>{intl l="Additional address"}</th>
+        <td>{$address->address2}</td>
+    </tr>
+    <tr data-field-class="js-zipcode">
+        <th>{intl l="Zip code"}</th>
+        <td>{$address->zipCode}</td>
+    </tr>
+    <tr data-field-class="js-city">
+        <th>{intl l="City"}</th>
+        <td>{$address->city}</td>
+    </tr>
+
+
+{elseif $data.tnt_service == 'DROPOFFPOINT'}
+
+    <tr>
+        <th>{intl l="Type"}</th>
+        <td>{intl l='Drop off point'}</td>
+    </tr>
+    <tr>
+        <th colspan="2">{intl l='Contact informations'}</th>
+    </tr>
+
+    <tr data-field-class="js-firstname">
+        <th>{intl l="Firstname"}</th>
+        <td>{$data.tnt_contactFirstName}</td>
+    </tr>
+    <tr data-field-class="js-lastname">
+        <th>{intl l="Lastname"}</th>
+        <td>{$data.tnt_contactLastName}</td>
+    </tr>
+    <tr>
+        <th>{intl l="Instructions"}</th>
+        <td>{$data.tnt_instructions}</td>
+    </tr>
+    <tr data-field-class="js-phone">
+        <th>{intl l="Phone"}</th>
+        <td>{$data.tnt_phoneNumber}</td>
+    </tr>
+
+    {$address=$data.tnt_dop_address}
+    <tr>
+        <th colspan="2">{intl l='Depot informations:'}</th>
+    </tr>
+
+    <tr>
+        <th>{intl l="Code"}</th>
+        <td>{$data.tnt_xettcode}</td>
+    </tr>
+    <tr data-field-class="js-address1">
+        <th>{intl l="Company"}</th>
+        <td>{$address->name}</td>
+    </tr>
+    <tr data-field-class="js-address1">
+        <th>{intl l="Street address"}</th>
+        <td>{$address->address1}</td>
+    </tr>
+    <tr data-field-class="js-address2">
+        <th>{intl l="Additional address"}</th>
+        <td>{$address->address2}</td>
+    </tr>
+    <tr data-field-class="js-zipcode">
+        <th>{intl l="Zip code"}</th>
+        <td>{$address->zipCode}</td>
+    </tr>
+    <tr data-field-class="js-city">
+        <th>{intl l="City"}</th>
+        <td>{$address->city}</td>
+    </tr>
+
+{else}
+    {intl l='Unknow TNT service %service' service={$data.tnt_service}}
+{/if}

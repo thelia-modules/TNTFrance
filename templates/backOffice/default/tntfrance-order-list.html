@@ -1,0 +1,223 @@
+{extends file="admin-layout.tpl"}
+
+{block name="no-return-functions"}
+    {$admin_current_location = 'tntfrance-order'}
+{/block}
+
+{block name="page-title"}{intl l='Orders'}{/block}
+
+{block name="check-resource"}admin.order{/block}
+{block name="check-access"}view{/block}
+
+{block name="main-content"}
+    {default_translation_domain domain='tntfrance.bo.default'}
+    {assign order_page {$smarty.get.page|default:1}}
+    {assign orders_order {$smarty.get.orders_order|default:'id-reverse'}}
+    {*assign status_filter {$smarty.get.status|assertType:'IntListType'}*}
+
+    <div class="orders">
+
+        <div id="wrapper" class="container">
+
+            <ul class="breadcrumb">
+                <li><a href="{url path='/admin/home'}">{intl l="Home"}</a></li>
+                <li><a href="#">{intl l="TNTFrance Orders"}</a></li>
+            </ul>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="general-block-decorator">
+
+                        <ul class="nav nav-tabs" id="tabbed-menu">
+                            <li class="active"><a href="#order_paid" data-toggle="tab">{intl l="Orders to manage"}</a></li>
+                            <li><a href="#order_processing" data-toggle="tab">{intl l="Orders processing"}</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+
+                            <div class="tab-pane active" id="order_paid">
+                                {include file="includes/order-list-paid.html"}
+                            </div>
+
+                            <div class="tab-pane" id="order_processing">
+                                {include file="includes/order-list-processing.html"}
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{/block}
+
+{block name="after-bootstrap-css"}
+    {stylesheets file='assets/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css'}
+        <link rel="stylesheet" href="{$asset_url}">
+    {/stylesheets}
+{/block}
+
+{block name="javascript-initialization"}
+
+{javascripts file='assets/js/moment-with-locales.min.js'}
+    <script src="{$asset_url}"></script>
+{/javascripts}
+
+{javascripts file='assets/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js'}
+    <script src="{$asset_url}"></script>
+{/javascripts}
+
+<script type="text/javascript">
+    var message= "{intl l='Please select at least one order.' attr="code"}";
+    var lang = "{lang attr="code"}";
+    var url = "{url path="/admin/module/TNTFrance/orders/tracking"}";
+
+    {literal}
+
+    /** Days to be disabled as an array */
+    var disableddates = ["10-6-2015", "12-11-2014", "12-25-2014", "12-20-2014"];
+
+    function DisableSpecificDates(date) {
+
+        var m = date.getMonth();
+        var d = date.getDate();
+        var y = date.getFullYear();
+
+        // First convert the date in to the mm-dd-yyyy format
+        // Take note that we will increment the month count by 1
+        var currentdate = (m + 1) + '-' + d + '-' + y ;
+
+        // We will now check if the date belongs to disableddates array
+        for (var i = 0; i < disableddates.length; i++) {
+
+            // Now check if the current date is in disabled dates array.
+            if ($.inArray(currentdate, disableddates) != -1 ) {
+                return [false];
+            }
+        }
+    }
+
+    function getCurrentUrl()
+    {
+        var url = window.location.host;
+
+        //Remove the last "/" at the end of the url if exist
+        if (url[url.length - 1] == "") {
+            url.pop();
+        }
+        return window.location.protocol+'//'+url;
+    }
+
+    (function ($) {
+        $(document).ready(function () {
+
+            $.ajax({
+                type: "GET",
+                url: getCurrentUrl() + "/admin/module/TNTFrance/getValidPickUpDate",
+                dataType: "json"
+            })
+            .done(function(results){
+                var disabledDates = new Array();
+                for (i = 0; i < results.length; i++) {
+                    var reOrderedDate = results[i].substr(5,2) + '/' + results[i].substr(8,2) + '/' + results[i].substr(0,4);
+                    disabledDates[i] = moment(reOrderedDate);
+                }
+
+                $('.datetime-picker').datetimepicker({
+                    lang: lang,
+                    format: 'YYYY-MM-DD',
+                    useSeconds: false,
+                    keepOpen: false,
+                    disabledDates: disabledDates
+                });
+            });
+
+            var getSelection = function getSelection(concernedClass) {
+                var orderList = [];
+
+                $(concernedClass).each(function(){
+                    var $field = $(this);
+                    if ($field.prop('checked')) {
+                        orderList.push($field.attr('value'));
+                    }
+                });
+
+                return orderList;
+            };
+
+            $('.js-order-selection').on('change', function() {
+
+                $($(this).data('target')).prop('checked', $(this).prop('checked'));
+                //$('.js-order-selection-paid').prop('checked', $(this).prop('checked'));
+            });
+
+            //Detect if one order products is checked
+            $('.js-order-product').on('change', function() {
+
+                var oneOrderProductChecked = false;
+                $('.js-order-product-'+$(this).data('order')).each(function(){
+
+                    if ($(this).prop('checked') == true) {
+                        oneOrderProductChecked = true;
+                    }
+                });
+
+                $('.order-selection-'+$(this).data('order')).prop('checked', oneOrderProductChecked);
+            });
+
+            //Hide/Show order products
+            $('.all-in-one').on('change', function() {
+
+                //if Yes
+                if ($(this).val() == 1) {
+                    $('.tr-order-product-'+$(this).data('order')).addClass('hidden');
+                    $('#order-package-'+$(this).data('order')).removeClass('hidden');
+                } else {
+                    $('.tr-order-product-'+$(this).data('order')).removeClass('hidden');
+                    $('#order-package-'+$(this).data('order')).addClass('hidden');
+                }
+
+            });
+
+            $('.js-create-paid').on('click', function(e) {
+                var ids = getSelection('.js-order-selection-paid');
+
+                if (ids.length == 0) {
+                    e.preventDefault();
+                }
+            });
+
+            $('.js-create-processing').on('click', function(e) {
+                var ids = getSelection('.js-order-selection-processing');
+
+                if (ids.length == 0) {
+                    e.preventDefault();
+                }
+
+                setTimeout(function(){
+                    location.reload();
+                }, 100);
+            });
+/*
+            $('.js-create').on('change', function() {
+                alert("not implemented");
+            });
+
+            $('.js-status').on('change', function() {
+                alert("not implemented");
+            });
+*/
+
+        });
+
+    })(jQuery);
+    {/literal}
+</script>
+{/block}
+
+{block name="javascript-last-call"}
+
+{/block}

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<routes xmlns="http://symfony.com/schema/routing" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+    <!--
+
+      if a /admin/module/tntfrance/ route is provided, a "Configuration" button will be displayed
+      for the module in the module list. Clicking this button will invoke this route.
+
+      <route id="my_route_id" path="/admin/module/tntfrance">
+          <default key="_controller">TNTFrance\Full\Class\Name\Of\YourConfigurationController::methodName</default>
+      </route>
+
+      <route id="my_route_id" path="/admin/module/tntfrance/route-name">
+          <default key="_controller">TNTFrance\Full\Class\Name\Of\YourAdminController::methodName</default>
+      </route>
+
+      <route id="my_route_id" path="/my/route/name">
+          <default key="_controller">TNTFrance\Full\Class\Name\Of\YourOtherController::methodName</default>
+      </route>
+
+      ...add as many routes as required.
+
+      <route>
+      ...
+      </route>
+      -->
+    <route id="tntfrance.service" path="/module/TNTFrance/service/{service}" methods="get">
+        <default key="_controller">TNTFrance:TNTFranceFront:configuration</default>
+        <requirement key="service" >.+</requirement>
+    </route>
+
+    <route id="tntfrance.save" path="/module/TNTFrance/save" methods="post">
+        <default key="_controller">TNTFrance:TNTFranceFront:saveConfiguration</default>
+    </route>
+
+    <route id="tntfrance.search.cities" path="/module/TNTFrance/searchCities/{zipCode}" methods="get">
+        <default key="_controller">TNTFrance:TNTFranceFront:searchCities</default>
+        <requirement key="zipCode" >.+</requirement>
+    </route>
+    <route id="tntfrance.search.dropoffpoint" path="/module/TNTFrance/searchDropOffPoint/{zipCode}/{city}" methods="get">
+        <default key="_controller">TNTFrance:TNTFranceFront:searchDropOffPoint</default>
+        <requirement key="zipCode" >.+</requirement>
+        <requirement key="city" >.+</requirement>
+    </route>
+    <route id="tntfrance.search.depot" path="/module/TNTFrance/searchDepot/{department}" methods="get">
+        <default key="_controller">TNTFrance:TNTFranceFront:searchDepot</default>
+        <requirement key="department" >.+</requirement>
+    </route>
+
+    <route id="tntfrance.orders.list" path="/admin/module/TNTFrance/orders" methods="get">
+        <default key="_controller">TNTFrance:TNTFranceAdmin:default</default>
+    </route>
+    <route id="tntfrance.orders.bulk" path="/admin/module/TNTFrance/orders" methods="post">
+        <default key="_controller">TNTFrance:TNTFranceAdmin:bulk</default>
+    </route>
+    <route id="tntfrance.orders.stickers" path="/admin/module/TNTFrance/generate/stickers" methods="post">
+        <default key="_controller">TNTFrance:TNTFranceAdmin:sticker</default>
+    </route>
+    <route id="tntfrance.orders.tracking" path="/admin/module/TNTFrance/orders/tracking" methods="post">
+        <default key="_controller">TNTFrance:TNTFranceAdmin:tracking</default>
+    </route>
+
+    <route id="tntfrance.configuration.default" path="/admin/module/TNTFrance" methods="get">
+        <default key="_controller">TNTFrance:TNTFranceConfig:default</default>
+    </route>
+    <route id="tntfrance.configuration.save" path="/admin/module/TNTFrance" methods="post">
+        <default key="_controller">TNTFrance:TNTFranceConfig:save</default>
+    </route>
+
+    <route id="tntfrance.front.set_delivery_address" path="/module/TNTFrance/setDeliveryAddress" methods="get">
+        <default key="_controller">TNTFrance:TNTFranceFront:setDeliveryAddress</default>
+    </route>
+
+    <route id="tntfrance.get.valid.pick.up.date" path="/admin/module/TNTFrance/getValidPickUpDate">
+        <default key="_controller">TNTFrance:TNTFranceAdmin:getValidPickUpDate</default>
+    </route>
+
+</routes>

@@ -1,0 +1,29 @@
+{include file="util-days-name.tpl" scope=parent}
+
+{if $places}
+    {foreach $places as $place}
+        {$address=$place->toArray()}
+        <div id="tnt-place-{$address.pexCode}" class="tnt-place u-tnt-p u-tnt-p" data-pexcode="{$address.pexCode}" data-lng="{$address.longitude}" data-lat="{$address.latitude}">
+            <p>
+                <strong>{$address.name}</strong><br>
+                {$address.address1}<br>
+                {if $address.address2}{$address.address2}<br>{/if}
+                {$address.zipCode} {$address.city}<br>
+                <a href="#" class="js-tnt-place-select" data-id="{$address.pexCode}" data-zipcode="{$address.zipCode}" data-city="{$address.city}" data-serialize='{$address|json_encode}'>
+                    <i class="fa fa-check-square-o"></i> {intl l="Select this depot"}</a>
+            </p>
+            <p class="tnt-popup">
+                <strong>{intl l="Opening hours"}</strong>
+                {foreach $address.openingHours as $day => $hours}
+                    <br>{$dayNames[$day]} : {$hours[0]} - {$hours[1]}
+                {/foreach}
+            </p>
+        </div>
+    {/foreach}
+{else}
+    <div class="tnt-no-places">
+        {intl l="Sorry but no depots exist in this departement"}
+    </div>
+{/if}
+
+

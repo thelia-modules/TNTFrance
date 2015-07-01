@@ -1,0 +1,52 @@
+{extends 'ajax-delivery-layout.tpl'}
+
+{block name="title"}{intl l='TNT Depot'}{/block}
+
+{block name="form"}
+    <input type="hidden" name="tnt_xettcode" id="tnt_xettcode" value="{$data.xETTCode}" class="tnt-control" />
+    <input type="hidden" name="tnt_dop_zipcode" id="tnt_dop_zipcode" value="{$data.tnt_dop_zipcode}" class="tnt-control" />
+    <input type="hidden" name="tnt_dop_city" id="tnt_dop_city" value="{$data.tnt_dop_city}" class="tnt-control" />
+    <input type="hidden" name="tnt_dop_address" id="tnt_dop_address" value="{$data.tnt_depot_address}" class="tnt-control" />
+    <div class="row">
+    <div class="form-group col-sm-4">
+        <label for="tnt_contactLastName">{intl l='Last name'} <span class="required">*</span></label>
+        <input type="text" name="tnt_contactLastName" id="tnt_contactLastName" value="{$data.tnt_contactLastName}" maxlength="19" class="form-control tnt-control">
+    </div>
+    <div class="form-group col-sm-4">
+        <label for="tnt_contactFirstName">{intl l='First name'} <span class="required">*</span></label>
+        <input type="text" name="tnt_contactFirstName" id="tnt_contactFirstName" value="{$data.tnt_contactFirstName}" maxlength="12" class="form-control tnt-control">
+    </div>
+    <div class="form-group col-sm-4">
+        <label for="tnt_phoneNumber">{intl l='Phone number'} <span class="required">*</span></label>
+        <input type="text" name="tnt_phoneNumber" id="tnt_phoneNumber" value="{$data.tnt_phoneNumber}" maxlength="10" class="form-control tnt-control" aria-required="true" required>
+    </div>
+    </div>
+{/block}
+
+{* map *}
+{block name="body"}
+<div class="row">
+    <div class="col-md-8 col-sm-12">
+        <div id="tnt-map"></div>
+    </div>
+    <div class="col-md-4 col-sm-12">
+        <div class="tnt-places"></div>
+    </div>
+</div>
+<div class="row u-tnt-pt">
+    <div class="col-md-6">
+        <div class="input-group">
+            <input name="tnt_zipCode" id="tnt_zipCode" value="{$data.tnt_zipCode}" maxlength="6" class="form-control" placeholder="{intl l='Select an other zip code'}">
+        <span class="input-group-btn">
+            <button class="js-tnt-search-dropoffpoint btn btn-default" type="button">{intl l='Search'}</button>
+        </span>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            <label for="tnt-city" class="sr-only">{intl l='Select your city'}</label>
+            <select name="tnt_city" id="tnt_city" class="form-control tnt-control" data-value="{$data.tnt_city}"></select>
+        </div>
+    </div>
+</div>
+{/block}

@@ -1,0 +1,82 @@
+{default_translation_domain domain='tntfrance.fo.default'}
+
+{if $data.tnt_service == 'INDIVIDUAL'}
+
+    <p>
+        {intl l='Home delivery'}<br>
+
+        {loop type="order_address" name="delivery_address" id=$address_id}
+        {loop type="title" name="order-invoice-address-title" id=$TITLE}{$LONG} {/loop}{$FIRSTNAME} {$LASTNAME}<br />
+        {$ADDRESS1} {$ADDRESS2} {$ADDRESS3}<br />
+        {$ZIPCODE} {$CITY}<br/>
+        {loop type="country" name="country_delivery" id=$COUNTRY}{$TITLE}{/loop}
+        <br>
+
+        {if $data.tnt_accessCode}{intl l='Access code:'} {$data.tnt_accessCode}<br>{/if}
+        {if $data.tnt_floorNumber}{intl l='Floor number:'} {$data.tnt_floorNumber}<br>{/if}
+        {if $data.tnt_buldingId}{intl l='Bulding id:'} {$data.tnt_buldingId}<br>{/if}
+        {/loop}
+    </p>
+
+{elseif $data.tnt_service == 'ENTERPRISE'}
+
+    <p>
+        {intl l='Enterprise delivery'}<br>
+
+        {loop type="order_address" name="delivery_address" id=$address_id}
+        {$COMPANY}<br />
+        {loop type="title" name="order-invoice-address-title" id=$TITLE}{$LONG} {/loop}{$FIRSTNAME} {$LASTNAME}<br />
+        {$ADDRESS1} {$ADDRESS2} {$ADDRESS3}<br />
+        {$ZIPCODE} {$CITY}<br/>
+        {loop type="country" name="country_delivery" id=$COUNTRY}{$TITLE}{/loop}
+            <br>
+
+        {if $data.tnt_instructions}{intl l='Instructions:'} {$data.tnt_instructions}{/if}
+        {/loop}
+    </p>
+
+{elseif $data.tnt_service == 'DEPOT'}
+
+    <p>
+        {intl l='TNT Depot'}<br>
+
+        <strong> {intl l='Contact informations'}</strong><br>
+        {if $data.tnt_contactLastName}{intl l='Last name:'} {$data.tnt_contactLastName}<br>{/if}
+        {if $data.tnt_contactFirstName}{intl l='First name:'} {$data.tnt_contactFirstName}<br>{/if}
+        {if $data.tnt_phoneNumber}{intl l='Phone number:'} {$data.tnt_phoneNumber}<br>{/if}
+        {if $data.tnt_instructions}{intl l='Instructions:'} {$data.tnt_instructions}<br>{/if}
+
+        <strong> {intl l='Depot informations:'}</strong><br>
+        {$address=$data.tnt_depot_address}
+
+        {$address.name}<br>
+        {$address.address1}<br>
+        {if $address.address2 != ""}{$address.address2}<br>{/if}
+        {$address.zipCode} {$address.city}
+
+    </p>
+
+{elseif $data.tnt_service == 'DROPOFFPOINT'}
+
+    <p>
+        {intl l='Drop off point'}<br>
+
+        <strong> {intl l='Contact informations'}</strong><br>
+        {if $data.tnt_contactLastName}{intl l='Last name:'} {$data.tnt_contactLastName}<br>{/if}
+        {if $data.tnt_contactFirstName}{intl l='First name:'} {$data.tnt_contactFirstName}<br>{/if}
+        {if $data.tnt_phoneNumber}{intl l='Phone number:'} {$data.tnt_phoneNumber}<br>{/if}
+        {if $data.tnt_instructions}{intl l='Instructions:'} {$data.tnt_instructions}<br>{/if}
+
+        <strong> {intl l='Drop off point informations:'}</strong><br>
+        {$address=$data.tnt_dop_address}
+
+        {$address.name}<br>
+        {$address.address1}<br>
+        {if $address.address2 != ""}{$address.address2}<br>{/if}
+        {$address.zipCode} {$address.city}
+
+    </p>
+
+{else}
+    {intl l='Unknow TNT service %service' service={$data.tnt_service}}
+{/if}

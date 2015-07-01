@@ -1,0 +1,144 @@
+{default_translation_domain domain='tntfrance.fo.default'}
+
+{include file="util-days-name.tpl" scope=parent}
+
+{if $data.tnt_service == 'INDIVIDUAL'}
+
+    <div class="panel">
+        {loop type="address" name="delivery-address" id={order attr="delivery_address"}}
+            <div class="panel-heading">{intl l="Delivery address"}</div>
+            <div class="panel-body">
+                <strong> {intl l='Home delivery'}</strong><br>
+
+                <span class="fn">{loop type="title" name="customer.title.info" id=$TITLE}{$SHORT}{/loop} {$LASTNAME|upper} {$FIRSTNAME|ucwords}</span>
+                <span class="org">{$COMPANY}</span>
+                <address class="adr">
+                    <span class="street-address">{$ADDRESS1}</span><br>
+                    {if $ADDRESS2 != ""}
+                        <span class="street-address">{$ADDRESS2}</span><br>
+                    {/if}
+                    {if $ADDRESS3 != ""}
+                        <span class="street-address">{$ADDRESS3}</span><br>
+                    {/if}
+                    <span class="postal-code">{$ZIPCODE}</span>
+                    <span class="locality">{$CITY}, <span class="country-name">{loop type="country" name="customer.country.info" id=$COUNTRY}{$TITLE}{/loop}</span></span><br>
+
+                    {if $data.tnt_accessCode}<span>{intl l='Access code:'} {$data.tnt_accessCode}</span><br>{/if}
+                    {if $data.tnt_floorNumber}<span>{intl l='Floor number:'} {$data.tnt_floorNumber}</span><br>{/if}
+                    {if $data.tnt_buldingId}<span>{intl l='Bulding id:'} {$data.tnt_buldingId}</span><br>{/if}
+                </address>
+            </div>
+        {/loop}
+    </div>
+
+{elseif $data.tnt_service == 'ENTERPRISE'}
+
+    <div class="panel">
+        {loop type="address" name="delivery-address" id={order attr="delivery_address"}}
+            <div class="panel-heading">{intl l="Delivery address"}</div>
+            <div class="panel-body">
+                <strong> {intl l='Enterprise delivery'}</strong><br>
+
+                <span class="fn">{loop type="title" name="customer.title.info" id=$TITLE}{$SHORT}{/loop} {$LASTNAME|upper} {$FIRSTNAME|ucwords}</span>
+
+                <span class="org">{$COMPANY}</span>
+                <address class="adr">
+                    <span class="street-address">{$ADDRESS1}</span><br>
+                    {if $ADDRESS2 != ""}
+                        <span class="street-address">{$ADDRESS2}</span><br>
+                    {/if}
+                    {if $ADDRESS3 != ""}
+                        <span class="street-address">{$ADDRESS3}</span><br>
+                    {/if}
+                    <span class="postal-code">{$ZIPCODE}</span>
+                    <span class="locality">{$CITY}, <span class="country-name">{loop type="country" name="customer.country.info" id=$COUNTRY}{$TITLE}{/loop}</span></span><br>
+
+                    {if $data.tnt_instructions}<span>{intl l='Instructions:'} {$data.tnt_instructions}</span><br>{/if}
+
+                </address>
+            </div>
+        {/loop}
+    </div>
+
+{elseif $data.tnt_service == 'DEPOT'}
+
+    <div class="panel">
+        {loop type="address" name="delivery-address" id={order attr="delivery_address"}}
+            <div class="panel-heading">{intl l="Delivery address"}</div>
+            <div class="panel-body">
+                <strong> {intl l='TNT Depot'}</strong><br>
+
+                <strong> {intl l='Contact informations'}</strong><br>
+                {if $data.tnt_contactLastName}<span>{intl l='Last name:'} {$data.tnt_contactLastName}</span><br>{/if}
+                {if $data.tnt_contactFirstName}<span>{intl l='First name:'} {$data.tnt_contactFirstName}</span><br>{/if}
+                {if $data.tnt_phoneNumber}<span>{intl l='Phone number:'} {$data.tnt_phoneNumber}</span><br>{/if}
+                {if $data.tnt_instructions}<span>{intl l='Instructions:'} {$data.tnt_instructions}</span><br>{/if}
+
+                <br><strong>{intl l='Depot informations:'}</strong><br>
+                {$address=$data.tnt_depot_address}
+
+                <address class="adr">
+                    <span class="org">{$address.name}</span><br>
+                    <span class="street-address">{$address.address1}</span><br>
+                    {if $address.address2 != ""}
+                        <span class="street-address">{$address.address2}</span><br>
+                    {/if}
+
+                    <span class="postal-code">{$address.zipCode}</span>
+                    <span class="locality"> {$address.city}</span><br>
+                </address>
+
+                <p>
+                    <strong>{intl l="Opening hours"}</strong>
+                    {foreach $address.openingHours as $day => $hours}
+                        <br>{$dayNames[$day]} : {$hours[0]} - {$hours[1]}
+                    {/foreach}
+                </p>
+            </div>
+        {/loop}
+    </div>
+
+{elseif $data.tnt_service == 'DROPOFFPOINT'}
+
+    <div class="panel">
+        {loop type="address" name="delivery-address" id={order attr="delivery_address"}}
+            <div class="panel-heading">{intl l='Drop Off Point'}</div>
+            <div class="panel-body">
+                <strong> {intl l='Drop off point'}</strong><br>
+
+                <strong> {intl l='Contact informations'}</strong><br>
+                {if $data.tnt_contactLastName}<span>{intl l='Last name:'} {$data.tnt_contactLastName}</span><br>{/if}
+                {if $data.tnt_contactFirstName}<span>{intl l='First name:'} {$data.tnt_contactFirstName}</span><br>{/if}
+                {if $data.tnt_phoneNumber}<span>{intl l='Phone number:'} {$data.tnt_phoneNumber}</span><br>{/if}
+                {if $data.tnt_instructions}<span>{intl l='Instructions:'} {$data.tnt_instructions}</span><br>{/if}
+
+                <br><strong>{intl l='Drop off point informations:'}</strong><br>
+
+                {$address=$data.tnt_dop_address}
+
+
+                <address class="adr">
+                    <span class="org">{$address.name}</span><br>
+                    <span class="street-address">{$address.address1}</span><br>
+                    {if $address.address2 != ""}
+                        <span class="street-address">{$address.address2}</span><br>
+                    {/if}
+
+                    <span class="postal-code">{$address.zipCode}</span>
+                    <span class="locality"> {$address.city}</span><br>
+                </address>
+
+                <p>
+                    <strong>{intl l="Opening hours"}</strong>
+                    {foreach $address.openingHours as $day => $hours}
+                        <br>{$dayNames[$day]} : {$hours[0]} - {$hours[1]}
+                    {/foreach}
+                </p>
+            </div>
+        {/loop}
+    </div>
+
+
+{else}
+    {intl l='Unknow TNT service %service' service={$data.tnt_service}}
+{/if}

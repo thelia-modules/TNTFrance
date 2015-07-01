@@ -1,0 +1,64 @@
+{assign var="oneValidService" value="0"}
+{foreach $services as $service}
+    {if $service.enabled}
+        {$valid=true}
+        {if $service.id == 'ENTERPRISE' && $company == ''}
+            {$valid=false}
+        {/if}
+        {if $service.id == 'INDIVIDUAL' && $company != ''}
+            {$valid=false}
+        {/if}
+        {if $valid}
+            {assign var="oneValidService" value="1"}
+        {/if}
+    {/if}
+{/foreach}
+{if $oneValidService == 1}
+<div class="container-fluid">
+    <div role="tabpanel" id="tntfrance-services">
+      <input type="hidden" id="tnt_service" name="tnt_service" value="{$service_selected}" class="tnt-control" />
+
+      <!-- Nav tabs -->
+      <ul class="nav nav-tabs nav-justified" role="tablist">
+        {foreach $services as $service}
+          {if $service.enabled}
+              {$valid=true}
+              {if $service.id == 'ENTERPRISE' && $company == ''}
+                  {$valid=false}
+              {/if}
+              {if $service.id == 'INDIVIDUAL' && $company != ''}
+                  {$valid=false}
+              {/if}
+              {if $valid}
+                <li role="presentation" {if $service_selected == $service.id} class="active"{/if}><a href="#tab{$service.id}" aria-controls="{$service.name}" role="tab" data-toggle="tab" class="tntfrance-panel" data-service="{$service.id}">{$service.name}</a></li>
+              {/if}
+          {/if}
+      {/foreach}
+
+      </ul>
+
+      <!-- Tab panes -->
+      <div class="tab-content">
+          {foreach $services as $service}
+          {if $service.enabled}
+              {$valid=true}
+              {if $service.id == 'ENTERPRISE' && $company == ''}
+                  {$valid=false}
+              {/if}
+              {if $service.id == 'INDIVIDUAL' && $company != ''}
+                  {$valid=false}
+              {/if}
+              {if $valid}
+                <div id="tab{$service.id}" class="tab-pane fade in{if $service_selected == $service.id}active{/if}" role="tabpanel" data-service="{$service.id}">
+                    <div id="tntfrance-service-content-{$service.id}">
+                    </div>
+                </div>
+              {/if}
+          {/if}
+      {/foreach}
+
+      </div>
+
+    </div>
+</div>
+{/if}

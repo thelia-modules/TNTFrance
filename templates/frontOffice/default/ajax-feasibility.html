@@ -1,0 +1,38 @@
+{if $choices}
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="radio">{intl l="Services available : "}</div>
+    {foreach $choices as $choice}
+        {$feasibility=$choice->toArray()}
+        {if $choices|@count == 1}
+            <div class="radio">
+                <label>
+                    <input type="hidden" name="tnt_serviceCode" class="tnt_serviceCode" id="tnt_serviceCode" value="{$feasibility.serviceCode}-{$feasibility.serviceLabel}" >
+                    {$feasibility.serviceLabel}
+                </label>
+            </div>
+        {else}
+            <div class="radio">
+                <label>
+                    <input type="radio" name="tnt_serviceCode" class="tnt_serviceCode" id="tnt_serviceCode{$choice@index}" value="{$feasibility.serviceCode}-{$feasibility.serviceLabel}" {if {$choice@index} == 0}checked{/if}>
+                    {$feasibility.serviceLabel}
+                </label>
+            </div>
+            {*
+            {$choice.afternoonDelivery}
+            {$choice.dueDate}
+            {$choice.insurance}
+            {$choice.priorityGuarantee}
+            {$choice.saturdayDelivery}
+            {$choice.serviceCode}
+            {$choice.serviceLabel}
+            *}
+        {/if}
+    {/foreach}
+    </div>
+</div>
+{else}
+    <div class="alert alert-warning">
+        {intl l="This service is unavailable."}
+    </div>
+{/if}

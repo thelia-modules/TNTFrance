@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns="http://thelia.net/schema/dic/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://thelia.net/schema/dic/config http://thelia.net/schema/dic/config/thelia-1.0.xsd">
+  <loops>
+      <loop name="tnt-order-parcel-response" class="TNTFrance\Loop\TntOrderParcelResponseLoop"/>
+  </loops>
+  <forms>
+    <!--
+        <form name="MyFormName" class="TNTFrance\Form\MySuperForm" />
+        -->
+    <form name="tntfrance.configuration" class="TNTFrance\Form\TNTFranceConfigForm"/>
+  </forms>
+  <commands>
+    <!--
+        <command class="TNTFrance\Command\MySuperCommand" />
+        -->
+  </commands>
+
+    <services>
+        <service id="tnt.ws.config" class="TNTFrance\WebService\Provider\ProductionConfigProvider" />
+
+        <service id="tnt.ws.factory" class="TNTFrance\WebService\WebServiceFactory">
+            <argument type="service" id="tnt.ws.config" />
+        </service>
+
+        <service id="tnt.order.action" class="TNTFrance\Action\OrderAction" scope="request">
+            <argument type="service" id="request"/>
+            <argument type="service" id="module.tntfrance"/>
+            <argument type="service" id="thelia.translator"/>
+            <argument type="service" id="service_container"/>
+
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="tnt.bulk.action" class="TNTFrance\Action\BulkAction" scope="request">
+            <argument type="service" id="tnt.ws.factory" />
+            <tag name="kernel.event_subscriber" />
+        </service>
+
+        <service id="tnt.mail.action" class="TNTFrance\Action\SendMailAction" scope="request">
+            <argument type="service" id="mailer"/>
+            <tag name="kernel.event_subscriber" />
+        </service>
+
+        <service id="smarty.plugin.tnt" class="TNTFrance\Smarty\TNTFormat">
+            <tag name="thelia.parser.register_plugin"/>
+        </service>
+    </services>
+
+    <hooks>
+        <hook id="tntfrance.hook" class="TNTFrance\Hook\TNTFranceHook" scope="request">
+            <argument type="service" id="service_container"/>
+
+            <tag name="hook.event_listener" event="order-delivery.extra" type="front"/>
+            <tag name="hook.event_listener" event="order-delivery.javascript" type="front"/>
+            <tag name="hook.event_listener" event="order-delivery.stylesheet" type="front"/>
+            <tag name="hook.event_listener" event="order-delivery.after-javascript-include" type="front"/>
+            <tag name="hook.event_listener" event="order-delivery.javascript-initialization" type="front"/>
+
+            <tag name="hook.event_listener" event="order-invoice.delivery-address" type="front"/>
+
+            <tag name="hook.event_listener" event="invoice.delivery-address" type="pdf" method="onPdfAddress"/>
+            <tag name="hook.event_listener" event="delivery.delivery-address" type="pdf" method="onPdfAddress"/>
+
+            <tag name="hook.event_listener" event="order-edit.bill-delivery-address" type="back" method="onBackAddress"/>
+            <tag name="hook.event_listener" event="main.top-menu-tools" type="back" />
+
+        </hook>
+    </hooks>
+  <!--
+    <exports>
+
+    </exports>
+    -->
+  <!--
+    <imports>
+
+    </imports>
+    -->
+</config>

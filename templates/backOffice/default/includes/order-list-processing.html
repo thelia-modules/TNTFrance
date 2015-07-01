@@ -1,0 +1,200 @@
+<form target="_blank" action="{url path="/admin/module/TNTFrance/generate/stickers"}" method="post">
+
+    <div class="table-responsive">
+
+        {flash type="tntfrance-error"}
+        <div class="alert alert-danger">{$MESSAGE}</div>
+        {/flash}
+
+        <table class="table table-striped table-condensed table-left-aligned">
+
+            {if $orders_processing_id}
+
+            <thead>
+            <tr>
+                <th class="object-title text-center">
+                    <input type="checkbox" name="order_id" class="js-order-selection" data-target=".js-order-selection-processing" value="1" title="{intl l="Select all"}" />
+                </th>
+
+                <th class="object-title">
+                    {admin_sortable_header
+                        current_order=$orders_order
+                        order='id'
+                        reverse_order='id-reverse'
+                        path={url path='/admin/orders'}
+                        request_parameter_name='orders_order'
+                        label="{intl l='ID'}"
+                    }</th>
+
+                <th class="object-title">
+                    {admin_sortable_header
+                        current_order=$orders_order
+                        order='reference'
+                        reverse_order='reference-reverse'
+                        path={url path='/admin/orders'}
+                        request_parameter_name='orders_order'
+                        label="{intl l='Reference'}"
+                    } </th>
+
+                <th class="object-title">
+                    {admin_sortable_header
+                        current_order=$orders_order
+                        order='create-date'
+                        reverse_order='create-date-reverse'
+                        path={url path='/admin/orders'}
+                        request_parameter_name='orders_order'
+                        label="{intl l='Date & Hour'}"
+                    } </th>
+
+                <th class="object-title">
+                    {admin_sortable_header
+                        current_order=$orders_order
+                        order='company'
+                        reverse_order='company-reverse'
+                        path={url path='/admin/orders'}
+                        request_parameter_name='orders_order'
+                        label="{intl l='Company'}"
+                    } </th>
+
+                <th class="object-title">
+                    {admin_sortable_header
+                        current_order=$orders_order
+                        order='customer-name'
+                        reverse_order='customer-name-reverse'
+                        path={url path='/admin/orders'}
+                        request_parameter_name='orders_order'
+                        label="{intl l='Cutomer Name'}"
+                    } </th>
+
+                <th class="object-title text-right">{intl l='Amount'}</th>
+
+                <th class="object-title text-center">
+                    {admin_sortable_header
+                        current_order=$orders_order
+                        order='status'
+                        reverse_order='status-reverse'
+                        path={url path='/admin/orders'}
+                        request_parameter_name='orders_order'
+                        label="{intl l='Status'}"
+                    } </th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            {loop type="order-status" name="order-status" code="sent"}
+                {assign "orderStatusSent" $TITLE}
+                {assign "orderStatusSentLabel" "order_$CODE"}
+            {/loop}
+            {loop type="order" name="order-list" customer="*" id={$orders_processing_id} order=$orders_order backend_context="1" page={$order_page} limit="{#max_displayed_orders#}" }
+
+                {loop type="currency" name="order-currency" id=$CURRENCY}
+                    {$orderCurrency=$SYMBOL}
+                {/loop}
+
+                {loop type="order_address" name="order-invoice-address" id=$INVOICE_ADDRESS}
+                    {assign "orderInvoiceFirstName" $FIRSTNAME}
+                    {assign "orderInvoiceLastName" $LASTNAME}
+                    {assign "orderInvoiceCompany" $COMPANY}
+                {/loop}
+
+                {loop type="order-status" name="order-status" id=$STATUS}
+                    {assign "orderStatus" $TITLE}
+                    {assign "orderStatusLabel" "order_$CODE"}
+                {/loop}
+
+                <tr>
+                    <td>
+                        <input type="checkbox" name="order-selection[]" id="order-selection-{$ID}" class="js-order-selection js-order-selection-processing order-selection-{$ID}" data-target=".js-order-product-{$ID}" value="{$ID}" title="{intl l="Select"}" />
+                    </td>
+                    <td><a href="{url path="/admin/order/update/$ID"}">{$ID}</a></td>
+                    <td><a href="{url path="/admin/order/update/$ID"}">{$REF}</a></td>
+                    <td>{format_date date=$CREATE_DATE}</td>
+                    <td>{$orderInvoiceCompany}</td>
+                    <td><a href="{url path='/admin/customer/update' customer_id=$CUSTOMER}">{$orderInvoiceFirstName|ucwords} {$orderInvoiceLastName|upper}</a></td>
+                    <td class="text-right">{format_money number=$TOTAL_TAXED_AMOUNT symbol=$orderCurrency}</td>
+                    <td class="text-center"></td>
+                </tr>
+
+                {assign var="_order_id_" value="$ID"}
+                {assign var="total_package" value="1"}
+                {loop name="parcel-response-not-printed" type="tnt-order-parcel-response" order_id=$ID printed="0" group_by="sticker"}
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input type="checkbox" name="tnt-order-parcel-response[]" class="js-order-selection-processing js-order-product js-order-product-{$_order_id_}" data-order="{$_order_id_}" value="{$ID}" title="{intl l='Select'}" />
+                        </td>
+                        <td>
+                            <a href="{url path="/admin/order/update/$_order_id_"}">
+                            {loop name="order-product" type="tnt-order-parcel-response" file_name=$FILE_NAME group_by="order_product"}
+                                {if $LOOP_COUNT > 1}
+                                    <br />
+                                {/if}
+                                {assign var="package_sent" value=$PRINTED}
+                                {$PRODUCT_SALE_ELEMENTS_REF}
+                            {/loop}
+                            </a>
+                        </td>
+                        <td colspan="3">
+                            {loop name="order-product" type="tnt-order-parcel-response" file_name=$FILE_NAME group_by="package"}
+                                {if $LOOP_COUNT > 1}
+                                    <br />
+                                {/if}
+                                <a href="{$TRACKING_URL}" target="_blank">{intl l="Package %number" number=$total_package}&nbsp;({$WEIGHT}{intl l="kg"})</a>&nbsp;:&nbsp;{$TRACKING_URL}<br />
+                                {assign var="total_package" value="{math equation="x + 1" x=$total_package}"}
+                            {/loop}
+                        </td>
+                        <td class="text-center">
+                            {if $package_sent == 0}
+                                <td class="text-center"><span class="label label-{#$orderStatusLabel#}">{$orderStatus}</span></td>
+                            {else}
+                                <td class="text-center"><span class="label label-{#$orderStatusSentLabel#}">{$orderStatusSent}</span></td>
+                            {/if}
+                        </td>
+                    </tr>
+                {/loop}
+
+            {/loop}
+
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="100">
+                    {if $orders_processing_id}
+                    <div class="form-inline actions u-padding-bottom u-padding-top">
+                        <button type="submit" name="action" value="create" class="js-create-processing btn btn-sm btn-default btn-info" title="{intl l='Generate stickers'}">{intl l='Generate stickers'} <span class="glyphicon glyphicon-ok"></span></button>
+                    </div>
+                    {/if}
+                </td>
+            </tr>
+            <tr>
+
+                <td colspan="100">
+                    {include
+                    file = "includes/pagination.html"
+
+                    loop_ref       = "order-list"
+                    max_page_count = 10
+                    page_url       = "{url path="/admin/orders" status=$status_filter orders_order=$orders_order search_term=$search_term search_in="$search_in"}"
+                    }
+
+                </td>
+            </tr>
+            </tfoot>
+
+
+            {else}
+
+            <tr>
+                <td colspan="8">
+                    <div class="alert alert-info">
+                        {intl l='You have no orders for the moment.'}
+                    </div>
+                </td>
+            </tr>
+
+            {/if}
+        </table>
+
+    </div>
+</form>
