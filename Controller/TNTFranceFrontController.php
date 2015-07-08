@@ -14,8 +14,12 @@
 namespace TNTFrance\Controller;
 
 use Thelia\Controller\Front\BaseFrontController;
+use Thelia\Core\Event\Cart\CartEvent;
 use Thelia\Model\Address;
 use Thelia\Model\Customer;
+use TNTFrance\Action\OrderAction;
+use TNTFrance\Model\Config\TNTFranceConfigValue;
+use TNTFrance\Model\TntPriceWeightQuery;
 use TNTFrance\TNTFrance;
 use TNTFrance\WebService\CitiesGuide;
 use TNTFrance\WebService\DropOffPoints;
@@ -193,6 +197,20 @@ class TNTFranceFrontController extends BaseFrontController
             ;
 
             $choices = $ws->exec();
+        }
+
+        $cartEvent = new CartEvent($this->getRequest()->getSession()->getSessionCart($this->getDispatcher()));
+        $this->dispatch(OrderAction::TNT_CALCUL_CART_WEIGHT, $cartEvent);
+
+        /** @var \TNTFrance\WebService\Model\TNTService $tntService */
+        foreach ($choices as $tntService) {
+            $tntService->setPrice(
+                TNTFrance::calculPriceForService(
+                    $tntService->getServiceCode(),
+                    $cartEvent->getCart()->getVirtualColumn('total_package'),
+                    $cartEvent->getCart()->getVirtualColumn('total_weight')
+                )
+            );
         }
 
         $out["status"] = count($choices);

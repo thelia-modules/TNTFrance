@@ -11,12 +11,12 @@ use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Map\RelationMap;
 use Propel\Runtime\Map\TableMap;
 use Propel\Runtime\Map\TableMapTrait;
-use TNTFrance\Model\TntOrderParcelResponse;
-use TNTFrance\Model\TntOrderParcelResponseQuery;
+use TNTFrance\Model\TntPriceWeight;
+use TNTFrance\Model\TntPriceWeightQuery;
 
 
 /**
- * This class defines the structure of the 'tnt_order_parcel_response' table.
+ * This class defines the structure of the 'tnt_price_weight' table.
  *
  *
  *
@@ -26,14 +26,14 @@ use TNTFrance\Model\TntOrderParcelResponseQuery;
  * (i.e. if it's a text column type).
  *
  */
-class TntOrderParcelResponseTableMap extends TableMap
+class TntPriceWeightTableMap extends TableMap
 {
     use InstancePoolTrait;
     use TableMapTrait;
     /**
      * The (dot-path) name of this class
      */
-    const CLASS_NAME = 'TNTFrance.Model.Map.TntOrderParcelResponseTableMap';
+    const CLASS_NAME = 'TNTFrance.Model.Map.TntPriceWeightTableMap';
 
     /**
      * The default database name for this class
@@ -43,22 +43,22 @@ class TntOrderParcelResponseTableMap extends TableMap
     /**
      * The table name for this class
      */
-    const TABLE_NAME = 'tnt_order_parcel_response';
+    const TABLE_NAME = 'tnt_price_weight';
 
     /**
      * The related Propel class for this table
      */
-    const OM_CLASS = '\\TNTFrance\\Model\\TntOrderParcelResponse';
+    const OM_CLASS = '\\TNTFrance\\Model\\TntPriceWeight';
 
     /**
      * A class that can be returned by this tableMap
      */
-    const CLASS_DEFAULT = 'TNTFrance.Model.TntOrderParcelResponse';
+    const CLASS_DEFAULT = 'TNTFrance.Model.TntPriceWeight';
 
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 12;
+    const NUM_COLUMNS = 9;
 
     /**
      * The number of lazy-loaded columns
@@ -68,67 +68,52 @@ class TntOrderParcelResponseTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 12;
+    const NUM_HYDRATE_COLUMNS = 9;
 
     /**
      * the column name for the ID field
      */
-    const ID = 'tnt_order_parcel_response.ID';
+    const ID = 'tnt_price_weight.ID';
 
     /**
-     * the column name for the ORDER_PRODUCT_ID field
+     * the column name for the AREA_ID field
      */
-    const ORDER_PRODUCT_ID = 'tnt_order_parcel_response.ORDER_PRODUCT_ID';
+    const AREA_ID = 'tnt_price_weight.AREA_ID';
 
     /**
-     * the column name for the PICK_UP_NUMBER field
+     * the column name for the TNT_PRODUCT_LABEL field
      */
-    const PICK_UP_NUMBER = 'tnt_order_parcel_response.PICK_UP_NUMBER';
+    const TNT_PRODUCT_LABEL = 'tnt_price_weight.TNT_PRODUCT_LABEL';
 
     /**
-     * the column name for the FILE_NAME field
+     * the column name for the TNT_PRODUCT_CODE field
      */
-    const FILE_NAME = 'tnt_order_parcel_response.FILE_NAME';
-
-    /**
-     * the column name for the SEQUENCE_NUMBER field
-     */
-    const SEQUENCE_NUMBER = 'tnt_order_parcel_response.SEQUENCE_NUMBER';
-
-    /**
-     * the column name for the PARCEL_NUMBER_ID field
-     */
-    const PARCEL_NUMBER_ID = 'tnt_order_parcel_response.PARCEL_NUMBER_ID';
-
-    /**
-     * the column name for the STICKER_NUMBER field
-     */
-    const STICKER_NUMBER = 'tnt_order_parcel_response.STICKER_NUMBER';
-
-    /**
-     * the column name for the TRACKING_URL field
-     */
-    const TRACKING_URL = 'tnt_order_parcel_response.TRACKING_URL';
-
-    /**
-     * the column name for the PRINTED field
-     */
-    const PRINTED = 'tnt_order_parcel_response.PRINTED';
+    const TNT_PRODUCT_CODE = 'tnt_price_weight.TNT_PRODUCT_CODE';
 
     /**
      * the column name for the WEIGHT field
      */
-    const WEIGHT = 'tnt_order_parcel_response.WEIGHT';
+    const WEIGHT = 'tnt_price_weight.WEIGHT';
+
+    /**
+     * the column name for the PRICE field
+     */
+    const PRICE = 'tnt_price_weight.PRICE';
+
+    /**
+     * the column name for the PRICE_KG_SUP field
+     */
+    const PRICE_KG_SUP = 'tnt_price_weight.PRICE_KG_SUP';
 
     /**
      * the column name for the CREATED_AT field
      */
-    const CREATED_AT = 'tnt_order_parcel_response.CREATED_AT';
+    const CREATED_AT = 'tnt_price_weight.CREATED_AT';
 
     /**
      * the column name for the UPDATED_AT field
      */
-    const UPDATED_AT = 'tnt_order_parcel_response.UPDATED_AT';
+    const UPDATED_AT = 'tnt_price_weight.UPDATED_AT';
 
     /**
      * The default string format for model objects of the related table
@@ -142,12 +127,12 @@ class TntOrderParcelResponseTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'OrderProductId', 'PickUpNumber', 'FileName', 'SequenceNumber', 'ParcelNumberId', 'StickerNumber', 'TrackingUrl', 'Printed', 'Weight', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_STUDLYPHPNAME => array('id', 'orderProductId', 'pickUpNumber', 'fileName', 'sequenceNumber', 'parcelNumberId', 'stickerNumber', 'trackingUrl', 'printed', 'weight', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(TntOrderParcelResponseTableMap::ID, TntOrderParcelResponseTableMap::ORDER_PRODUCT_ID, TntOrderParcelResponseTableMap::PICK_UP_NUMBER, TntOrderParcelResponseTableMap::FILE_NAME, TntOrderParcelResponseTableMap::SEQUENCE_NUMBER, TntOrderParcelResponseTableMap::PARCEL_NUMBER_ID, TntOrderParcelResponseTableMap::STICKER_NUMBER, TntOrderParcelResponseTableMap::TRACKING_URL, TntOrderParcelResponseTableMap::PRINTED, TntOrderParcelResponseTableMap::WEIGHT, TntOrderParcelResponseTableMap::CREATED_AT, TntOrderParcelResponseTableMap::UPDATED_AT, ),
-        self::TYPE_RAW_COLNAME   => array('ID', 'ORDER_PRODUCT_ID', 'PICK_UP_NUMBER', 'FILE_NAME', 'SEQUENCE_NUMBER', 'PARCEL_NUMBER_ID', 'STICKER_NUMBER', 'TRACKING_URL', 'PRINTED', 'WEIGHT', 'CREATED_AT', 'UPDATED_AT', ),
-        self::TYPE_FIELDNAME     => array('id', 'order_product_id', 'pick_up_number', 'file_name', 'sequence_number', 'parcel_number_id', 'sticker_number', 'tracking_url', 'printed', 'weight', 'created_at', 'updated_at', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+        self::TYPE_PHPNAME       => array('Id', 'AreaId', 'TntProductLabel', 'TntProductCode', 'Weight', 'Price', 'PriceKgSup', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_STUDLYPHPNAME => array('id', 'areaId', 'tntProductLabel', 'tntProductCode', 'weight', 'price', 'priceKgSup', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(TntPriceWeightTableMap::ID, TntPriceWeightTableMap::AREA_ID, TntPriceWeightTableMap::TNT_PRODUCT_LABEL, TntPriceWeightTableMap::TNT_PRODUCT_CODE, TntPriceWeightTableMap::WEIGHT, TntPriceWeightTableMap::PRICE, TntPriceWeightTableMap::PRICE_KG_SUP, TntPriceWeightTableMap::CREATED_AT, TntPriceWeightTableMap::UPDATED_AT, ),
+        self::TYPE_RAW_COLNAME   => array('ID', 'AREA_ID', 'TNT_PRODUCT_LABEL', 'TNT_PRODUCT_CODE', 'WEIGHT', 'PRICE', 'PRICE_KG_SUP', 'CREATED_AT', 'UPDATED_AT', ),
+        self::TYPE_FIELDNAME     => array('id', 'area_id', 'tnt_product_label', 'tnt_product_code', 'weight', 'price', 'price_kg_sup', 'created_at', 'updated_at', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -157,12 +142,12 @@ class TntOrderParcelResponseTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'OrderProductId' => 1, 'PickUpNumber' => 2, 'FileName' => 3, 'SequenceNumber' => 4, 'ParcelNumberId' => 5, 'StickerNumber' => 6, 'TrackingUrl' => 7, 'Printed' => 8, 'Weight' => 9, 'CreatedAt' => 10, 'UpdatedAt' => 11, ),
-        self::TYPE_STUDLYPHPNAME => array('id' => 0, 'orderProductId' => 1, 'pickUpNumber' => 2, 'fileName' => 3, 'sequenceNumber' => 4, 'parcelNumberId' => 5, 'stickerNumber' => 6, 'trackingUrl' => 7, 'printed' => 8, 'weight' => 9, 'createdAt' => 10, 'updatedAt' => 11, ),
-        self::TYPE_COLNAME       => array(TntOrderParcelResponseTableMap::ID => 0, TntOrderParcelResponseTableMap::ORDER_PRODUCT_ID => 1, TntOrderParcelResponseTableMap::PICK_UP_NUMBER => 2, TntOrderParcelResponseTableMap::FILE_NAME => 3, TntOrderParcelResponseTableMap::SEQUENCE_NUMBER => 4, TntOrderParcelResponseTableMap::PARCEL_NUMBER_ID => 5, TntOrderParcelResponseTableMap::STICKER_NUMBER => 6, TntOrderParcelResponseTableMap::TRACKING_URL => 7, TntOrderParcelResponseTableMap::PRINTED => 8, TntOrderParcelResponseTableMap::WEIGHT => 9, TntOrderParcelResponseTableMap::CREATED_AT => 10, TntOrderParcelResponseTableMap::UPDATED_AT => 11, ),
-        self::TYPE_RAW_COLNAME   => array('ID' => 0, 'ORDER_PRODUCT_ID' => 1, 'PICK_UP_NUMBER' => 2, 'FILE_NAME' => 3, 'SEQUENCE_NUMBER' => 4, 'PARCEL_NUMBER_ID' => 5, 'STICKER_NUMBER' => 6, 'TRACKING_URL' => 7, 'PRINTED' => 8, 'WEIGHT' => 9, 'CREATED_AT' => 10, 'UPDATED_AT' => 11, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'order_product_id' => 1, 'pick_up_number' => 2, 'file_name' => 3, 'sequence_number' => 4, 'parcel_number_id' => 5, 'sticker_number' => 6, 'tracking_url' => 7, 'printed' => 8, 'weight' => 9, 'created_at' => 10, 'updated_at' => 11, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'AreaId' => 1, 'TntProductLabel' => 2, 'TntProductCode' => 3, 'Weight' => 4, 'Price' => 5, 'PriceKgSup' => 6, 'CreatedAt' => 7, 'UpdatedAt' => 8, ),
+        self::TYPE_STUDLYPHPNAME => array('id' => 0, 'areaId' => 1, 'tntProductLabel' => 2, 'tntProductCode' => 3, 'weight' => 4, 'price' => 5, 'priceKgSup' => 6, 'createdAt' => 7, 'updatedAt' => 8, ),
+        self::TYPE_COLNAME       => array(TntPriceWeightTableMap::ID => 0, TntPriceWeightTableMap::AREA_ID => 1, TntPriceWeightTableMap::TNT_PRODUCT_LABEL => 2, TntPriceWeightTableMap::TNT_PRODUCT_CODE => 3, TntPriceWeightTableMap::WEIGHT => 4, TntPriceWeightTableMap::PRICE => 5, TntPriceWeightTableMap::PRICE_KG_SUP => 6, TntPriceWeightTableMap::CREATED_AT => 7, TntPriceWeightTableMap::UPDATED_AT => 8, ),
+        self::TYPE_RAW_COLNAME   => array('ID' => 0, 'AREA_ID' => 1, 'TNT_PRODUCT_LABEL' => 2, 'TNT_PRODUCT_CODE' => 3, 'WEIGHT' => 4, 'PRICE' => 5, 'PRICE_KG_SUP' => 6, 'CREATED_AT' => 7, 'UPDATED_AT' => 8, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'area_id' => 1, 'tnt_product_label' => 2, 'tnt_product_code' => 3, 'weight' => 4, 'price' => 5, 'price_kg_sup' => 6, 'created_at' => 7, 'updated_at' => 8, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, )
     );
 
     /**
@@ -175,22 +160,19 @@ class TntOrderParcelResponseTableMap extends TableMap
     public function initialize()
     {
         // attributes
-        $this->setName('tnt_order_parcel_response');
-        $this->setPhpName('TntOrderParcelResponse');
-        $this->setClassName('\\TNTFrance\\Model\\TntOrderParcelResponse');
+        $this->setName('tnt_price_weight');
+        $this->setPhpName('TntPriceWeight');
+        $this->setClassName('\\TNTFrance\\Model\\TntPriceWeight');
         $this->setPackage('TNTFrance.Model');
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
-        $this->addForeignKey('ORDER_PRODUCT_ID', 'OrderProductId', 'INTEGER', 'order_product', 'ID', true, null, null);
-        $this->addColumn('PICK_UP_NUMBER', 'PickUpNumber', 'INTEGER', true, null, null);
-        $this->addColumn('FILE_NAME', 'FileName', 'VARCHAR', false, 255, null);
-        $this->addColumn('SEQUENCE_NUMBER', 'SequenceNumber', 'INTEGER', true, null, null);
-        $this->addColumn('PARCEL_NUMBER_ID', 'ParcelNumberId', 'INTEGER', true, null, null);
-        $this->addColumn('STICKER_NUMBER', 'StickerNumber', 'INTEGER', false, null, null);
-        $this->addColumn('TRACKING_URL', 'TrackingUrl', 'VARCHAR', true, 255, null);
-        $this->addColumn('PRINTED', 'Printed', 'TINYINT', false, null, 0);
-        $this->addColumn('WEIGHT', 'Weight', 'FLOAT', false, null, 0);
+        $this->addForeignKey('AREA_ID', 'AreaId', 'INTEGER', 'area', 'ID', true, null, null);
+        $this->addColumn('TNT_PRODUCT_LABEL', 'TntProductLabel', 'VARCHAR', false, 255, null);
+        $this->addColumn('TNT_PRODUCT_CODE', 'TntProductCode', 'VARCHAR', true, 255, null);
+        $this->addColumn('WEIGHT', 'Weight', 'FLOAT', true, null, 0);
+        $this->addColumn('PRICE', 'Price', 'FLOAT', true, null, 0);
+        $this->addColumn('PRICE_KG_SUP', 'PriceKgSup', 'FLOAT', true, null, 0);
         $this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('UPDATED_AT', 'UpdatedAt', 'TIMESTAMP', false, null, null);
     } // initialize()
@@ -200,7 +182,7 @@ class TntOrderParcelResponseTableMap extends TableMap
      */
     public function buildRelations()
     {
-        $this->addRelation('OrderProduct', '\\Thelia\\Model\\OrderProduct', RelationMap::MANY_TO_ONE, array('order_product_id' => 'id', ), 'CASCADE', null);
+        $this->addRelation('Area', '\\Thelia\\Model\\Area', RelationMap::MANY_TO_ONE, array('area_id' => 'id', ), 'CASCADE', null);
     } // buildRelations()
 
     /**
@@ -272,7 +254,7 @@ class TntOrderParcelResponseTableMap extends TableMap
      */
     public static function getOMClass($withPrefix = true)
     {
-        return $withPrefix ? TntOrderParcelResponseTableMap::CLASS_DEFAULT : TntOrderParcelResponseTableMap::OM_CLASS;
+        return $withPrefix ? TntPriceWeightTableMap::CLASS_DEFAULT : TntPriceWeightTableMap::OM_CLASS;
     }
 
     /**
@@ -286,21 +268,21 @@ class TntOrderParcelResponseTableMap extends TableMap
      *
      * @throws PropelException Any exceptions caught during processing will be
      *         rethrown wrapped into a PropelException.
-     * @return array (TntOrderParcelResponse object, last column rank)
+     * @return array (TntPriceWeight object, last column rank)
      */
     public static function populateObject($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
-        $key = TntOrderParcelResponseTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
-        if (null !== ($obj = TntOrderParcelResponseTableMap::getInstanceFromPool($key))) {
+        $key = TntPriceWeightTableMap::getPrimaryKeyHashFromRow($row, $offset, $indexType);
+        if (null !== ($obj = TntPriceWeightTableMap::getInstanceFromPool($key))) {
             // We no longer rehydrate the object, since this can cause data loss.
             // See http://www.propelorm.org/ticket/509
             // $obj->hydrate($row, $offset, true); // rehydrate
-            $col = $offset + TntOrderParcelResponseTableMap::NUM_HYDRATE_COLUMNS;
+            $col = $offset + TntPriceWeightTableMap::NUM_HYDRATE_COLUMNS;
         } else {
-            $cls = TntOrderParcelResponseTableMap::OM_CLASS;
+            $cls = TntPriceWeightTableMap::OM_CLASS;
             $obj = new $cls();
             $col = $obj->hydrate($row, $offset, false, $indexType);
-            TntOrderParcelResponseTableMap::addInstanceToPool($obj, $key);
+            TntPriceWeightTableMap::addInstanceToPool($obj, $key);
         }
 
         return array($obj, $col);
@@ -323,8 +305,8 @@ class TntOrderParcelResponseTableMap extends TableMap
         $cls = static::getOMClass(false);
         // populate the object(s)
         while ($row = $dataFetcher->fetch()) {
-            $key = TntOrderParcelResponseTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
-            if (null !== ($obj = TntOrderParcelResponseTableMap::getInstanceFromPool($key))) {
+            $key = TntPriceWeightTableMap::getPrimaryKeyHashFromRow($row, 0, $dataFetcher->getIndexType());
+            if (null !== ($obj = TntPriceWeightTableMap::getInstanceFromPool($key))) {
                 // We no longer rehydrate the object, since this can cause data loss.
                 // See http://www.propelorm.org/ticket/509
                 // $obj->hydrate($row, 0, true); // rehydrate
@@ -333,7 +315,7 @@ class TntOrderParcelResponseTableMap extends TableMap
                 $obj = new $cls();
                 $obj->hydrate($row);
                 $results[] = $obj;
-                TntOrderParcelResponseTableMap::addInstanceToPool($obj, $key);
+                TntPriceWeightTableMap::addInstanceToPool($obj, $key);
             } // if key exists
         }
 
@@ -354,29 +336,23 @@ class TntOrderParcelResponseTableMap extends TableMap
     public static function addSelectColumns(Criteria $criteria, $alias = null)
     {
         if (null === $alias) {
-            $criteria->addSelectColumn(TntOrderParcelResponseTableMap::ID);
-            $criteria->addSelectColumn(TntOrderParcelResponseTableMap::ORDER_PRODUCT_ID);
-            $criteria->addSelectColumn(TntOrderParcelResponseTableMap::PICK_UP_NUMBER);
-            $criteria->addSelectColumn(TntOrderParcelResponseTableMap::FILE_NAME);
-            $criteria->addSelectColumn(TntOrderParcelResponseTableMap::SEQUENCE_NUMBER);
-            $criteria->addSelectColumn(TntOrderParcelResponseTableMap::PARCEL_NUMBER_ID);
-            $criteria->addSelectColumn(TntOrderParcelResponseTableMap::STICKER_NUMBER);
-            $criteria->addSelectColumn(TntOrderParcelResponseTableMap::TRACKING_URL);
-            $criteria->addSelectColumn(TntOrderParcelResponseTableMap::PRINTED);
-            $criteria->addSelectColumn(TntOrderParcelResponseTableMap::WEIGHT);
-            $criteria->addSelectColumn(TntOrderParcelResponseTableMap::CREATED_AT);
-            $criteria->addSelectColumn(TntOrderParcelResponseTableMap::UPDATED_AT);
+            $criteria->addSelectColumn(TntPriceWeightTableMap::ID);
+            $criteria->addSelectColumn(TntPriceWeightTableMap::AREA_ID);
+            $criteria->addSelectColumn(TntPriceWeightTableMap::TNT_PRODUCT_LABEL);
+            $criteria->addSelectColumn(TntPriceWeightTableMap::TNT_PRODUCT_CODE);
+            $criteria->addSelectColumn(TntPriceWeightTableMap::WEIGHT);
+            $criteria->addSelectColumn(TntPriceWeightTableMap::PRICE);
+            $criteria->addSelectColumn(TntPriceWeightTableMap::PRICE_KG_SUP);
+            $criteria->addSelectColumn(TntPriceWeightTableMap::CREATED_AT);
+            $criteria->addSelectColumn(TntPriceWeightTableMap::UPDATED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.ID');
-            $criteria->addSelectColumn($alias . '.ORDER_PRODUCT_ID');
-            $criteria->addSelectColumn($alias . '.PICK_UP_NUMBER');
-            $criteria->addSelectColumn($alias . '.FILE_NAME');
-            $criteria->addSelectColumn($alias . '.SEQUENCE_NUMBER');
-            $criteria->addSelectColumn($alias . '.PARCEL_NUMBER_ID');
-            $criteria->addSelectColumn($alias . '.STICKER_NUMBER');
-            $criteria->addSelectColumn($alias . '.TRACKING_URL');
-            $criteria->addSelectColumn($alias . '.PRINTED');
+            $criteria->addSelectColumn($alias . '.AREA_ID');
+            $criteria->addSelectColumn($alias . '.TNT_PRODUCT_LABEL');
+            $criteria->addSelectColumn($alias . '.TNT_PRODUCT_CODE');
             $criteria->addSelectColumn($alias . '.WEIGHT');
+            $criteria->addSelectColumn($alias . '.PRICE');
+            $criteria->addSelectColumn($alias . '.PRICE_KG_SUP');
             $criteria->addSelectColumn($alias . '.CREATED_AT');
             $criteria->addSelectColumn($alias . '.UPDATED_AT');
         }
@@ -391,7 +367,7 @@ class TntOrderParcelResponseTableMap extends TableMap
      */
     public static function getTableMap()
     {
-        return Propel::getServiceContainer()->getDatabaseMap(TntOrderParcelResponseTableMap::DATABASE_NAME)->getTable(TntOrderParcelResponseTableMap::TABLE_NAME);
+        return Propel::getServiceContainer()->getDatabaseMap(TntPriceWeightTableMap::DATABASE_NAME)->getTable(TntPriceWeightTableMap::TABLE_NAME);
     }
 
     /**
@@ -399,16 +375,16 @@ class TntOrderParcelResponseTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(TntOrderParcelResponseTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(TntOrderParcelResponseTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new TntOrderParcelResponseTableMap());
+        $dbMap = Propel::getServiceContainer()->getDatabaseMap(TntPriceWeightTableMap::DATABASE_NAME);
+        if (!$dbMap->hasTable(TntPriceWeightTableMap::TABLE_NAME)) {
+            $dbMap->addTableObject(new TntPriceWeightTableMap());
         }
     }
 
     /**
-     * Performs a DELETE on the database, given a TntOrderParcelResponse or Criteria object OR a primary key value.
+     * Performs a DELETE on the database, given a TntPriceWeight or Criteria object OR a primary key value.
      *
-     * @param mixed               $values Criteria or TntOrderParcelResponse object or primary key or array of primary keys
+     * @param mixed               $values Criteria or TntPriceWeight object or primary key or array of primary keys
      *              which is used to create the DELETE statement
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).  This includes CASCADE-related rows
@@ -419,25 +395,25 @@ class TntOrderParcelResponseTableMap extends TableMap
     public static function doDelete($values, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(TntOrderParcelResponseTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(TntPriceWeightTableMap::DATABASE_NAME);
         }
 
         if ($values instanceof Criteria) {
             // rename for clarity
             $criteria = $values;
-        } elseif ($values instanceof \TNTFrance\Model\TntOrderParcelResponse) { // it's a model object
+        } elseif ($values instanceof \TNTFrance\Model\TntPriceWeight) { // it's a model object
             // create criteria based on pk values
             $criteria = $values->buildPkeyCriteria();
         } else { // it's a primary key, or an array of pks
-            $criteria = new Criteria(TntOrderParcelResponseTableMap::DATABASE_NAME);
-            $criteria->add(TntOrderParcelResponseTableMap::ID, (array) $values, Criteria::IN);
+            $criteria = new Criteria(TntPriceWeightTableMap::DATABASE_NAME);
+            $criteria->add(TntPriceWeightTableMap::ID, (array) $values, Criteria::IN);
         }
 
-        $query = TntOrderParcelResponseQuery::create()->mergeWith($criteria);
+        $query = TntPriceWeightQuery::create()->mergeWith($criteria);
 
-        if ($values instanceof Criteria) { TntOrderParcelResponseTableMap::clearInstancePool();
+        if ($values instanceof Criteria) { TntPriceWeightTableMap::clearInstancePool();
         } elseif (!is_object($values)) { // it's a primary key, or an array of pks
-            foreach ((array) $values as $singleval) { TntOrderParcelResponseTableMap::removeInstanceFromPool($singleval);
+            foreach ((array) $values as $singleval) { TntPriceWeightTableMap::removeInstanceFromPool($singleval);
             }
         }
 
@@ -445,20 +421,20 @@ class TntOrderParcelResponseTableMap extends TableMap
     }
 
     /**
-     * Deletes all rows from the tnt_order_parcel_response table.
+     * Deletes all rows from the tnt_price_weight table.
      *
      * @param ConnectionInterface $con the connection to use
      * @return int The number of affected rows (if supported by underlying database driver).
      */
     public static function doDeleteAll(ConnectionInterface $con = null)
     {
-        return TntOrderParcelResponseQuery::create()->doDeleteAll($con);
+        return TntPriceWeightQuery::create()->doDeleteAll($con);
     }
 
     /**
-     * Performs an INSERT on the database, given a TntOrderParcelResponse or Criteria object.
+     * Performs an INSERT on the database, given a TntPriceWeight or Criteria object.
      *
-     * @param mixed               $criteria Criteria or TntOrderParcelResponse object containing data that is used to create the INSERT statement.
+     * @param mixed               $criteria Criteria or TntPriceWeight object containing data that is used to create the INSERT statement.
      * @param ConnectionInterface $con the ConnectionInterface connection to use
      * @return mixed           The new primary key.
      * @throws PropelException Any exceptions caught during processing will be
@@ -467,22 +443,22 @@ class TntOrderParcelResponseTableMap extends TableMap
     public static function doInsert($criteria, ConnectionInterface $con = null)
     {
         if (null === $con) {
-            $con = Propel::getServiceContainer()->getWriteConnection(TntOrderParcelResponseTableMap::DATABASE_NAME);
+            $con = Propel::getServiceContainer()->getWriteConnection(TntPriceWeightTableMap::DATABASE_NAME);
         }
 
         if ($criteria instanceof Criteria) {
             $criteria = clone $criteria; // rename for clarity
         } else {
-            $criteria = $criteria->buildCriteria(); // build Criteria from TntOrderParcelResponse object
+            $criteria = $criteria->buildCriteria(); // build Criteria from TntPriceWeight object
         }
 
-        if ($criteria->containsKey(TntOrderParcelResponseTableMap::ID) && $criteria->keyContainsValue(TntOrderParcelResponseTableMap::ID) ) {
-            throw new PropelException('Cannot insert a value for auto-increment primary key ('.TntOrderParcelResponseTableMap::ID.')');
+        if ($criteria->containsKey(TntPriceWeightTableMap::ID) && $criteria->keyContainsValue(TntPriceWeightTableMap::ID) ) {
+            throw new PropelException('Cannot insert a value for auto-increment primary key ('.TntPriceWeightTableMap::ID.')');
         }
 
 
         // Set the correct dbName
-        $query = TntOrderParcelResponseQuery::create()->mergeWith($criteria);
+        $query = TntPriceWeightQuery::create()->mergeWith($criteria);
 
         try {
             // use transaction because $criteria could contain info
@@ -498,7 +474,7 @@ class TntOrderParcelResponseTableMap extends TableMap
         return $pk;
     }
 
-} // TntOrderParcelResponseTableMap
+} // TntPriceWeightTableMap
 // This is the static code needed to register the TableMap for this table with the main Propel class.
 //
-TntOrderParcelResponseTableMap::buildTableMap();
+TntPriceWeightTableMap::buildTableMap();

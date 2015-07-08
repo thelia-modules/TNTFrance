@@ -1,0 +1,40 @@
+{"1":
+    {
+        "N": {
+            "label": "8:00 Express",
+            "price": 19.25,
+            "weight": 1,
+            "price_kg_sup" : 0.37
+        },
+        "A": {
+            "label": "9:00 Express",
+            "price": 16.25,
+            "weight": 1,
+            "price_kg_sup" : 0.37
+        },
+        "T": {
+            "label": "10:00 Express",
+            "price": 13.25,
+            "weight": 1,
+            "price_kg_sup" : 0.37
+        },
+        "M": {
+            "label": "12:00 Express",
+            "price": 7.25,
+            "weight": 1,
+            "price_kg_sup" : 0.37
+        },
+        "J": {
+            "label": "Express",
+            "price": 4.25,
+            "weight": 1,
+            "price_kg_sup" : 0.37
+        },
+        "P": {
+            "label": "Express (P)",
+            "price": 4.25,
+            "weight": 1,
+            "price_kg_sup" : 0.37
+        }
+    }
+}

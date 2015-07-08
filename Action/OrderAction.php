@@ -15,12 +15,14 @@ namespace TNTFrance\Action;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Thelia\Core\Event\Cart\CartEvent;
 use Thelia\Core\Event\Order\OrderEvent;
 use Thelia\Core\Event\TheliaEvents;
 use Thelia\Core\HttpFoundation\Request;
 use Thelia\Core\Translation\Translator;
 use Thelia\Model\Address;
 use Thelia\Model\Order;
+use Thelia\Model\ProductSaleElementsQuery;
 use TNTFrance\Model\Config\TNTFranceConfigValue;
 use TNTFrance\TNTFrance;
 use TNTFrance\Tools\DataValidator;
@@ -33,6 +35,8 @@ use TNTFrance\WebService\Feasibility;
  */
 class OrderAction implements EventSubscriberInterface
 {
+    const TNT_CALCUL_CART_WEIGHT = "action.front.tnt.calcul.cart.weight";
+
     /** @var Request */
     protected $request;
 
@@ -85,8 +89,7 @@ class OrderAction implements EventSubscriberInterface
             $ws
                 ->setZipCode($customer->getDefaultAddress()->getZipcode())
                 ->setCity($customer->getDefaultAddress()->getCity())
-                ->setType($data['tnt_service'])
-            ;
+                ->setType($data['tnt_service']);
 
             $choices = $ws->exec();
 
@@ -210,6 +213,20 @@ class OrderAction implements EventSubscriberInterface
 
             try {
                 $this->saveExtraInformation($data, $event->getOrder(), $address);
+
+                //We must recalcul postage when this informations are saved :(
+                if (array_key_exists('tnt_serviceCode', $data)) {
+                    $cartEvent = new CartEvent($this->getRequest()->getSession()->getSessionCart($event->getDispatcher()));
+                    $event->getDispatcher()->dispatch(OrderAction::TNT_CALCUL_CART_WEIGHT, $cartEvent);
+
+                    $postage = TNTFrance::calculPriceForService(
+                        $data['tnt_serviceCode'],
+                        $cartEvent->getCart()->getVirtualColumn('total_package'),
+                        $cartEvent->getCart()->getVirtualColumn('total_weight')
+                    );
+                    $event->getOrder()->setPostage($postage);
+                    $event->setPostage($postage);
+                }
             } catch (\Exception $ex) {
                 throw $ex;
             }
@@ -227,6 +244,30 @@ class OrderAction implements EventSubscriberInterface
         }
     }
 
+    public function tntCalculCartWeight(CartEvent $event)
+    {
+        $event->getCart()->setVirtualColumn('total_weight', $event->getCart()->getWeight());
+        $maxWeightPackage = TNTFrance::getConfigValue(TNTFranceConfigValue::MAX_WEIGHT_PACKAGE, 25);
+
+        $totalPackage = 0;
+
+        //If packages are separated per product
+        if (1 == TNTFrance::getConfigValue(TNTFranceConfigValue::SEPARATE_PRODUCT_IN_PACKAGE, 0)) {
+
+            /** @var \Thelia\Model\CartItem $cartItem */
+            foreach ($event->getCart()->getCartItems() as $cartItem) {
+
+                if (null != $pse = ProductSaleElementsQuery::create()->findPk($cartItem->getProductSaleElementsId())) {
+                    $totalPackage += ceil($cartItem->getQuantity() * $pse->getWeight() / $maxWeightPackage);
+                }
+            }
+        } else {
+            $totalPackage += ceil($event->getCart()->getVirtualColumn('total_weight') / $maxWeightPackage);
+        }
+
+        $event->getCart()->setVirtualColumn('total_package', $totalPackage);
+    }
+
     protected function trans($id, $parameters = [])
     {
         if (null === $this->translator) {
@@ -240,9 +281,9 @@ class OrderAction implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            TheliaEvents::ORDER_SET_DELIVERY_MODULE => array('setModuleDelivery', 64),
-            TheliaEvents::ORDER_BEFORE_PAYMENT => array('setOrderDelivery', 256)
+            TheliaEvents::ORDER_SET_DELIVERY_MODULE => ['setModuleDelivery', 64],
+            TheliaEvents::ORDER_BEFORE_PAYMENT => ['setOrderDelivery', 256],
+            OrderAction::TNT_CALCUL_CART_WEIGHT => ['tntCalculCartWeight', 128]
         );
     }
-
 }

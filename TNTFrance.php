@@ -8,6 +8,7 @@ namespace TNTFrance;
 
 use Propel\Runtime\Connection\ConnectionInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Thelia\Core\Event\Cart\CartEvent;
 use Thelia\Core\HttpFoundation\Request;
 use Thelia\Core\Translation\Translator;
 use Thelia\Install\Database;
@@ -22,7 +23,10 @@ use Thelia\Model\MetaDataQuery;
 use Thelia\Model\OrderPostage;
 use Thelia\Module\AbstractDeliveryModule;
 use Thelia\Module\Exception\DeliveryException;
+use TNTFrance\Action\OrderAction;
+use TNTFrance\Model\Base\TntPriceWeightQuery;
 use TNTFrance\Model\Config\TNTFranceConfigValue;
+use TNTFrance\Model\TntPriceWeight;
 
 /**
  * Class TNTFrance
@@ -30,6 +34,10 @@ use TNTFrance\Model\Config\TNTFranceConfigValue;
  */
 class TNTFrance extends AbstractDeliveryModule
 {
+
+    const JSON_PRICE_RESOURCE = "/Config/prices.json";
+    private static $prices = null;
+
     const MESSAGE_DOMAIN = "tntfrance";
     const ROUTER = "router.tntfrance";
     const METADATA_KEY_ORDER = 'tntfrance';
@@ -111,11 +119,42 @@ class TNTFrance extends AbstractDeliveryModule
             TNTFranceConfigValue::LABEL_FORMAT => "STDA4",
             TNTFranceConfigValue::FREE_SHIPPING => 0,
             TNTFranceConfigValue::TRACKING_URL => 'http://www.tnt.fr/public/suivi_colis/recherche/visubontransport.do?radiochoixrecherche=BT&bonTransport=%tracking-number%',
+            TNTFranceConfigValue::SURCHARGE_FUEL => 0,
+            TNTFranceConfigValue::SURCHARGE_SECURITY_FEE => 0.36,
+            TNTFranceConfigValue::SURCHARGE_MULTI_PACKAGE => 0.5,
+            TNTFranceConfigValue::SEPARATE_PRODUCT_IN_PACKAGE => 0,
+            TNTFranceConfigValue::OPTION_P_PAYMENT_BACK=> 0,
+            TNTFranceConfigValue::OPTION_W_EXPEDITION_UNDER_PROTECTION => 0,
+            TNTFranceConfigValue::OPTION_D_RELAY_PACKAGE => 0,
+            TNTFranceConfigValue::OPTION_Z_HOME_DELIVERY => 0,
+            TNTFranceConfigValue::OPTION_E_WITHOUT_ANNOTATING => 0,
         ];
 
         foreach ($defaults as $configName => $configValue) {
             if (null === self::getConfigValue($configName)) {
                 self::setConfigValue($configName, $configValue);
+            }
+        }
+
+        //If no postage price exists, save the defaults one
+        if (null == $tntPriceWeight = TntPriceWeightQuery::create()->findOne()) {
+
+            foreach (self::getPrices() as $areaId => $tntProducts) {
+
+                foreach ($tntProducts as $productCode => $tntProduct) {
+
+                    $tntPriceWeight = new TntPriceWeight();
+                    $tntPriceWeight
+                        ->setAreaId($areaId)
+                        ->setTntProductLabel($tntProduct['label'])
+                        ->setTntProductCode($productCode)
+                        ->setPrice($tntProduct['price'])
+                        ->setWeight($tntProduct['weight'])
+                        ->setPriceKgSup($tntProduct['price_kg_sup'])
+                        ->save()
+                    ;
+                }
+
             }
         }
     }
@@ -141,9 +180,6 @@ class TNTFrance extends AbstractDeliveryModule
 
         $cartWeight = $this->getRequest()->getSession()->getSessionCart()->getWeight();
         // TODO get the real max weight
-        if ($cartWeight > 30) {
-            return false;
-        }
 
         return true;
     }
@@ -163,9 +199,22 @@ class TNTFrance extends AbstractDeliveryModule
 
         $freeShipping = intval(self::getConfigValue(TNTFranceConfigValue::FREE_SHIPPING));
 
-        if (0 !== $freeShipping) {
-            $data = TNTFrance::getExtraOrderData($this->getRequest()->getSession()->getSessionCart());
-            // todo get the price.
+        if (0 == $freeShipping) {
+            $data = TNTFrance::getExtraOrderData($this->getRequest()->getSession()->getSessionCart()->getId(), true);
+
+            if (array_key_exists('tnt_serviceCode', $data)) {
+                $cartEvent = new CartEvent($this->getRequest()->getSession()->getSessionCart($this->getDispatcher()));
+                $this->getDispatcher()->dispatch(OrderAction::TNT_CALCUL_CART_WEIGHT, $cartEvent);
+
+                $postage->setAmount(
+                    self::calculPriceForService(
+                        $data['tnt_serviceCode'],
+                        $cartEvent->getCart()->getVirtualColumn('total_package'),
+                        $cartEvent->getCart()->getVirtualColumn('total_weight')
+                    )
+                );
+            }
+
         }
 
         return $postage->getAmount();
@@ -180,6 +229,89 @@ class TNTFrance extends AbstractDeliveryModule
     public function handleVirtualProductDelivery()
     {
         return false;
+    }
+
+    public static function calculPriceForService($serviceCode, $numberOfPackages, $weight = 0)
+    {
+        $price = 0;
+
+        $freeShipping = intval(self::getConfigValue(TNTFranceConfigValue::FREE_SHIPPING, 0));
+
+        //A serviceCode is composed by a tnt_code_product AND a tnt_code_option
+        if (strlen($serviceCode) == 2) {
+            $productCode = substr($serviceCode, 0, 1);
+            $optionCode = substr($serviceCode, 1, 1);
+        } else {
+            $productCode = $serviceCode;
+            $optionCode = null;
+        }
+
+        if (0 == $freeShipping) {
+            /** @var \TNTFrance\Model\TntPriceWeight $tntPriceWeight */
+            if (null != $tntPriceWeight = TntPriceWeightQuery::create()
+                    ->filterByTntProductCode($productCode)
+                    ->findOne()) {
+
+                $price = $tntPriceWeight->getPrice() + (floor($weight) - 1) * $tntPriceWeight->getPriceKgSup();
+
+                //Package SURCHARGES
+                //surcharge_security_fee
+                $price += $numberOfPackages * (float)TNTFrance::getConfigValue(TNTFranceConfigValue::SURCHARGE_SECURITY_FEE, 0);
+
+                //surcharge surcharge_multi_package
+                if ($numberOfPackages > 1) {
+                    $price += ($numberOfPackages - 1) * (float)TNTFrance::getConfigValue(TNTFranceConfigValue::SURCHARGE_MULTI_PACKAGE, 0);
+                }
+
+                //If there is an option_code and this option aply to each package
+                if (null != $optionCode && in_array($optionCode, ['W', 'D', 'Z'])) {
+
+                    switch ($optionCode) {
+                        //option_expedition_under_protection
+                        case 'W':
+                            $price += $numberOfPackages * (float)TNTFrance::getConfigValue(TNTFranceConfigValue::OPTION_W_EXPEDITION_UNDER_PROTECTION, 0);
+                            break;
+
+                        //option_relay_package
+                        case 'D':
+                            $price += $numberOfPackages * (float)TNTFrance::getConfigValue(TNTFranceConfigValue::OPTION_D_RELAY_PACKAGE, 0);
+                            break;
+
+                        //option_home_delivery
+                        case 'Z':
+                            $price += $numberOfPackages * (float)TNTFrance::getConfigValue(TNTFranceConfigValue::OPTION_Z_HOME_DELIVERY, 0);
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+
+                //Expedition SURCHARGES
+                //surcharge_fuel
+                $price += (float)TNTFrance::getConfigValue(TNTFranceConfigValue::SURCHARGE_FUEL, 0);
+
+                //If there is an option_code and this option aply to each expedition
+                if (null != $optionCode && in_array($optionCode, ['P', 'E'])) {
+                    switch ($optionCode) {
+                        //option_payment_back
+                        case 'P':
+                            $price += (float)TNTFrance::getConfigValue(TNTFranceConfigValue::OPTION_P_PAYMENT_BACK, 0);
+                            break;
+
+                        //option_without_annotating
+                        case 'E':
+                            $price += (float)TNTFrance::getConfigValue(TNTFranceConfigValue::OPTION_E_WITHOUT_ANNOTATING, 0);
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+
+        return $price;
     }
 
     /**
@@ -315,5 +447,14 @@ class TNTFrance extends AbstractDeliveryModule
         );
 
         return in_array($date, $holidays);
+    }
+
+    public static function getPrices()
+    {
+        if (null === self::$prices) {
+            self::$prices = json_decode(file_get_contents(sprintf('%s%s', __DIR__, self::JSON_PRICE_RESOURCE)), true);
+        }
+
+        return self::$prices;
     }
 }

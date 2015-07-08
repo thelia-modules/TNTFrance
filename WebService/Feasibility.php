@@ -88,7 +88,8 @@ class Feasibility extends BaseTNTFranceWebService
                 ->setSaturdayDelivery($service->saturdayDelivery)
                 ->setPriorityGuarantee($service->priorityGuarantee)
                 ->setInsurance($service->insurance)
-                ->setAfternoonDelivery($service->afternoonDelivery);
+                ->setAfternoonDelivery($service->afternoonDelivery)
+            ;
 
             $services[] = $tntService;
         }

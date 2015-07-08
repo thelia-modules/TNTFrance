@@ -54,62 +54,66 @@ class ParcelsRequestBuilder
             );
         }
 
-        $maxWeightPackage = TNTFrance::getConfigValue(TNTFranceConfigValue::MAX_WEIGHT_PACKAGE);
+        $maxWeightPackage = TNTFrance::getConfigValue(TNTFranceConfigValue::MAX_WEIGHT_PACKAGE, 25);
 
         $parcelsRequest = [];
-        if (!empty($maxWeightPackage)) {
 
-            $orderTotalWeight = 0;
-            $packages = [];
+        $orderTotalWeight = 0;
+        $packages = [];
 
-            foreach ($order->getOrderProducts() as $orderProduct) {
-                $orderProductWeight = $orderProduct->getQuantity() * $orderProduct->getWeight();
-                $orderTotalWeight += $orderProductWeight;
+        foreach ($order->getOrderProducts() as $orderProduct) {
+            $orderProductWeight = $orderProduct->getQuantity() * $orderProduct->getWeight();
+            $orderTotalWeight += $orderProductWeight;
 
-                if (!$allInOne) {
-                    //If customer has choosen a manual number of package
-                    if ($orderProduct->getVirtualColumn(TNTFranceCreateExpeditionEvent::PACKAGE) &&
-                        intval($orderProduct->getVirtualColumn(TNTFranceCreateExpeditionEvent::PACKAGE)) == $orderProduct->getVirtualColumn(TNTFranceCreateExpeditionEvent::PACKAGE)) {
-                        $orderProductPackages = $orderProduct->getVirtualColumn(TNTFranceCreateExpeditionEvent::PACKAGE);
-                    } else {
-                        $orderProductPackages = ceil($orderProductWeight / $maxWeightPackage);
-                    }
-
-                    //Divide the weight between packages
-                    for ($i = 1; $i <= $orderProductPackages; $i++) {
-                        $packages[] = round($orderProductWeight / $orderProductPackages, 2);
-                    }
-
-                }
-            }
-
-            if ($allInOne) {
+            if (!$allInOne) {
                 //If customer has choosen a manual number of package
-                if ($order->getVirtualColumn(TNTFranceCreateExpeditionEvent::PACKAGE) &&
-                    intval($order->getVirtualColumn(TNTFranceCreateExpeditionEvent::PACKAGE)) == $order->getVirtualColumn(TNTFranceCreateExpeditionEvent::PACKAGE)) {
-                    $orderPackages = $order->getVirtualColumn(TNTFranceCreateExpeditionEvent::PACKAGE);
+                if ($orderProduct->getVirtualColumn(TNTFranceCreateExpeditionEvent::PACKAGE) &&
+                    intval($orderProduct->getVirtualColumn(TNTFranceCreateExpeditionEvent::PACKAGE)) == $orderProduct->getVirtualColumn(TNTFranceCreateExpeditionEvent::PACKAGE)) {
+                    $orderProductPackages = $orderProduct->getVirtualColumn(TNTFranceCreateExpeditionEvent::PACKAGE);
                 } else {
-                    $orderPackages = ceil($orderTotalWeight / $maxWeightPackage);
+
+                    if ($maxWeightPackage != 0) {
+                        $orderProductPackages = ceil($orderProductWeight / $maxWeightPackage);
+                    } else {
+                        $orderProductPackages = 1;
+                    }
+
                 }
 
                 //Divide the weight between packages
-                for ($i = 1; $i <= $orderPackages; $i++) {
-                    $packages[] = round($orderTotalWeight / $orderPackages, 2);
+                for ($i = 1; $i <= $orderProductPackages; $i++) {
+                    $packages[] = round($orderProductWeight / $orderProductPackages, 2);
                 }
+
+            }
+        }
+
+        if ($allInOne) {
+            //If customer has choosen a manual number of package
+            if ($order->getVirtualColumn(TNTFranceCreateExpeditionEvent::PACKAGE) &&
+                intval($order->getVirtualColumn(TNTFranceCreateExpeditionEvent::PACKAGE)) == $order->getVirtualColumn(TNTFranceCreateExpeditionEvent::PACKAGE)) {
+                $orderPackages = $order->getVirtualColumn(TNTFranceCreateExpeditionEvent::PACKAGE);
+            } else {
+                $orderPackages = ceil($orderTotalWeight / $maxWeightPackage);
             }
 
-
-            foreach ($packages as $key => $packageWeight) {
-                $parcelRequest = new TNTParcelRequest();
-                $parcelRequest
-                    ->setSequenceNumber($key + 1)
-                    ->setCustomerReference($order->getCustomer()->getRef())
-                    ->setWeight($packageWeight)
-                    //->setComment($data['tnt_instructions'])
-                ;
-
-                $parcelsRequest[] = $parcelRequest;
+            //Divide the weight between packages
+            for ($i = 1; $i <= $orderPackages; $i++) {
+                $packages[] = round($orderTotalWeight / $orderPackages, 2);
             }
+        }
+
+
+        foreach ($packages as $key => $packageWeight) {
+            $parcelRequest = new TNTParcelRequest();
+            $parcelRequest
+                ->setSequenceNumber($key + 1)
+                ->setCustomerReference($order->getCustomer()->getRef())
+                ->setWeight($packageWeight)
+                //->setComment($data['tnt_instructions'])
+            ;
+
+            $parcelsRequest[] = $parcelRequest;
         }
 
         if (count($parcelsRequest) == 0) {

@@ -42,8 +42,7 @@ class TNTFranceConfigValue
     const NOTIFICATION_EMAILS = "notification_emails";
     const NOTIFICATION_SUCCESS = "notification_success";
     const LABEL_FORMAT = "label_format";
-    const FREE_SHIPPING = "free_sheeping";
+    const FREE_SHIPPING = "free_shipping";
     const MAX_WEIGHT_PACKAGE = "max_weight_package";
     const TRACKING_URL = "tracking_url";
 }
-

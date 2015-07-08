@@ -1,0 +1,224 @@
+{form name="tntfrance.price.weight"}
+<form action="{url path=$current_url current_tab=weight}" method="post">
+    {include "includes/inner-form-toolbar.html" hide_flags = 1 close_url={url path='/admin/modules'}}
+
+    {form_hidden_fields form=$form}
+
+    {form_field form=$form field="free_shipping"}
+    <div class="form-group">
+        <label class="control-label" for="{$label_attr.for}">{$label} : </label>
+        <div class="make-switch switch-small module-activation" data-id="{$name}" data-on="success" data-off="danger" data-on-label="<i class='glyphicon glyphicon-ok-circle'></i>" data-off-label="<i class='glyphicon glyphicon-remove-circle'></i>">
+            <input id="{$label_attr.for}" name="{$name}" type="checkbox" value="1" {if $value == 1}checked{/if} />
+        </div>
+    </div>
+    {/form_field}
+
+    <div id="no_free_shipping">
+    <label class="title">{intl l="Surchages" d="tntfrance.bo.default"}</label>&nbsp;:
+    <table class="table">
+        <thead>
+        <tr>
+            <th class="title">{intl l="Title" d="tntfrance.bo.default"}</th>
+            <th class="title">{intl l="Description" d="tntfrance.bo.default"}</th>
+            <th class="title">{intl l="Amount" d="tntfrance.bo.default"}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {form_field form=$form field="surcharge_fuel"}
+        <tr>
+            <td>
+                <label for="{$label_attr.for}">{$label}</label>
+            </td>
+            <td>
+                <label for="{$label_attr.for}">{$label_attr.description}</label>
+            </td>
+            <td>
+                <input type="number" step="0.01" name="{$name}" id="{$label_attr.for}" value="{if $value}{$value}{else}0{/if}" />
+                <div class="help-block">{$label_attr.helper}</div>
+            </td>
+        </tr>
+        {/form_field}
+        {form_field form=$form field="surcharge_security_fee"}
+        <tr>
+            <td>
+                <label for="{$label_attr.for}">{$label}</label>
+            </td>
+            <td>
+                <label for="{$label_attr.for}">{$label_attr.description}</label>
+            </td>
+            <td>
+                <input type="number" step="0.01" name="{$name}" id="{$label_attr.for}" value="{if $value}{$value}{else}0{/if}" />
+                <div class="help-block">{$label_attr.helper}</div>
+            </td>
+        </tr>
+        {/form_field}
+        {form_field form=$form field="surcharge_multi_package"}
+        <tr>
+            <td>
+                <label for="{$label_attr.for}">{$label}</label>
+            </td>
+            <td>
+                <label for="{$label_attr.for}">{$label_attr.description}</label>
+            </td>
+            <td>
+                <input type="number" step="0.01" name="{$name}" id="{$label_attr.for}" value="{if $value}{$value}{else}0{/if}" />
+                <div class="help-block">{$label_attr.helper}</div>
+            </td>
+        </tr>
+        {/form_field}
+        {form_field form=$form field="separate_product_in_package"}
+        <tr>
+            <td>
+                <label for="{$label_attr.for}">{$label}</label>
+            </td>
+            <td>
+                <label for="{$label_attr.for}">{$label_attr.description}</label>
+            </td>
+            <td>
+                <div class="make-switch switch-small module-activation" data-id="{$name}" data-on="success" data-off="danger" data-on-label="<i class='glyphicon glyphicon-ok-circle'></i>" data-off-label="<i class='glyphicon glyphicon-remove-circle'></i>">
+                    <input id="{$label_attr.for}" name="{$name}" type="checkbox" value="1" {if $value == 1}checked{/if} />
+                </div>
+            </td>
+        </tr>
+        {/form_field}
+        {form_field form=$form field="option_payment_back"}
+        <tr>
+            <td>
+                <label for="{$label_attr.for}">{$label}</label>
+            </td>
+            <td>
+                <label for="{$label_attr.for}">{$label_attr.description}</label>
+            </td>
+            <td>
+                <input type="number" step="0.01" name="{$name}" id="{$label_attr.for}" value="{if $value}{$value}{else}0{/if}" />
+                <div class="help-block">{$label_attr.helper}</div>
+            </td>
+        </tr>
+        {/form_field}
+        {form_field form=$form field="option_expedition_under_protection"}
+        <tr>
+            <td>
+                <label for="{$label_attr.for}">{$label}</label>
+            </td>
+            <td>
+                <label for="{$label_attr.for}">{$label_attr.description}</label>
+            </td>
+            <td>
+                <input type="number" step="0.01" name="{$name}" id="{$label_attr.for}" value="{if $value}{$value}{else}0{/if}" />
+                <div class="help-block">{$label_attr.helper}</div>
+            </td>
+        </tr>
+        {/form_field}
+        {form_field form=$form field="option_relay_package"}
+        <tr>
+            <td>
+                <label for="{$label_attr.for}">{$label}</label>
+            </td>
+            <td>
+                <label for="{$label_attr.for}">{$label_attr.description}</label>
+            </td>
+            <td>
+                <input type="number" step="0.01" name="{$name}" id="{$label_attr.for}" value="{if $value}{$value}{else}0{/if}" />
+                <div class="help-block">{$label_attr.helper}</div>
+            </td>
+        </tr>
+        {/form_field}
+        {form_field form=$form field="option_home_delivery"}
+        <tr>
+            <td>
+                <label for="{$label_attr.for}">{$label}</label>
+            </td>
+            <td>
+                <label for="{$label_attr.for}">{$label_attr.description}</label>
+            </td>
+            <td>
+                <input type="number" step="0.01" name="{$name}" id="{$label_attr.for}" value="{if $value}{$value}{else}0{/if}" />
+                <div class="help-block">{$label_attr.helper}</div>
+            </td>
+        </tr>
+        {/form_field}
+        {form_field form=$form field="option_without_annotating"}
+        <tr>
+            <td>
+                <label for="{$label_attr.for}">{$label}</label>
+            </td>
+            <td>
+                <label for="{$label_attr.for}">{$label_attr.description}</label>
+            </td>
+            <td>
+                <input type="number" step="0.01" name="{$name}" id="{$label_attr.for}" value="{if $value}{$value}{else}0{/if}" />
+                <div class="help-block">{$label_attr.helper}</div>
+            </td>
+        </tr>
+        {/form_field}
+        </tbody>
+    </table>
+    {loop name="area" type="area" backend_context="1"}
+        {ifloop rel="tnt-price-weight"}
+        <label class="title">{intl l="Contracted rates" d="tntfrance.bo.default"}</label>&nbsp;:
+        <table class="table">
+            <thead>
+            <tr>
+                <th class="col-md-1">
+                    {$array_tnt_price_weight = []}
+                </th>
+                {loop name="tnt-price-weight" type="tnt-price-weight" area_id=$ID tnt_product_code=$products_enabled}
+                <th>{$TNT_PRODUCT_LABEL}</th>
+                {$array_tnt_price_weight[] = ['id' => {$ID}, 'label' => {$TNT_PRODUCT_LABEL}, 'weight' => {$WEIGHT}, 'price'=> $PRICE, 'price_kg_sup'=> {$PRICE_KG_SUP}]}
+                {/loop}
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{intl l="1 kg" d="tntfrance.bo.default"}</td>
+                {foreach from=$array_tnt_price_weight item=tnt_price_weight}
+                <td>
+                    {form_field form=$form field="price" value_key=$tnt_price_weight.id}
+                    <input type="number" step="0.01" name="{$name}" class="form-control" value="{if $value}{$value}{else}{$tnt_price_weight.price}{/if}">
+                    {/form_field}
+                </td>
+                {/foreach}
+            </tr>
+            <tr>
+                <td>{intl l="kg sup" d="tntfrance.bo.default"}</td>
+                {foreach from=$array_tnt_price_weight item=tnt_price_weight}
+                <td>
+                    {form_field form=$form field="price_kg_sup" value_key=$tnt_price_weight.id}
+                    <input type="number" step="0.01" name="{$name}" class="form-control" value="{if $value}{$value}{else}{$tnt_price_weight.price_kg_sup}{/if}">
+                    {/form_field}
+                </td>
+                {/foreach}
+            </tr>
+            </tbody>
+        </table>
+
+        <label class="title">{intl l="Grid developed for guidance" d="tntfrance.bo.default"}</label>&nbsp;({intl l="calculated on contracted rates above" d="tntfrance.bo.default"})
+        <table class="table">
+            <thead>
+            <tr>
+                <th class="col-md-1">{intl l="Weight, kg" d="tntfrance.bo.default"}</th>
+                {foreach from=$array_tnt_price_weight item=tnt_price_weight}
+                <th>
+                    {$tnt_price_weight.label}
+                </th>
+                {/foreach}
+            </tr>
+            </thead>
+            <tbody>
+            {for $count=1 to 30}
+            <tr>
+                <td>{$count}&nbsp;{intl l="kg"}</td>
+                {foreach from=$array_tnt_price_weight item=tnt_price_weight}
+                <td>
+                    {math equation="p + (c - 1) * k" p=$tnt_price_weight.price c=$count k=$tnt_price_weight.price_kg_sup}€
+                </td>
+                {/foreach}
+            </tr>
+            {/for}
+            </tbody>
+        </table>
+        {/ifloop}
+    {/loop}
+    </div>
+</form>
+{/form}

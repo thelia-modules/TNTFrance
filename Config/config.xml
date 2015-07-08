@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config xmlns="http://thelia.net/schema/dic/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://thelia.net/schema/dic/config http://thelia.net/schema/dic/config/thelia-1.0.xsd">
-  <loops>
-      <loop name="tnt-order-parcel-response" class="TNTFrance\Loop\TntOrderParcelResponseLoop"/>
-  </loops>
-  <forms>
-    <!--
-        <form name="MyFormName" class="TNTFrance\Form\MySuperForm" />
-        -->
-    <form name="tntfrance.configuration" class="TNTFrance\Form\TNTFranceConfigForm"/>
-  </forms>
-  <commands>
-    <!--
-        <command class="TNTFrance\Command\MySuperCommand" />
-        -->
-  </commands>
+    <loops>
+        <loop name="tnt-order-parcel-response" class="TNTFrance\Loop\TntOrderParcelResponseLoop"/>
+        <loop name="tnt-price-weight" class="TNTFrance\Loop\TntPriceWeightLoop"/>
+    </loops>
+    <forms>
+        <!--
+            <form name="MyFormName" class="TNTFrance\Form\MySuperForm" />
+            -->
+        <form name="tntfrance.configuration" class="TNTFrance\Form\TNTFranceConfigForm"/>
+        <form name="tntfrance.price.weight" class="TNTFrance\Form\TNTPriceWeightForm"/>
+    </forms>
+    <commands>
+        <!--
+            <command class="TNTFrance\Command\MySuperCommand" />
+            -->
+    </commands>
 
     <services>
         <service id="tnt.ws.config" class="TNTFrance\WebService\Provider\ProductionConfigProvider" />
@@ -66,14 +68,14 @@
 
         </hook>
     </hooks>
-  <!--
-    <exports>
+    <!--
+      <exports>
 
-    </exports>
-    -->
-  <!--
-    <imports>
+      </exports>
+      -->
+    <!--
+      <imports>
 
-    </imports>
-    -->
+      </imports>
+      -->
 </config>

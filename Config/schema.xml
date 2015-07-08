@@ -16,7 +16,7 @@
         <column name="pick_up_number" required="true" type="INTEGER" />
         <column name="file_name" type="VARCHAR" />
         <column name="sequence_number" required="true" type="INTEGER" />
-        <column name="parcel_number_id" required="VARCHAR" type="INTEGER" />
+        <column name="parcel_number_id" required="true" type="INTEGER" />
         <column name="sticker_number" type="INTEGER" />
         <column name="tracking_url" type="VARCHAR" required="true" />
         <column defaultValue="0" name="printed" type="TINYINT" />
@@ -25,6 +25,28 @@
         <foreign-key foreignTable="order_product" onDelete="CASCADE">
             <reference foreign="id" local="order_product_id" />
         </foreign-key>
+
+        <behavior name="timestampable" />
+    </table>
+
+    <table name="tnt_price_weight" namespace="TNTFrance\Model">
+        <column autoIncrement="true" name="id" primaryKey="true" required="true" type="INTEGER" />
+        <column name="area_id" required="true" type="INTEGER" />
+        <column name="tnt_product_label" type="VARCHAR" />
+        <column name="tnt_product_code" required="true" type="VARCHAR" />
+        <column name="weight" defaultValue="0" required="true" type="FLOAT" />
+        <column name="price" defaultValue="0" required="true" type="FLOAT" />
+        <column name="price_kg_sup" defaultValue="0" required="true" type="FLOAT" />
+
+        <foreign-key foreignTable="area" onDelete="CASCADE">
+            <reference foreign="id" local="area_id" />
+        </foreign-key>
+
+        <unique name="tnt_price_weight_area_product_weight">
+            <unique-column name="area_id" />
+            <unique-column name="tnt_product_code" />
+            <unique-column name="weight" />
+        </unique>
 
         <behavior name="timestampable" />
     </table>

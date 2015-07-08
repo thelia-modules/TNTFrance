@@ -26,5 +26,24 @@ CREATE TABLE IF NOT EXISTS `tnt_order_parcel_response`
         ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS `tnt_price_weight`
+(
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `area_id` INTEGER NOT NULL,
+    `tnt_product_label` VARCHAR(255),
+    `tnt_product_code` VARCHAR(255) NOT NULL,
+    `weight` FLOAT DEFAULT 0 NOT NULL,
+    `price` FLOAT DEFAULT 0 NOT NULL,
+    `price_kg_sup` FLOAT DEFAULT 0 NOT NULL,
+    `created_at` DATETIME,
+    `updated_at` DATETIME,
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX `tnt_price_weight_area_product_weight` (`area_id`, `tnt_product_code`, `weight`),
+    CONSTRAINT `tnt_price_weight_FK_1`
+        FOREIGN KEY (`area_id`)
+        REFERENCES `area` (`id`)
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
+
 # This restores the fkey checks, after having unset them earlier
 SET FOREIGN_KEY_CHECKS = 1;

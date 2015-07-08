@@ -25,6 +25,7 @@ namespace TNTFrance\WebService\Model;
  * @method getPriorityGuarantee()
  * @method getInsurance()
  * @method getAfternoonDelivery()
+ * @method getPrice()
  * @method setDueDate(\DateTime $dueDate)
  * @method setServiceLabel($serviceLabel)
  * @method setServiceCode($serviceCode)
@@ -32,6 +33,7 @@ namespace TNTFrance\WebService\Model;
  * @method setPriorityGuarantee($priorityGuarantee)
  * @method setInsurance($insurance)
  * @method setAfternoonDelivery($afternoonDelivery)
+ * @method setPrice($price)
  */
 class TNTService extends BaseModel
 {
@@ -49,4 +51,11 @@ class TNTService extends BaseModel
     protected $insurance;
     /** @var boolean */
     protected $afternoonDelivery;
+    /** @var  float */
+    protected $price;
+
+    public function __construct()
+    {
+        $this->price = 0;
+    }
 }
