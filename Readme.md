@@ -23,8 +23,8 @@ composer require thelia/tnt-france-module:~1.0
  - TNT Account Number : 06324676
  - TNT Username : webservices@tnt.fr
  - TNT password : test
- - Use individual : YES (default one if no services are choosen)
- - Use enterprise : YES
+ - Use individual : YES (default one if no services are choosen) => Will not be visible if the current customer has a company
+ - Use enterprise : YES => Will not be visible if the connected user doesn't have a company
  - Use TNT depot : YES
  - Use drop off point  : YES
  - List of available products : CHECK ALL TO YES

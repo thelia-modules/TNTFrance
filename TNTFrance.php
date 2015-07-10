@@ -172,16 +172,34 @@ class TNTFrance extends AbstractDeliveryModule
      */
     public function isValidDelivery(Country $country)
     {
+        $isValid = true;
         // We just check the country and weight
         // the address could not be a valid address for TNT at this moment cp - city
         if ('FR' !== $country->getIsoalpha2()) {
-            return false;
+            $isValid = false;
         }
 
-        $cartWeight = $this->getRequest()->getSession()->getSessionCart()->getWeight();
-        // TODO get the real max weight
+        /** @var \Thelia\Model\Customer $customer */
+        if (null != $customer = $this->getRequest()->getSession()->getCustomerUser()) {
+            //If INDIVIDUAL service exist, be sure that the customer has no company
+            if (1 == TNTFrance::getConfigValue(TNTFranceConfigValue::USE_INDIVIDUAL, 0)) {
 
-        return true;
+                if (null != $customer->getDefaultAddress()->getCompany() &&
+                    $customer->getDefaultAddress()->getCompany() != "") {
+                    $isValid = false;
+                }
+            }
+
+            //If ENTERPRISE service exist, be sure that the customer has a company
+            if (1 == TNTFrance::getConfigValue(TNTFranceConfigValue::USE_ENTERPRISE, 0)) {
+                if (null == $customer->getDefaultAddress()->getCompany() &&
+                    $customer->getDefaultAddress()->getCompany() == "") {
+                    $isValid = false;
+                }
+            }
+        }
+
+        return $isValid;
     }
 
     /**

@@ -39,6 +39,14 @@
 
         function loadService() {
 
+            //Remove the default price for this module (because the price is selected in the list of feasibility)
+            $('#delivery-module-list-block label').each(function(){
+
+                var newHtml = $(this)[0].outerHTML.replace(' / 0.00 €', '');
+                $(this).html(newHtml)
+
+            });
+
             var service = $(config.servicesRadio).val();
             if (service == "") {
                 service = $container.find('.tntfrance-panel').first().data('service');
@@ -314,6 +322,7 @@
             $('#tnt-faisability').html(feasibility.content);
 
         }
+
 
 
         function hasValidMethod() {
