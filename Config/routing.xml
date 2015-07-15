@@ -71,8 +71,13 @@
         <default key="_controller">TNTFrance:TNTFranceFront:setDeliveryAddress</default>
     </route>
 
-    <route id="tntfrance.get.valid.pick.up.date" path="/admin/module/TNTFrance/getValidPickUpDate">
+    <route id="tntfrance.get.valid.pick.up.date" path="/admin/module/TNTFrance/getValidPickUpDate" methods="get">
         <default key="_controller">TNTFrance:TNTFranceAdmin:getValidPickUpDate</default>
+    </route>
+
+    <route id="tntfrance.get.cities" path="/module/TNTFrance/get/cities/{zip_code}" methods="get">
+        <default key="_controller">TNTFrance:TNTFranceFront:getCities</default>
+        <requirement key="zip_code" >.+</requirement>
     </route>
 
 </routes>

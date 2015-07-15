@@ -1,7 +1,7 @@
 {extends file="admin-layout.tpl"}
 
 {block name="no-return-functions"}
-{$admin_current_location = 'modules'}
+    {$admin_current_location = 'modules'}
 {/block}
 
 {block name="page-title"}{intl d="tntfrance.bo.default" l='TNTFrance configuration'}{/block}
@@ -11,52 +11,52 @@
 {block name="check-module"}TNTFrance{/block}
 
 {block name="main-content"}
-<div class="container" id="wrapper">
-    <ul class="breadcrumb">
-        <li><a href="{url path='/admin'}">{intl l="Home" d="tntfrance.bo.default"}</a></li>
-        <li><a href="{url path='/admin/modules'}">{intl l="Modules" d="tntfrance.bo.default"}</a></li>
-        <li>{intl l="TNTFrance configuration" d="tntfrance.bo.default"}</li>
-    </ul>
+    <div class="container" id="wrapper">
+        <ul class="breadcrumb">
+            <li><a href="{url path='/admin'}">{intl l="Home" d="tntfrance.bo.default"}</a></li>
+            <li><a href="{url path='/admin/modules'}">{intl l="Modules" d="tntfrance.bo.default"}</a></li>
+            <li>{intl l="TNTFrance configuration" d="tntfrance.bo.default"}</li>
+        </ul>
 
-    <div class="general-block-decorator">
-        <div class="title title-without-tabs">
-            {intl l="Configure tntfrance" d="tntfrance.bo.default"}
-        </div>
+        <div class="general-block-decorator">
+            <div class="title title-without-tabs">
+                {intl l="Configure tntfrance" d="tntfrance.bo.default"}
+            </div>
 
-        <div class="row">
-            <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
 
-                {if $success}
-                <div class="alert alert-success">
-                    {intl l="Configuration correctly saved" d="tntfrance.bo.default"}
-                </div>
-                {/if}
-
-                {if $general_error}
-                <div class="alert alert-danger">
-                    {$general_error}
-                </div>
-                {/if}
-
-                <ul class="nav nav-tabs" id="tabbed-menu">
-                    <li class="{if $smarty.get.current_tab == general || !$smarty.get.current_tab}active{/if}"><a href="#general" data-toggle="tab">{intl l="General" d="tntfrance.bo.default"}</a></li>
-                    <li class="{if $smarty.get.current_tab == weight}active{/if}"><a href="#weight" data-toggle="tab">{intl l="Prices and weights" d="tntfrance.bo.default"}</a></li>
-                </ul>
-
-                <div class="tab-content">
-
-                    <div class="tab-pane {if $smarty.get.current_tab == general || !$smarty.get.current_tab}active in{else}fade clearfix{/if}" id="general">
-                        {include file="includes/configuration-general-tab.html"}
+                    {if $success}
+                    <div class="alert alert-success">
+                        {intl l="Configuration correctly saved" d="tntfrance.bo.default"}
                     </div>
+                    {/if}
 
-                    <div class="tab-pane {if $smarty.get.current_tab == weight}active in{else}fade clearfix{/if}" id="weight">
-                        {include file="includes/configuration-weight-tab.html"}
+                    {if $general_error}
+                    <div class="alert alert-danger">
+                        {$general_error}
+                    </div>
+                    {/if}
+
+                    <ul class="nav nav-tabs" id="tabbed-menu">
+                        <li class="{if $smarty.get.current_tab == general || !$smarty.get.current_tab}active{/if}"><a href="#general" data-toggle="tab">{intl l="General" d="tntfrance.bo.default"}</a></li>
+                        <li class="{if $smarty.get.current_tab == weight}active{/if}"><a href="#weight" data-toggle="tab">{intl l="Prices and weights" d="tntfrance.bo.default"}</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+
+                        <div class="tab-pane {if $smarty.get.current_tab == general || !$smarty.get.current_tab}active in{else}fade clearfix{/if}" id="general">
+                            {include file="includes/configuration-general-tab.html"}
+                        </div>
+
+                        <div class="tab-pane {if $smarty.get.current_tab == weight}active in{else}fade clearfix{/if}" id="weight">
+                            {include file="includes/configuration-weight-tab.html"}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 {/block}
 
 {block name="javascript-initialization"}
@@ -73,8 +73,8 @@
     (function ($) {
         $(document).ready(function () {
             var products = $('#products_enabled').val(),
-                    options = $('#options_enabled').val(),
-                    labelFormat = $('#label_format').val();
+                options = $('#options_enabled').val(),
+                labelFormat = $('#label_format').val();
 
             $('input[name="product"]').val(products.split(","));
             $('input[name="option"]').val(options.split(","));
@@ -127,6 +127,35 @@
                     $('#no_free_shipping').removeClass('hidden');
                 }
             }
+
+            $('#sender_zip_code').on('input', function(){
+
+                if ($(this).val().length >= 2) {
+
+                    $('#sender_city').addClass("loading");
+                    $.ajax({
+                        type: "GET",
+                        url: "/module/TNTFrance/get/cities/"+$(this).val(),
+                        dataType: "json"
+                    }).done(function(cities){
+
+                        var html = "";
+                        for (var i = 0; i < cities.length; i++) {
+                            html += "<option>"+cities[i]+"</option>";
+                        }
+
+                        $('#sender_city').html(html);
+                        $('#sender_city').removeClass("loading");
+
+                        if (cities.length == 0) {
+                            $('#sender_city').parent().addClass("has-error");
+                        } else {
+                            $('#sender_city').parent().removeClass("has-error");
+                        }
+
+                    });
+                }
+            });
 
         });
     })(jQuery);

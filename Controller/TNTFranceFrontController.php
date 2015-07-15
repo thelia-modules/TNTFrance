@@ -392,4 +392,14 @@ class TNTFranceFrontController extends BaseFrontController
         return new Response('done');
     }
 
+    public function getCitiesAction($zip_code)
+    {
+        try {
+            $cities = $this->getCities($zip_code);
+        } catch (\Exception $e) {
+            $cities = [];
+        }
+
+        return $this->jsonResponse(json_encode($cities));
+    }
 }
