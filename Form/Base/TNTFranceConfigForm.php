@@ -328,10 +328,7 @@ class TNTFranceConfigForm extends BaseForm
                     "for" => $this->readKey("sender_address2", $fieldsIdKeys),
                     "help" => $this->readKey("help.sender_address2", $translationKeys)
                 ],
-                "required" => true,
-                "constraints" => array(
-                    new NotBlank(),
-                ),
+                "required" => false,
                 "data" => TNTFrance::getConfigValue(TNTFranceConfigValue::SENDER_ADDRESS2),
             ))
         ;
