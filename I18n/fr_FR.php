@@ -61,7 +61,7 @@ return array(
     'Use drop off point' => 'Utiliser la livraison en relais colis',
     'Use enterprise' => 'Utiliser la livraison en entreprise',
     'Use free shipping' => 'Utiliser la livraison gratuite',
-    'Use individual' => 'Uiliser la livraison à domicile',
+    'Use individual' => 'Utiliser la livraison à domicile',
     'Use the production mode ?' => 'Utiliser le mode production',
     'You must have a phone number to continue this order' => 'Vous devez avoir un numéro de téléphone valide pour continuer cet achat',
     'Your myTNT Account Number' => 'Votre numéro de compte myTnt',
