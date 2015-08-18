@@ -9,6 +9,8 @@ namespace TNTFrance\Controller\Base;
 use TNTFrance\TNTFrance;
 use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Form\Exception\FormValidationException;
+use Thelia\Core\Security\Resource\AdminResources;
+use Thelia\Core\Security\AccessManager;
 use TNTFrance\Model\Config\TNTFranceConfigValue;
 
 /**
@@ -20,11 +22,19 @@ class TNTFranceConfigController extends BaseAdminController
 {
     public function defaultAction()
     {
+        if (null !== $response = $this->checkAuth([AdminResources::MODULE], ["tntfrance"], AccessManager::VIEW)) {
+            return $response;
+        }
+
         return $this->render("tntfrance-configuration");
     }
 
     public function saveAction()
     {
+        if (null !== $response = $this->checkAuth([AdminResources::MODULE], ["tntfrance"], AccessManager::UPDATE)) {
+            return $response;
+        }
+
         $baseForm = $this->createForm("tntfrance.configuration");
 
         $errorMessage = null;

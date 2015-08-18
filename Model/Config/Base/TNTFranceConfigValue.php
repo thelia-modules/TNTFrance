@@ -46,3 +46,4 @@ class TNTFranceConfigValue
     const MAX_WEIGHT_PACKAGE = "max_weight_package";
     const TRACKING_URL = "tracking_url";
 }
+

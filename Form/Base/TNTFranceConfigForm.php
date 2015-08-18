@@ -329,6 +329,8 @@ class TNTFranceConfigForm extends BaseForm
                     "help" => $this->readKey("help.sender_address2", $translationKeys)
                 ],
                 "required" => false,
+                "constraints" => array(
+                ),
                 "data" => TNTFrance::getConfigValue(TNTFranceConfigValue::SENDER_ADDRESS2),
             ))
         ;
@@ -592,6 +594,9 @@ class TNTFranceConfigForm extends BaseForm
             "notification_emails" => "notification_emails",
             "notification_success" => "notification_success",
             "label_format" => "label_format",
+            "free_shipping" => "free_shipping",
+            "max_weight_package" => "max_weight_package",
+            "tracking_url" => "tracking_url",
         );
     }
 }

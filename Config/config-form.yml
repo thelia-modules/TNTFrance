@@ -1,11 +1,13 @@
 config:
   enabled:
     type: checkbox
+    required: false
     label: Do you want to activate TNT Express National
   mode_production:
     type: checkbox
+    required: false
     label: Use the production mode ?
-    help: if not checked the test mode will be used
+    help: If not checked the test mode will be used.
   account_number:
     type: text
     required: true
@@ -20,69 +22,91 @@ config:
     LABEL: Your myTNT password
   use_individual:
     type: checkbox
-    label: Use individual
+    required: false
+    label: Use individual delivery
   use_enterprise:
     type: checkbox
-    label: Use enterprise
+    required: false
+    label: Use enterprise delivery
   use_depot:
     type: checkbox
-    label: Use TNT depot
+    required: false
+    label: Use TNT depot delivery
   use_dropoffpoint:
     type: checkbox
-    label: Use drop off point
+    required: false
+    label: Use drop off point delivery
   products_enabled:
     type: text
+    required: true
     label: List of available products
   options_enabled:
     type: text
+    required: true
     label: List of available options
   regular_pickup:
     type: checkbox
+    required: false
     label: Regular pickup
   sender_name:
     type: text
-    label: name
+    required: true
+    label: Name
   sender_address1:
     type: text
-    label: address 1
+    required: true
+    label: Address 1
   sender_address2:
     type: text
-    label: address 2
+    required: false
+    label: Address 2
   sender_zip_code:
     type: text
-    label: zip code
+    required: true
+    label: Zip code
   sender_city:
     type: text
+    required: true
     label: City
   contact_lastname:
     type: text
+    required: true
     label: Contact last name
   contact_firstname:
     type: text
+    required: true
     label: Contact first name
   contact_email:
     type: text
+    required: true
     label: Contact email
   contact_phone:
     type: text
+    required: true
     label: Contact phone number
   notification_emails:
     type: text
+    required: true
     label: Notification emails
-    help: List of emails (separated by a ,) that will be notified on pick up anomaly
+    help: List of emails (separated by a ,) that will be notified on pick up anomaly.
   notification_success:
     type: checkbox
-    label: Notification on successfull pick up
+    required: false
+    label: Notification on successful pick up
   label_format:
     type: text
+    required: true
     label: Print format, options
   free_shipping:
     type: checkbox
+    required: false
     label: Use free shipping
   max_weight_package:
     type: text
+    required: false
     label: Max weight per package (kg)
   tracking_url:
     type: text
-    label: The tracking URL
-    help: The URL to access to a parcel’s delivery status
+    required: false
+    label: Parcel tracking URL
+    help: %tracking-number% will be replaced by the parcel tracking number.
