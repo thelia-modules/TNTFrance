@@ -58,7 +58,7 @@ class TntOrderParcelResponseTableMap extends TableMap
     /**
      * The total number of columns
      */
-    const NUM_COLUMNS = 12;
+    const NUM_COLUMNS = 13;
 
     /**
      * The number of lazy-loaded columns
@@ -68,12 +68,17 @@ class TntOrderParcelResponseTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    const NUM_HYDRATE_COLUMNS = 12;
+    const NUM_HYDRATE_COLUMNS = 13;
 
     /**
      * the column name for the ID field
      */
     const ID = 'tnt_order_parcel_response.ID';
+
+    /**
+     * the column name for the ACCOUNT_ID field
+     */
+    const ACCOUNT_ID = 'tnt_order_parcel_response.ACCOUNT_ID';
 
     /**
      * the column name for the ORDER_PRODUCT_ID field
@@ -142,12 +147,12 @@ class TntOrderParcelResponseTableMap extends TableMap
      * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
      */
     protected static $fieldNames = array (
-        self::TYPE_PHPNAME       => array('Id', 'OrderProductId', 'PickUpNumber', 'FileName', 'SequenceNumber', 'ParcelNumberId', 'StickerNumber', 'TrackingUrl', 'Printed', 'Weight', 'CreatedAt', 'UpdatedAt', ),
-        self::TYPE_STUDLYPHPNAME => array('id', 'orderProductId', 'pickUpNumber', 'fileName', 'sequenceNumber', 'parcelNumberId', 'stickerNumber', 'trackingUrl', 'printed', 'weight', 'createdAt', 'updatedAt', ),
-        self::TYPE_COLNAME       => array(TntOrderParcelResponseTableMap::ID, TntOrderParcelResponseTableMap::ORDER_PRODUCT_ID, TntOrderParcelResponseTableMap::PICK_UP_NUMBER, TntOrderParcelResponseTableMap::FILE_NAME, TntOrderParcelResponseTableMap::SEQUENCE_NUMBER, TntOrderParcelResponseTableMap::PARCEL_NUMBER_ID, TntOrderParcelResponseTableMap::STICKER_NUMBER, TntOrderParcelResponseTableMap::TRACKING_URL, TntOrderParcelResponseTableMap::PRINTED, TntOrderParcelResponseTableMap::WEIGHT, TntOrderParcelResponseTableMap::CREATED_AT, TntOrderParcelResponseTableMap::UPDATED_AT, ),
-        self::TYPE_RAW_COLNAME   => array('ID', 'ORDER_PRODUCT_ID', 'PICK_UP_NUMBER', 'FILE_NAME', 'SEQUENCE_NUMBER', 'PARCEL_NUMBER_ID', 'STICKER_NUMBER', 'TRACKING_URL', 'PRINTED', 'WEIGHT', 'CREATED_AT', 'UPDATED_AT', ),
-        self::TYPE_FIELDNAME     => array('id', 'order_product_id', 'pick_up_number', 'file_name', 'sequence_number', 'parcel_number_id', 'sticker_number', 'tracking_url', 'printed', 'weight', 'created_at', 'updated_at', ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+        self::TYPE_PHPNAME       => array('Id', 'AccountId', 'OrderProductId', 'PickUpNumber', 'FileName', 'SequenceNumber', 'ParcelNumberId', 'StickerNumber', 'TrackingUrl', 'Printed', 'Weight', 'CreatedAt', 'UpdatedAt', ),
+        self::TYPE_STUDLYPHPNAME => array('id', 'accountId', 'orderProductId', 'pickUpNumber', 'fileName', 'sequenceNumber', 'parcelNumberId', 'stickerNumber', 'trackingUrl', 'printed', 'weight', 'createdAt', 'updatedAt', ),
+        self::TYPE_COLNAME       => array(TntOrderParcelResponseTableMap::ID, TntOrderParcelResponseTableMap::ACCOUNT_ID, TntOrderParcelResponseTableMap::ORDER_PRODUCT_ID, TntOrderParcelResponseTableMap::PICK_UP_NUMBER, TntOrderParcelResponseTableMap::FILE_NAME, TntOrderParcelResponseTableMap::SEQUENCE_NUMBER, TntOrderParcelResponseTableMap::PARCEL_NUMBER_ID, TntOrderParcelResponseTableMap::STICKER_NUMBER, TntOrderParcelResponseTableMap::TRACKING_URL, TntOrderParcelResponseTableMap::PRINTED, TntOrderParcelResponseTableMap::WEIGHT, TntOrderParcelResponseTableMap::CREATED_AT, TntOrderParcelResponseTableMap::UPDATED_AT, ),
+        self::TYPE_RAW_COLNAME   => array('ID', 'ACCOUNT_ID', 'ORDER_PRODUCT_ID', 'PICK_UP_NUMBER', 'FILE_NAME', 'SEQUENCE_NUMBER', 'PARCEL_NUMBER_ID', 'STICKER_NUMBER', 'TRACKING_URL', 'PRINTED', 'WEIGHT', 'CREATED_AT', 'UPDATED_AT', ),
+        self::TYPE_FIELDNAME     => array('id', 'account_id', 'order_product_id', 'pick_up_number', 'file_name', 'sequence_number', 'parcel_number_id', 'sticker_number', 'tracking_url', 'printed', 'weight', 'created_at', 'updated_at', ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
     );
 
     /**
@@ -157,12 +162,12 @@ class TntOrderParcelResponseTableMap extends TableMap
      * e.g. self::$fieldKeys[self::TYPE_PHPNAME]['Id'] = 0
      */
     protected static $fieldKeys = array (
-        self::TYPE_PHPNAME       => array('Id' => 0, 'OrderProductId' => 1, 'PickUpNumber' => 2, 'FileName' => 3, 'SequenceNumber' => 4, 'ParcelNumberId' => 5, 'StickerNumber' => 6, 'TrackingUrl' => 7, 'Printed' => 8, 'Weight' => 9, 'CreatedAt' => 10, 'UpdatedAt' => 11, ),
-        self::TYPE_STUDLYPHPNAME => array('id' => 0, 'orderProductId' => 1, 'pickUpNumber' => 2, 'fileName' => 3, 'sequenceNumber' => 4, 'parcelNumberId' => 5, 'stickerNumber' => 6, 'trackingUrl' => 7, 'printed' => 8, 'weight' => 9, 'createdAt' => 10, 'updatedAt' => 11, ),
-        self::TYPE_COLNAME       => array(TntOrderParcelResponseTableMap::ID => 0, TntOrderParcelResponseTableMap::ORDER_PRODUCT_ID => 1, TntOrderParcelResponseTableMap::PICK_UP_NUMBER => 2, TntOrderParcelResponseTableMap::FILE_NAME => 3, TntOrderParcelResponseTableMap::SEQUENCE_NUMBER => 4, TntOrderParcelResponseTableMap::PARCEL_NUMBER_ID => 5, TntOrderParcelResponseTableMap::STICKER_NUMBER => 6, TntOrderParcelResponseTableMap::TRACKING_URL => 7, TntOrderParcelResponseTableMap::PRINTED => 8, TntOrderParcelResponseTableMap::WEIGHT => 9, TntOrderParcelResponseTableMap::CREATED_AT => 10, TntOrderParcelResponseTableMap::UPDATED_AT => 11, ),
-        self::TYPE_RAW_COLNAME   => array('ID' => 0, 'ORDER_PRODUCT_ID' => 1, 'PICK_UP_NUMBER' => 2, 'FILE_NAME' => 3, 'SEQUENCE_NUMBER' => 4, 'PARCEL_NUMBER_ID' => 5, 'STICKER_NUMBER' => 6, 'TRACKING_URL' => 7, 'PRINTED' => 8, 'WEIGHT' => 9, 'CREATED_AT' => 10, 'UPDATED_AT' => 11, ),
-        self::TYPE_FIELDNAME     => array('id' => 0, 'order_product_id' => 1, 'pick_up_number' => 2, 'file_name' => 3, 'sequence_number' => 4, 'parcel_number_id' => 5, 'sticker_number' => 6, 'tracking_url' => 7, 'printed' => 8, 'weight' => 9, 'created_at' => 10, 'updated_at' => 11, ),
-        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+        self::TYPE_PHPNAME       => array('Id' => 0, 'AccountId' => 1, 'OrderProductId' => 2, 'PickUpNumber' => 3, 'FileName' => 4, 'SequenceNumber' => 5, 'ParcelNumberId' => 6, 'StickerNumber' => 7, 'TrackingUrl' => 8, 'Printed' => 9, 'Weight' => 10, 'CreatedAt' => 11, 'UpdatedAt' => 12, ),
+        self::TYPE_STUDLYPHPNAME => array('id' => 0, 'accountId' => 1, 'orderProductId' => 2, 'pickUpNumber' => 3, 'fileName' => 4, 'sequenceNumber' => 5, 'parcelNumberId' => 6, 'stickerNumber' => 7, 'trackingUrl' => 8, 'printed' => 9, 'weight' => 10, 'createdAt' => 11, 'updatedAt' => 12, ),
+        self::TYPE_COLNAME       => array(TntOrderParcelResponseTableMap::ID => 0, TntOrderParcelResponseTableMap::ACCOUNT_ID => 1, TntOrderParcelResponseTableMap::ORDER_PRODUCT_ID => 2, TntOrderParcelResponseTableMap::PICK_UP_NUMBER => 3, TntOrderParcelResponseTableMap::FILE_NAME => 4, TntOrderParcelResponseTableMap::SEQUENCE_NUMBER => 5, TntOrderParcelResponseTableMap::PARCEL_NUMBER_ID => 6, TntOrderParcelResponseTableMap::STICKER_NUMBER => 7, TntOrderParcelResponseTableMap::TRACKING_URL => 8, TntOrderParcelResponseTableMap::PRINTED => 9, TntOrderParcelResponseTableMap::WEIGHT => 10, TntOrderParcelResponseTableMap::CREATED_AT => 11, TntOrderParcelResponseTableMap::UPDATED_AT => 12, ),
+        self::TYPE_RAW_COLNAME   => array('ID' => 0, 'ACCOUNT_ID' => 1, 'ORDER_PRODUCT_ID' => 2, 'PICK_UP_NUMBER' => 3, 'FILE_NAME' => 4, 'SEQUENCE_NUMBER' => 5, 'PARCEL_NUMBER_ID' => 6, 'STICKER_NUMBER' => 7, 'TRACKING_URL' => 8, 'PRINTED' => 9, 'WEIGHT' => 10, 'CREATED_AT' => 11, 'UPDATED_AT' => 12, ),
+        self::TYPE_FIELDNAME     => array('id' => 0, 'account_id' => 1, 'order_product_id' => 2, 'pick_up_number' => 3, 'file_name' => 4, 'sequence_number' => 5, 'parcel_number_id' => 6, 'sticker_number' => 7, 'tracking_url' => 8, 'printed' => 9, 'weight' => 10, 'created_at' => 11, 'updated_at' => 12, ),
+        self::TYPE_NUM           => array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
     );
 
     /**
@@ -182,6 +187,7 @@ class TntOrderParcelResponseTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
+        $this->addColumn('ACCOUNT_ID', 'AccountId', 'INTEGER', false, null, null);
         $this->addForeignKey('ORDER_PRODUCT_ID', 'OrderProductId', 'INTEGER', 'order_product', 'ID', true, null, null);
         $this->addColumn('PICK_UP_NUMBER', 'PickUpNumber', 'INTEGER', true, null, null);
         $this->addColumn('FILE_NAME', 'FileName', 'VARCHAR', false, 255, null);
@@ -252,11 +258,11 @@ class TntOrderParcelResponseTableMap extends TableMap
     public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
 
-        return (int) $row[
-        $indexType == TableMap::TYPE_NUM
-            ? 0 + $offset
-            : self::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)
-        ];
+            return (int) $row[
+                            $indexType == TableMap::TYPE_NUM
+                            ? 0 + $offset
+                            : self::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)
+                        ];
     }
 
     /**
@@ -281,7 +287,7 @@ class TntOrderParcelResponseTableMap extends TableMap
      * @param array  $row       row returned by DataFetcher->fetch().
      * @param int    $offset    The 0-based offset for reading from the resultset row.
      * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
-    One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_STUDLYPHPNAME
+                                 One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_STUDLYPHPNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
      * @throws PropelException Any exceptions caught during processing will be
@@ -355,6 +361,7 @@ class TntOrderParcelResponseTableMap extends TableMap
     {
         if (null === $alias) {
             $criteria->addSelectColumn(TntOrderParcelResponseTableMap::ID);
+            $criteria->addSelectColumn(TntOrderParcelResponseTableMap::ACCOUNT_ID);
             $criteria->addSelectColumn(TntOrderParcelResponseTableMap::ORDER_PRODUCT_ID);
             $criteria->addSelectColumn(TntOrderParcelResponseTableMap::PICK_UP_NUMBER);
             $criteria->addSelectColumn(TntOrderParcelResponseTableMap::FILE_NAME);
@@ -368,6 +375,7 @@ class TntOrderParcelResponseTableMap extends TableMap
             $criteria->addSelectColumn(TntOrderParcelResponseTableMap::UPDATED_AT);
         } else {
             $criteria->addSelectColumn($alias . '.ID');
+            $criteria->addSelectColumn($alias . '.ACCOUNT_ID');
             $criteria->addSelectColumn($alias . '.ORDER_PRODUCT_ID');
             $criteria->addSelectColumn($alias . '.PICK_UP_NUMBER');
             $criteria->addSelectColumn($alias . '.FILE_NAME');
@@ -399,10 +407,10 @@ class TntOrderParcelResponseTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(TntOrderParcelResponseTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(TntOrderParcelResponseTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new TntOrderParcelResponseTableMap());
-        }
+      $dbMap = Propel::getServiceContainer()->getDatabaseMap(TntOrderParcelResponseTableMap::DATABASE_NAME);
+      if (!$dbMap->hasTable(TntOrderParcelResponseTableMap::TABLE_NAME)) {
+        $dbMap->addTableObject(new TntOrderParcelResponseTableMap());
+      }
     }
 
     /**
@@ -416,8 +424,8 @@ class TntOrderParcelResponseTableMap extends TableMap
      * @throws PropelException Any exceptions caught during processing will be
      *         rethrown wrapped into a PropelException.
      */
-    public static function doDelete($values, ConnectionInterface $con = null)
-    {
+     public static function doDelete($values, ConnectionInterface $con = null)
+     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(TntOrderParcelResponseTableMap::DATABASE_NAME);
         }
