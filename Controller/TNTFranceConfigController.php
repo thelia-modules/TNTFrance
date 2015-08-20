@@ -47,7 +47,7 @@ class TNTFranceConfigController extends BaseAdminController
 
         switch ($currentTab) {
             case 'weight':
-                $baseForm = new TNTPriceWeightForm($this->getRequest());
+                $baseForm = $this->createForm("tntfrance.price.weight");
                 break;
             default:
                 $baseForm = $this->createForm("tntfrance.configuration");
