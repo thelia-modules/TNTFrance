@@ -109,7 +109,7 @@ class ReceiverBuilder
                 throw new \InvalidArgumentException(
                     $translator->trans(
                         "TNT service %service is not valid for order %id",
-                        ['id' => $order->getId(), 'service' => $data['tnt_service']],
+                        ['%id' => $order->getId(), '%service' => $data['tnt_service']],
                         TNTFrance::MESSAGE_DOMAIN
                     )
                 );
