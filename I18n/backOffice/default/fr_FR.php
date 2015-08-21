@@ -54,6 +54,8 @@ return array(
     'Status' => 'statut',
     'Street address' => 'Adresse 1',
     'Surchages' => 'Surchages',
+    'TNT accounts' => 'Comptes TNT',
+    'TNT account' => 'Compte TNT',
     'TNT Depot' => 'Dépôt TNT',
     'TNT Orders' => 'Commandes TNT',
     'TNTFrance Orders' => 'Commandes TNT',

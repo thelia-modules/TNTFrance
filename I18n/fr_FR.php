@@ -5,6 +5,7 @@ return array(
     '(Around %default_price€ per expedition by default)' => '(Environ %default_price€ par défaut par expédition)',
     '(%default_price€ per expedition by default)' => '(%default_price€ par défaut par expédition)',
     '(%default_price€ per package by default)' => '(%default_price€ par défaut par colis)',
+    'Account label' => 'Nom du compte',
     'Allows you to send several packages even if the max weight is not reached.' => 'Vous permet d\'envoyer plusieurs colis même si le poids max n\'est pas atteinds.',
     'Based on the monthly average price of a liter of diesel at the pump released by the National Committee Road, for all of your domestic shipments.' => 'Basée sur la moyenne mensuelle du prix du litre de gazole à la pompe publiée par le Comité National Routier, pour l\'ensemble de vos expéditions nationales.',
     'City' => 'Ville',

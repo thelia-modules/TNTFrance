@@ -19,6 +19,31 @@
         </ul>
 
         <div class="general-block-decorator">
+            <div class="table-responsive">
+                <table class="table table-striped table-condensed">
+                    <caption>
+                        {intl l="TNT accounts" d="tntfrance.bo.default"}
+
+                        <a class="btn btn-primary action-btn"
+                           title="{intl l="Add an account" d="tntfrance.bo.default"}"
+                           href="{url path='/admin/module/TNTFrance/account/'}">
+                            <span class="glyphicon glyphicon-plus-sign"></span>
+                        </a>
+
+                    <tbody>
+                    {foreach $accounts as $account}
+                        <tr>
+                            <td>
+                                <a href="{url path="/admin/module/TNTFrance/account/{$account.id}"}">{$account.label}</a>
+                            </td>
+                        </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="general-block-decorator">
             <div class="title title-without-tabs">
                 {intl l="Configure tntfrance" d="tntfrance.bo.default"}
             </div>
@@ -69,95 +94,8 @@
 <script src="{$asset_url}"></script>
 {/javascripts}
 
-<script type="text/javascript">
-    (function ($) {
-        $(document).ready(function () {
-            var products = $('#products_enabled').val(),
-                options = $('#options_enabled').val(),
-                labelFormat = $('#label_format').val();
+{javascripts source="TNTFrance" file="assets/js/configuration.js"}
+<script type="text/javascript" src="{$asset_url}"></script>
+{/javascripts}
 
-            $('input[name="product"]').val(products.split(","));
-            $('input[name="option"]').val(options.split(","));
-
-            $('input.label_format_stda4').prop("checked", (-1 !== labelFormat.indexOf("STDA4")));
-            $('input.label_format_thermal').prop("checked", (-1 !== labelFormat.indexOf("THERMAL")));
-            $('input.label_format_thermal_no_logo').prop("checked", (-1 !== labelFormat.indexOf("NO_LOGO")));
-            $('input.label_format_thermal_rotate_180').prop("checked", (-1 !== labelFormat.indexOf("ROTATE_180")));
-
-            //$('input[name="product"]').val(products.split(","));
-
-            $("#configuration_form").on("submit", function() {
-                var productsEnabled = $('input:checkbox[name=product]:checked').map(function() {
-                    return this.value;
-                }).get();
-                var optionsEnabled = $('input:checkbox[name=option]:checked').map(function() {
-                    return this.value;
-                }).get();
-                var labelFormatValue = [];
-
-                $('#products_enabled').val(productsEnabled.join(','));
-                $('#options_enabled').val(optionsEnabled.join(','));
-
-                if ($('input.label_format_stda4').prop("checked")) {
-                    labelFormatValue.push('STDA4');
-                } else {
-                    labelFormatValue.push('THERMAL');
-
-                    if ($('input.label_format_thermal_no_logo').prop("checked")) {
-                        labelFormatValue.push('NO_LOGO');
-                    }
-                    if ($('input.label_format_thermal_rotate_180').prop("checked")) {
-                        labelFormatValue.push('ROTATE_180');
-                    }
-                }
-
-                $('#label_format').val(labelFormatValue.join(','));
-            });
-
-            $('#free_shipping').on('change', function(){
-                show_sheeping_configuration();
-            });
-
-            show_sheeping_configuration();
-
-            function show_sheeping_configuration() {
-                if ($('#free_shipping').is(':checked') === true) {
-                    $('#no_free_shipping').addClass('hidden');
-                } else {
-                    $('#no_free_shipping').removeClass('hidden');
-                }
-            }
-
-            $('#sender_zip_code').on('input', function(){
-
-                if ($(this).val().length >= 2) {
-
-                    $('#sender_city').addClass("loading");
-                    $.ajax({
-                        type: "GET",
-                        url: "/module/TNTFrance/get/cities/"+$(this).val(),
-                        dataType: "json"
-                    }).done(function(cities){
-
-                        var html = "";
-                        for (var i = 0; i < cities.length; i++) {
-                            html += "<option>"+cities[i]+"</option>";
-                        }
-
-                        $('#sender_city').html(html);
-                        $('#sender_city').removeClass("loading");
-
-                        if (cities.length == 0) {
-                            $('#sender_city').parent().addClass("has-error");
-                        } else {
-                            $('#sender_city').parent().removeClass("has-error");
-                        }
-
-                    });
-                }
-            });
-
-        });
-    })(jQuery);
-</script>
 {/block}

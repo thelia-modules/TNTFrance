@@ -6,6 +6,7 @@
 
 namespace TNTFrance;
 
+use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Thelia\Core\Event\Cart\CartEvent;
@@ -20,6 +21,8 @@ use Thelia\Model\Message;
 use Thelia\Model\MessageQuery;
 use Thelia\Model\MetaData;
 use Thelia\Model\MetaDataQuery;
+use Thelia\Model\ModuleConfig;
+use Thelia\Model\ModuleConfigQuery;
 use Thelia\Model\OrderPostage;
 use Thelia\Module\AbstractDeliveryModule;
 use Thelia\Module\Exception\DeliveryException;
@@ -45,6 +48,9 @@ class TNTFrance extends AbstractDeliveryModule
 
     const DEFAULT_PRODUCTS_ENABLED = 'N,A,T,M,J,P';
     const DEFAULT_OPTIONS_ENABLED = 'P,W,D,Z,E';
+
+    const ACCOUNT_ID_DELIMITER = ':';
+    const DEFAULT_ACCOUNT_ID = 1;
 
     /** @var Translator $translator */
     protected $translator;
@@ -474,5 +480,126 @@ class TNTFrance extends AbstractDeliveryModule
         }
 
         return self::$prices;
+    }
+
+    /**
+     * Get the configuration key to use when saving a module configuration value for a specific TNT account.
+     * @param string $accountId Account id.
+     * @param string $variableName Module config key.
+     * @return string
+     */
+    public static function getAccountConfigKey($accountId, $variableName)
+    {
+        // map the base account to a default id for backward compatibility
+        if ($accountId == static::DEFAULT_ACCOUNT_ID) {
+            return $variableName;
+        } else {
+            return $variableName . static::ACCOUNT_ID_DELIMITER . $accountId;
+        }
+    }
+
+    public static function getAccountConfigValue(
+        $accountId,
+        $variableName,
+        $defaultValue = null,
+        $valueLocale = null
+    ) {
+        return static::getConfigValue(
+            static::getAccountConfigKey($accountId, $variableName),
+            $defaultValue,
+            $valueLocale
+        );
+    }
+
+    public static function setAccountConfigValue(
+        $accountId,
+        $variableName,
+        $variableValue,
+        $valueLocale = null,
+        $createIfNotExists = true
+    ) {
+        static::setConfigValue(
+            static::getAccountConfigKey($accountId, $variableName),
+            $variableValue,
+            $valueLocale,
+            $createIfNotExists
+        );
+    }
+
+    /**
+     * Get all registered account ids.
+     * @return array [id, label
+     */
+    public static function getAccounts()
+    {
+        $configQuery = new ModuleConfigQuery();
+
+        $accountLabels = $configQuery
+            ->filterByModuleId(static::getModuleId())
+            ->filterByName('%' . TNTFranceConfigValue::ACCOUNT_LABEL . '%', Criteria::LIKE)
+            ->find();
+
+        $accounts = [];
+
+        // always add the default account
+        $defaultAccountLabel = static::getAccountConfigValue(
+            static::DEFAULT_ACCOUNT_ID,
+            TNTFranceConfigValue::ACCOUNT_LABEL
+        );
+        $accounts[] = [
+            'id' => static::DEFAULT_ACCOUNT_ID,
+            'label' => empty($defaultAccountLabel) ? 'Default' : $defaultAccountLabel,
+        ];
+
+        /** @var ModuleConfig $accountLabel */
+        foreach ($accountLabels as $accountLabel) {
+            // do not add the default account again
+            if ($accountLabel->getName()
+                == static::getAccountConfigKey(static::DEFAULT_ACCOUNT_ID, TNTFranceConfigValue::ACCOUNT_LABEL)
+            ) {
+                continue;
+            }
+
+            $parts = explode(static::ACCOUNT_ID_DELIMITER, $accountLabel->getName());
+            if (count($parts) == 2) {
+                $accounts[] = [
+                    'id' => $parts[1],
+                    'label' => $accountLabel->getValue(),
+                ];
+
+                continue;
+            }
+        }
+
+        return $accounts;
+    }
+
+    /**
+     * Get the default TNT account id.
+     * @return int
+     */
+    public static function getDefaultAccountId()
+    {
+        return static::DEFAULT_ACCOUNT_ID;
+    }
+
+    /**
+     * Get the id to use when registering a new TNT account.
+     * @return int|mixed
+     */
+    public static function getNewAccountId()
+    {
+        $accounts = static::getAccounts();
+
+        if (empty($accounts)) {
+            return static::DEFAULT_ACCOUNT_ID;
+        }
+
+        $maxId = 0;
+        foreach ($accounts as $account) {
+            $maxId = max($maxId, $account['id']);
+        }
+
+        return $maxId + 1;
     }
 }

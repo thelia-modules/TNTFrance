@@ -20,18 +20,11 @@ use TNTFrance\TNTFrance;
  */
 class TNTFranceConfigValue
 {
-    const ENABLED = "enabled";
-    const MODE_PRODUCTION = "mode_production";
+    // account
+    const ACCOUNT_LABEL = "account_label";
     const ACCOUNT_NUMBER = "account_number";
     const USERNAME = "username";
     const PASSWORD = "password";
-    const USE_INDIVIDUAL = "use_individual";
-    const USE_ENTERPRISE = "use_enterprise";
-    const USE_DEPOT = "use_depot";
-    const USE_DROPOFFPOINT = "use_dropoffpoint";
-    const PRODUCTS_ENABLED = "products_enabled";
-    const OPTIONS_ENABLED = "options_enabled";
-    const REGULAR_PICKUP = "regular_pickup";
     const SENDER_NAME = "sender_name";
     const SENDER_ADDRESS1 = "sender_address1";
     const SENDER_ADDRESS2 = "sender_address2";
@@ -43,11 +36,23 @@ class TNTFranceConfigValue
     const CONTACT_PHONE = "contact_phone";
     const NOTIFICATION_EMAILS = "notification_emails";
     const NOTIFICATION_SUCCESS = "notification_success";
+
+    // general
+    const ENABLED = "enabled";
+    const MODE_PRODUCTION = "mode_production";
+    const USE_INDIVIDUAL = "use_individual";
+    const USE_ENTERPRISE = "use_enterprise";
+    const USE_DEPOT = "use_depot";
+    const USE_DROPOFFPOINT = "use_dropoffpoint";
+    const PRODUCTS_ENABLED = "products_enabled";
+    const OPTIONS_ENABLED = "options_enabled";
+    const REGULAR_PICKUP = "regular_pickup";
     const LABEL_FORMAT = "label_format";
     const FREE_SHIPPING = "free_shipping";
     const MAX_WEIGHT_PACKAGE = "max_weight_package";
     const TRACKING_URL = "tracking_url";
 
+    // prices & weights
     const SURCHARGE_FUEL = "surcharge_fuel";
     const SURCHARGE_SECURITY_FEE = "surcharge_security_fee";
     const SURCHARGE_MULTI_PACKAGE = "surcharge_multi_package";

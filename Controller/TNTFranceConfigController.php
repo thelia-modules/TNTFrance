@@ -7,7 +7,6 @@ use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Core\Security\AccessManager;
 use Thelia\Core\Security\Resource\AdminResources;
 use Thelia\Form\Exception\FormValidationException;
-use TNTFrance\Form\TNTPriceWeightForm;
 use TNTFrance\Model\Config\TNTFranceConfigValue;
 use TNTFrance\Model\TntPriceWeightQuery;
 use TNTFrance\TNTFrance;
@@ -17,6 +16,10 @@ use TNTFrance\TNTFrance;
  */
 class TNTFranceConfigController extends BaseAdminController
 {
+    const SAVE_MODE_GENERAL = 'general';
+    const SAVE_MODE_WEIGHT = 'weight';
+    const SAVE_MODE_ACCOUNT = 'account';
+
     public function defaultAction()
     {
         if (null !==
@@ -28,12 +31,44 @@ class TNTFranceConfigController extends BaseAdminController
         return $this->render(
             "tntfrance-configuration",
             [
+                'accounts' => TNTFrance::getAccounts(),
                 'products_enabled' => TNTFrance::getConfigValue(TNTFranceConfigValue::PRODUCTS_ENABLED),
             ]
         );
     }
 
+    public function accountAction($id = null)
+    {
+        if (null !==
+            $response = $this->checkAuth(AdminResources::MODULE, TNTFrance::getModuleCode(), AccessManager::VIEW)
+        ) {
+            return $response;
+        }
+
+        return $this->render(
+            "tntfrance-configuration-account",
+            [
+                'account' => [
+                    'id' => $id,
+                    'label' => TNTFrance::getAccountConfigValue($id, TNTFranceConfigValue::ACCOUNT_LABEL),
+                ]
+            ]
+        );
+    }
+
     public function saveAction()
+    {
+        $currentTab = $this->getRequest()->get('current_tab');
+
+        return $this->doSave($currentTab);
+    }
+
+    public function saveAccountAction($id = null)
+    {
+        return $this->doSave(static::SAVE_MODE_ACCOUNT, $id);
+    }
+
+    protected function doSave($mode, $accountId = null)
     {
         if (null !==
             $response = $this->checkAuth(AdminResources::MODULE, TNTFrance::getModuleCode(), AccessManager::UPDATE)
@@ -43,25 +78,30 @@ class TNTFranceConfigController extends BaseAdminController
 
         $errorMessage = null;
 
-        $currentTab = $this->getRequest()->get('current_tab');
-
-        switch ($currentTab) {
-            case 'weight':
+        switch ($mode) {
+            case (static::SAVE_MODE_WEIGHT):
                 $baseForm = $this->createForm("tntfrance.price.weight");
                 break;
+            case (static::SAVE_MODE_ACCOUNT):
+                $baseForm = $this->createForm("tntfrance.configuration.account");
+                break;
+            case (static::SAVE_MODE_GENERAL):
             default:
                 $baseForm = $this->createForm("tntfrance.configuration");
                 break;
         }
 
         try {
-
             $form = $this->validateForm($baseForm);
 
-            switch ($currentTab) {
-                case 'weight':
+            switch ($mode) {
+                case (static::SAVE_MODE_WEIGHT):
                     $this->processPriceWeigthForm($form);
                     break;
+                case (static::SAVE_MODE_ACCOUNT):
+                    $this->processAccountForm($form, $accountId);
+                    break;
+                case (static::SAVE_MODE_GENERAL):
                 default:
                     $this->processGeneralForm($form);
                     break;
@@ -103,9 +143,6 @@ class TNTFranceConfigController extends BaseAdminController
         $fields = [
             TNTFranceConfigValue::ENABLED,
             TNTFranceConfigValue::MODE_PRODUCTION,
-            TNTFranceConfigValue::ACCOUNT_NUMBER,
-            TNTFranceConfigValue::USERNAME,
-            TNTFranceConfigValue::PASSWORD,
             TNTFranceConfigValue::USE_INDIVIDUAL,
             TNTFranceConfigValue::USE_ENTERPRISE,
             TNTFranceConfigValue::USE_DEPOT,
@@ -113,17 +150,6 @@ class TNTFranceConfigController extends BaseAdminController
             TNTFranceConfigValue::PRODUCTS_ENABLED,
             TNTFranceConfigValue::OPTIONS_ENABLED,
             TNTFranceConfigValue::REGULAR_PICKUP,
-            TNTFranceConfigValue::SENDER_NAME,
-            TNTFranceConfigValue::SENDER_ADDRESS1,
-            TNTFranceConfigValue::SENDER_ADDRESS2,
-            TNTFranceConfigValue::SENDER_ZIP_CODE,
-            TNTFranceConfigValue::SENDER_CITY,
-            TNTFranceConfigValue::CONTACT_LASTNAME,
-            TNTFranceConfigValue::CONTACT_FIRSTNAME,
-            TNTFranceConfigValue::CONTACT_EMAIL,
-            TNTFranceConfigValue::CONTACT_PHONE,
-            TNTFranceConfigValue::NOTIFICATION_EMAILS,
-            TNTFranceConfigValue::NOTIFICATION_SUCCESS,
             TNTFranceConfigValue::LABEL_FORMAT,
             TNTFranceConfigValue::FREE_SHIPPING,
             TNTFranceConfigValue::MAX_WEIGHT_PACKAGE,
@@ -182,6 +208,41 @@ class TNTFranceConfigController extends BaseAdminController
             }
 
             $tntPriceWeight->save();
+        }
+    }
+
+    protected function processAccountForm(Form $form, $accountId = null)
+    {
+        if ($accountId === null) {
+            $accountId = TNTFrance::getNewAccountId();
+        }
+
+        $fields = [
+            TNTFranceConfigValue::ACCOUNT_LABEL,
+            TNTFranceConfigValue::ACCOUNT_NUMBER,
+            TNTFranceConfigValue::USERNAME,
+            TNTFranceConfigValue::PASSWORD,
+            TNTFranceConfigValue::SENDER_NAME,
+            TNTFranceConfigValue::SENDER_ADDRESS1,
+            TNTFranceConfigValue::SENDER_ADDRESS2,
+            TNTFranceConfigValue::SENDER_ZIP_CODE,
+            TNTFranceConfigValue::SENDER_CITY,
+            TNTFranceConfigValue::CONTACT_LASTNAME,
+            TNTFranceConfigValue::CONTACT_FIRSTNAME,
+            TNTFranceConfigValue::CONTACT_EMAIL,
+            TNTFranceConfigValue::CONTACT_PHONE,
+            TNTFranceConfigValue::NOTIFICATION_EMAILS,
+            TNTFranceConfigValue::NOTIFICATION_SUCCESS,
+        ];
+
+        foreach ($fields as $field) {
+            $data = $form->get($field)->getData();
+
+            if (is_bool($data)) {
+                $data = (int)$data;
+            }
+
+            TNTFrance::setAccountConfigValue($accountId, $field, $data);
         }
     }
 }
