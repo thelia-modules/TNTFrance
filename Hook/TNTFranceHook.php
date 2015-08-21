@@ -177,11 +177,23 @@ class TNTFranceHook extends BaseHook
 
     public function onMainTopMenuTools(HookRenderBlockEvent $event)
     {
-        $event->add([
-            'id' => 'top-menu-tools-tntfrance',
-            'class' => '',
-            'url' => URL::getInstance()->absoluteUrl('/admin/module/TNTFrance/orders'),
-            'title' => $this->trans('TNT Orders', [], TNTFrance::MESSAGE_DOMAIN)
-        ]);
+        foreach (TNTFrance::getAccounts() as $account) {
+            $event->add([
+                'id' => 'top-menu-tools-tntfrance-' . $account['id'],
+                'url' => URL::getInstance()->absoluteUrl(
+                    '/admin/module/TNTFrance/orders',
+                    [
+                        'account' => $account['id'],
+                    ]
+                ),
+                'title' => $this->trans(
+                    'TNT Orders - %account_label',
+                    [
+                        '%account_label' => $account['label'],
+                    ],
+                    TNTFrance::MESSAGE_DOMAIN
+                ),
+            ]);
+        }
     }
 }

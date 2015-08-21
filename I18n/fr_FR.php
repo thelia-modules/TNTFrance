@@ -55,6 +55,7 @@ return array(
     'TNT Depot' => 'Livraison en dépôt TNT',
     'TNT France shipping message' => 'Message d\'expédition TNT France',
     'TNT Orders' => 'Commandes TNT',
+    'TNT Orders - %account_label' => 'Commandes TNT - %account_label',
     'TNT service %service is not valid for order %id' => 'Le service TNT %service n\'est pas valide pour la commande %id',
     'The URL to access to a parcel’s delivery status' => 'URL de suivi du colis',
     'The order %id does not use the' => 'La commande %id n\'utilise pas',
