@@ -26,6 +26,9 @@ class TNTFranceCreateExpeditionEvent extends ActionEvent
 {
     const PACKAGE = "package";
 
+    /** @var int */
+    protected $accountId;
+
     /** @var Order */
     protected $order;
 
@@ -42,6 +45,24 @@ class TNTFranceCreateExpeditionEvent extends ActionEvent
     {
         $this->order = $order;
         $this->allInOne = true;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAccountId()
+    {
+        return $this->accountId;
+    }
+
+    /**
+     * @param int $accountId
+     * @return $this
+     */
+    public function setAccountId($accountId)
+    {
+        $this->accountId = $accountId;
+        return $this;
     }
 
     /**

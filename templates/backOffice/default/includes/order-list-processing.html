@@ -118,7 +118,7 @@
 
                 {assign var="_order_id_" value="$ID"}
                 {assign var="total_package" value="1"}
-                {loop name="parcel-response-not-printed" type="tnt-order-parcel-response" order_id=$ID printed="0" group_by="sticker"}
+                {loop name="parcel-response-not-printed" type="tnt-order-parcel-response" account_id=$account_id order_id=$ID printed="0" group_by="sticker"}
                     <tr>
                         <td></td>
                         <td>

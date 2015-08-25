@@ -60,6 +60,8 @@ class TNTFranceAdminController extends BaseAdminController
 
     private function redirectToDefaultPage()
     {
+        $accountId = $this->getRequest()->query->get('account');
+
         $orders_paid_id = OrderQuery::create()
             ->useOrderProductQuery()
                 ->filterById(
@@ -77,7 +79,23 @@ class TNTFranceAdminController extends BaseAdminController
             ->toArray()
         ;
 
-        $orders_processing_id = OrderQuery::create()
+        $orders_processing_query = OrderQuery::create();
+
+        if ($accountId !== null) {
+            $orders_processing_query
+                ->useOrderProductQuery()
+                ->filterById(
+                    TntOrderParcelResponseQuery::create()
+                        ->filterByAccountId($accountId)
+                        ->select(TntOrderParcelResponseTableMap::ORDER_PRODUCT_ID)
+                        ->find()
+                        ->toArray(),
+                    Criteria::IN
+                )
+                ->endUse();
+        }
+
+        $orders_processing_id = $orders_processing_query
             ->filterByDeliveryModuleId(TNTFrance::getModuleId())
             ->orderById(Criteria::DESC)
             ->useOrderStatusQuery()
@@ -103,6 +121,7 @@ class TNTFranceAdminController extends BaseAdminController
         return $this->render(
             "tntfrance-order-list",
             [
+                'account_id' => $accountId,
                 'orders_paid_id' => $orders_paid_id,
                 'orders_processing_id' => $orders_processing_id
             ]
@@ -269,6 +288,7 @@ class TNTFranceAdminController extends BaseAdminController
         $orderAllInOne = $this->getRequest()->request->get("order-all-in-one");
         $orderPackage = $this->getRequest()->request->get("order-package");
         $orderProductPackage = $this->getRequest()->request->get("order-product-package");
+        $accountId = $this->getRequest()->request->get("account_id");
 
         if (!is_array($orderIdList)) {
             $orderIdList = [$orderIdList];
@@ -288,6 +308,8 @@ class TNTFranceAdminController extends BaseAdminController
                 }
 
                 $event = new TNTFranceCreateExpeditionEvent();
+
+                $event->setAccountId($accountId);
 
                 $order->clearOrderProducts();
                 $order->setOrderProducts(
