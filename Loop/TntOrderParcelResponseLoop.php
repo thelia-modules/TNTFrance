@@ -41,6 +41,7 @@ class TntOrderParcelResponseLoop extends BaseLoop implements PropelSearchLoopInt
             $loopResultRow = new LoopResultRow($tntOrderParcelResponse);
             $loopResultRow
                 ->set("ID", $tntOrderParcelResponse->getId())
+                ->set("ACCOUNT_ID", $tntOrderParcelResponse->getAccountId())
                 ->set("SEQUENCE_NUMBER", $tntOrderParcelResponse->getSequenceNumber())
                 ->set("PARCEL_NUMBER_ID", $tntOrderParcelResponse->getParcelNumberId())
                 ->set("STICKER_NUMBER", $tntOrderParcelResponse->getStickerNumber())
@@ -87,6 +88,7 @@ class TntOrderParcelResponseLoop extends BaseLoop implements PropelSearchLoopInt
     protected function getArgDefinitions()
     {
         return new ArgumentCollection(
+            Argument::createIntListTypeArgument('account_id'),
             Argument::createIntListTypeArgument('order_id'),
             Argument::createIntListTypeArgument('order_product_id'),
             Argument::createIntListTypeArgument('id'),
@@ -131,6 +133,10 @@ class TntOrderParcelResponseLoop extends BaseLoop implements PropelSearchLoopInt
             Criteria::INNER_JOIN
         );
         $search->addJoinObject($orderJoin, 'order_join');
+
+        if (null !== $accountId = $this->getAccountId()) {
+            $search->filterByAccountId($accountId, Criteria::IN);
+        }
 
         if (null !== $orderProductId = $this->getOrderProductId()) {
             $search->addJoinCondition(
