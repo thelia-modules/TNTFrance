@@ -33,9 +33,10 @@ class WebServiceFactory
 
     /**
      * @param $webServiceName
+     * @param $accountId
      * @return BaseTNTFranceWebService
      */
-    public function get($webServiceName)
+    public function get($webServiceName, $accountId = null)
     {
         /** @var BaseTNTFranceWebService $webService */
         $webService = null;
@@ -64,6 +65,7 @@ class WebServiceFactory
                 throw new NotImplementedException();
         }
 
+        $this->configProvider->setAccountId($accountId);
         $webService->setConfigProvider($this->configProvider);
 
         return $webService;

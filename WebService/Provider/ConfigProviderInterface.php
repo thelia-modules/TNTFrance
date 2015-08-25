@@ -22,6 +22,13 @@ use TNTFrance\WebService\Model\TNTSender;
 interface ConfigProviderInterface
 {
     /**
+     * Set the configured TNT account to get the configuration for.
+     *
+     * @param null|int $accountId Account id (defaults to the default account).
+     */
+    public function setAccountId($accountId = null);
+
+    /**
      * URL of the Wsdl
      *
      * @return mixed
