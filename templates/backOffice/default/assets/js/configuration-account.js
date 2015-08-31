@@ -4,26 +4,64 @@
             return;
         }
 
-        var $senderCity = $('#sender_city');
-
-        $senderCity.addClass("loading");
+        $('#sender_city').addClass("loading");
 
         $.ajax({
             type: "GET",
             url: "/module/TNTFrance/get/cities/" + $(this).val(),
-            dataType: "json"
-        }).done(function (cities) {
-            var html = "";
-            for (var i = 0; i < cities.length; i++) {
-                html += "<option>" + cities[i] + "</option>";
-            }
-            $senderCity.html(html);
+            dataType: "json",
+            success: function (cities) {
+                var $senderCity = $('#sender_city');
+                var $newSenderCity;
 
-            $senderCity.removeClass("loading");
-            if (cities.length == 0) {
-                $senderCity.parent().addClass("has-error");
-            } else {
-                $senderCity.parent().removeClass("has-error");
+                if (cities.length == 0) {
+                    // convert the field to an input
+                    $senderCity.each(function () {
+                        var attributes = {
+                            type: "text"
+                        };
+
+                        $.each(this.attributes, function(i, attribute) {
+                            attributes[attribute.nodeName] = attribute.nodeValue;
+                        });
+
+                        $(this).replaceWith(function () {
+                            return $("<input>", attributes);
+                        });
+                    });
+
+                    $newSenderCity = $('#sender_city');
+
+                    $newSenderCity.parent().addClass("has-error");
+                    $newSenderCity.removeClass("loading");
+                } else {
+                    // convert the input to a select
+                    $senderCity.each(function () {
+                        var attributes = {};
+
+                        $.each(this.attributes, function(i, attribute) {
+                            if ($.inArray(attribute.nodeName, ["type", "value"]) == -1) {
+                                attributes[attribute.nodeName] = attribute.nodeValue;
+                            }
+                        });
+
+                        $(this).replaceWith(function () {
+                            return $("<select>", attributes);
+                        });
+                    });
+
+                    $newSenderCity = $('#sender_city');
+
+                    var html = "";
+                    for (var i = 0; i < cities.length; i++) {
+                        html += "<option>" + cities[i] + "</option>";
+                    }
+                    $newSenderCity.html(html);
+
+                    $newSenderCity.parent().removeClass("has-error");
+                    $newSenderCity.removeClass("loading");
+                }
+
             }
         });
     });
