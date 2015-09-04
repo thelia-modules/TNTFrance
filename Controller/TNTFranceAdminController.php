@@ -31,6 +31,7 @@ use TNTFrance\Event\Module\TNTFranceCreateExpeditionEvent;
 use TNTFrance\Event\Module\TNTFranceEvents;
 use TNTFrance\Event\Module\TNTFranceExportEvent;
 use TNTFrance\Event\Module\TNTFrancePrintExpeditionEvent;
+use TNTFrance\Model\Config\TNTFranceConfigValue;
 use TNTFrance\Model\Map\TntOrderParcelResponseTableMap;
 use TNTFrance\Model\TntOrderParcelResponseQuery;
 use TNTFrance\TNTFrance;
@@ -61,6 +62,8 @@ class TNTFranceAdminController extends BaseAdminController
     private function redirectToDefaultPage()
     {
         $accountId = $this->getRequest()->query->get('account');
+
+        $accountLabel = TNTFrance::getAccountConfigValue($accountId, TNTFranceConfigValue::ACCOUNT_LABEL);
 
         $orders_paid_id = OrderQuery::create()
             ->useOrderProductQuery()
@@ -122,6 +125,7 @@ class TNTFranceAdminController extends BaseAdminController
             "tntfrance-order-list",
             [
                 'account_id' => $accountId,
+                'account_label' => $accountLabel,
                 'orders_paid_id' => $orders_paid_id,
                 'orders_processing_id' => $orders_processing_id
             ]

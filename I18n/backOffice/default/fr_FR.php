@@ -5,6 +5,7 @@ return array(
     'Additional address' => 'Adresse 2',
     'Amount' => 'Montant',
     'Ask pick up' => 'Demander un ramassage',
+    'Ask pick up (%account_label)' => 'Demander un ramassage (%account_label)',
     'Bulding id:' => 'Batiment :',
     'calculated on contracted rates above' => 'calculée sur les tarifs contractuels ci-dessus',
     'Change status' => 'Changer le statut',
