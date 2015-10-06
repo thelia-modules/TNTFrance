@@ -61,7 +61,7 @@ class TNTFranceAdminController extends BaseAdminController
 
     private function redirectToDefaultPage()
     {
-        $accountId = $this->getRequest()->query->get('account');
+        $accountId = $this->getRequest()->query->get('account', TNTFrance::getDefaultAccountId());
 
         $accountLabel = TNTFrance::getAccountConfigValue($accountId, TNTFranceConfigValue::ACCOUNT_LABEL);
 
@@ -365,7 +365,12 @@ class TNTFranceAdminController extends BaseAdminController
             );
         }
 
-        return $this->generateRedirectFromRoute('tntfrance.orders.list');
+        return $this->generateRedirectFromRoute(
+            'tntfrance.orders.list',
+            [
+                'account' => $accountId,
+            ]
+        );
     }
 
     protected function changeStatus()
