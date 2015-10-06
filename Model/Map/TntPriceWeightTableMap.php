@@ -234,11 +234,11 @@ class TntPriceWeightTableMap extends TableMap
     public static function getPrimaryKeyFromRow($row, $offset = 0, $indexType = TableMap::TYPE_NUM)
     {
 
-        return (int) $row[
-        $indexType == TableMap::TYPE_NUM
-            ? 0 + $offset
-            : self::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)
-        ];
+            return (int) $row[
+                            $indexType == TableMap::TYPE_NUM
+                            ? 0 + $offset
+                            : self::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)
+                        ];
     }
 
     /**
@@ -263,7 +263,7 @@ class TntPriceWeightTableMap extends TableMap
      * @param array  $row       row returned by DataFetcher->fetch().
      * @param int    $offset    The 0-based offset for reading from the resultset row.
      * @param string $indexType The index type of $row. Mostly DataFetcher->getIndexType().
-    One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_STUDLYPHPNAME
+                                 One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_STUDLYPHPNAME
      *                           TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
      * @throws PropelException Any exceptions caught during processing will be
@@ -375,10 +375,10 @@ class TntPriceWeightTableMap extends TableMap
      */
     public static function buildTableMap()
     {
-        $dbMap = Propel::getServiceContainer()->getDatabaseMap(TntPriceWeightTableMap::DATABASE_NAME);
-        if (!$dbMap->hasTable(TntPriceWeightTableMap::TABLE_NAME)) {
-            $dbMap->addTableObject(new TntPriceWeightTableMap());
-        }
+      $dbMap = Propel::getServiceContainer()->getDatabaseMap(TntPriceWeightTableMap::DATABASE_NAME);
+      if (!$dbMap->hasTable(TntPriceWeightTableMap::TABLE_NAME)) {
+        $dbMap->addTableObject(new TntPriceWeightTableMap());
+      }
     }
 
     /**
@@ -392,8 +392,8 @@ class TntPriceWeightTableMap extends TableMap
      * @throws PropelException Any exceptions caught during processing will be
      *         rethrown wrapped into a PropelException.
      */
-    public static function doDelete($values, ConnectionInterface $con = null)
-    {
+     public static function doDelete($values, ConnectionInterface $con = null)
+     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(TntPriceWeightTableMap::DATABASE_NAME);
         }

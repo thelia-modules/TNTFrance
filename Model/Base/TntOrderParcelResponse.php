@@ -63,6 +63,12 @@ abstract class TntOrderParcelResponse implements ActiveRecordInterface
     protected $id;
 
     /**
+     * The value for the account_id field.
+     * @var        int
+     */
+    protected $account_id;
+
+    /**
      * The value for the order_product_id field.
      * @var        int
      */
@@ -427,6 +433,17 @@ abstract class TntOrderParcelResponse implements ActiveRecordInterface
     }
 
     /**
+     * Get the [account_id] column value.
+     *
+     * @return   int
+     */
+    public function getAccountId()
+    {
+
+        return $this->account_id;
+    }
+
+    /**
      * Get the [order_product_id] column value.
      *
      * @return   int
@@ -585,6 +602,27 @@ abstract class TntOrderParcelResponse implements ActiveRecordInterface
 
         return $this;
     } // setId()
+
+    /**
+     * Set the value of [account_id] column.
+     *
+     * @param      int $v new value
+     * @return   \TNTFrance\Model\TntOrderParcelResponse The current object (for fluent API support)
+     */
+    public function setAccountId($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->account_id !== $v) {
+            $this->account_id = $v;
+            $this->modifiedColumns[TntOrderParcelResponseTableMap::ACCOUNT_ID] = true;
+        }
+
+
+        return $this;
+    } // setAccountId()
 
     /**
      * Set the value of [order_product_id] column.
@@ -869,40 +907,43 @@ abstract class TntOrderParcelResponse implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 0 + $startcol : TntOrderParcelResponseTableMap::translateFieldName('Id', TableMap::TYPE_PHPNAME, $indexType)];
             $this->id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : TntOrderParcelResponseTableMap::translateFieldName('OrderProductId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 1 + $startcol : TntOrderParcelResponseTableMap::translateFieldName('AccountId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->account_id = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : TntOrderParcelResponseTableMap::translateFieldName('OrderProductId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->order_product_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 2 + $startcol : TntOrderParcelResponseTableMap::translateFieldName('PickUpNumber', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : TntOrderParcelResponseTableMap::translateFieldName('PickUpNumber', TableMap::TYPE_PHPNAME, $indexType)];
             $this->pick_up_number = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 3 + $startcol : TntOrderParcelResponseTableMap::translateFieldName('FileName', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : TntOrderParcelResponseTableMap::translateFieldName('FileName', TableMap::TYPE_PHPNAME, $indexType)];
             $this->file_name = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 4 + $startcol : TntOrderParcelResponseTableMap::translateFieldName('SequenceNumber', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : TntOrderParcelResponseTableMap::translateFieldName('SequenceNumber', TableMap::TYPE_PHPNAME, $indexType)];
             $this->sequence_number = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : TntOrderParcelResponseTableMap::translateFieldName('ParcelNumberId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : TntOrderParcelResponseTableMap::translateFieldName('ParcelNumberId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->parcel_number_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : TntOrderParcelResponseTableMap::translateFieldName('StickerNumber', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : TntOrderParcelResponseTableMap::translateFieldName('StickerNumber', TableMap::TYPE_PHPNAME, $indexType)];
             $this->sticker_number = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : TntOrderParcelResponseTableMap::translateFieldName('TrackingUrl', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : TntOrderParcelResponseTableMap::translateFieldName('TrackingUrl', TableMap::TYPE_PHPNAME, $indexType)];
             $this->tracking_url = (null !== $col) ? (string) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : TntOrderParcelResponseTableMap::translateFieldName('Printed', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : TntOrderParcelResponseTableMap::translateFieldName('Printed', TableMap::TYPE_PHPNAME, $indexType)];
             $this->printed = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : TntOrderParcelResponseTableMap::translateFieldName('Weight', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : TntOrderParcelResponseTableMap::translateFieldName('Weight', TableMap::TYPE_PHPNAME, $indexType)];
             $this->weight = (null !== $col) ? (double) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : TntOrderParcelResponseTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : TntOrderParcelResponseTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->created_at = (null !== $col) ? PropelDateTime::newInstance($col, null, '\DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : TntOrderParcelResponseTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : TntOrderParcelResponseTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -915,7 +956,7 @@ abstract class TntOrderParcelResponse implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 12; // 12 = TntOrderParcelResponseTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 13; // 13 = TntOrderParcelResponseTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException("Error populating \TNTFrance\Model\TntOrderParcelResponse object", 0, $e);
@@ -1154,6 +1195,9 @@ abstract class TntOrderParcelResponse implements ActiveRecordInterface
         if ($this->isColumnModified(TntOrderParcelResponseTableMap::ID)) {
             $modifiedColumns[':p' . $index++]  = 'ID';
         }
+        if ($this->isColumnModified(TntOrderParcelResponseTableMap::ACCOUNT_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'ACCOUNT_ID';
+        }
         if ($this->isColumnModified(TntOrderParcelResponseTableMap::ORDER_PRODUCT_ID)) {
             $modifiedColumns[':p' . $index++]  = 'ORDER_PRODUCT_ID';
         }
@@ -1200,6 +1244,9 @@ abstract class TntOrderParcelResponse implements ActiveRecordInterface
                 switch ($columnName) {
                     case 'ID':
                         $stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
+                        break;
+                    case 'ACCOUNT_ID':
+                        $stmt->bindValue($identifier, $this->account_id, PDO::PARAM_INT);
                         break;
                     case 'ORDER_PRODUCT_ID':
                         $stmt->bindValue($identifier, $this->order_product_id, PDO::PARAM_INT);
@@ -1300,36 +1347,39 @@ abstract class TntOrderParcelResponse implements ActiveRecordInterface
                 return $this->getId();
                 break;
             case 1:
-                return $this->getOrderProductId();
+                return $this->getAccountId();
                 break;
             case 2:
-                return $this->getPickUpNumber();
+                return $this->getOrderProductId();
                 break;
             case 3:
-                return $this->getFileName();
+                return $this->getPickUpNumber();
                 break;
             case 4:
-                return $this->getSequenceNumber();
+                return $this->getFileName();
                 break;
             case 5:
-                return $this->getParcelNumberId();
+                return $this->getSequenceNumber();
                 break;
             case 6:
-                return $this->getStickerNumber();
+                return $this->getParcelNumberId();
                 break;
             case 7:
-                return $this->getTrackingUrl();
+                return $this->getStickerNumber();
                 break;
             case 8:
-                return $this->getPrinted();
+                return $this->getTrackingUrl();
                 break;
             case 9:
-                return $this->getWeight();
+                return $this->getPrinted();
                 break;
             case 10:
-                return $this->getCreatedAt();
+                return $this->getWeight();
                 break;
             case 11:
+                return $this->getCreatedAt();
+                break;
+            case 12:
                 return $this->getUpdatedAt();
                 break;
             default:
@@ -1362,17 +1412,18 @@ abstract class TntOrderParcelResponse implements ActiveRecordInterface
         $keys = TntOrderParcelResponseTableMap::getFieldNames($keyType);
         $result = array(
             $keys[0] => $this->getId(),
-            $keys[1] => $this->getOrderProductId(),
-            $keys[2] => $this->getPickUpNumber(),
-            $keys[3] => $this->getFileName(),
-            $keys[4] => $this->getSequenceNumber(),
-            $keys[5] => $this->getParcelNumberId(),
-            $keys[6] => $this->getStickerNumber(),
-            $keys[7] => $this->getTrackingUrl(),
-            $keys[8] => $this->getPrinted(),
-            $keys[9] => $this->getWeight(),
-            $keys[10] => $this->getCreatedAt(),
-            $keys[11] => $this->getUpdatedAt(),
+            $keys[1] => $this->getAccountId(),
+            $keys[2] => $this->getOrderProductId(),
+            $keys[3] => $this->getPickUpNumber(),
+            $keys[4] => $this->getFileName(),
+            $keys[5] => $this->getSequenceNumber(),
+            $keys[6] => $this->getParcelNumberId(),
+            $keys[7] => $this->getStickerNumber(),
+            $keys[8] => $this->getTrackingUrl(),
+            $keys[9] => $this->getPrinted(),
+            $keys[10] => $this->getWeight(),
+            $keys[11] => $this->getCreatedAt(),
+            $keys[12] => $this->getUpdatedAt(),
         );
         $virtualColumns = $this->virtualColumns;
         foreach ($virtualColumns as $key => $virtualColumn) {
@@ -1421,36 +1472,39 @@ abstract class TntOrderParcelResponse implements ActiveRecordInterface
                 $this->setId($value);
                 break;
             case 1:
-                $this->setOrderProductId($value);
+                $this->setAccountId($value);
                 break;
             case 2:
-                $this->setPickUpNumber($value);
+                $this->setOrderProductId($value);
                 break;
             case 3:
-                $this->setFileName($value);
+                $this->setPickUpNumber($value);
                 break;
             case 4:
-                $this->setSequenceNumber($value);
+                $this->setFileName($value);
                 break;
             case 5:
-                $this->setParcelNumberId($value);
+                $this->setSequenceNumber($value);
                 break;
             case 6:
-                $this->setStickerNumber($value);
+                $this->setParcelNumberId($value);
                 break;
             case 7:
-                $this->setTrackingUrl($value);
+                $this->setStickerNumber($value);
                 break;
             case 8:
-                $this->setPrinted($value);
+                $this->setTrackingUrl($value);
                 break;
             case 9:
-                $this->setWeight($value);
+                $this->setPrinted($value);
                 break;
             case 10:
-                $this->setCreatedAt($value);
+                $this->setWeight($value);
                 break;
             case 11:
+                $this->setCreatedAt($value);
+                break;
+            case 12:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1478,17 +1532,18 @@ abstract class TntOrderParcelResponse implements ActiveRecordInterface
         $keys = TntOrderParcelResponseTableMap::getFieldNames($keyType);
 
         if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-        if (array_key_exists($keys[1], $arr)) $this->setOrderProductId($arr[$keys[1]]);
-        if (array_key_exists($keys[2], $arr)) $this->setPickUpNumber($arr[$keys[2]]);
-        if (array_key_exists($keys[3], $arr)) $this->setFileName($arr[$keys[3]]);
-        if (array_key_exists($keys[4], $arr)) $this->setSequenceNumber($arr[$keys[4]]);
-        if (array_key_exists($keys[5], $arr)) $this->setParcelNumberId($arr[$keys[5]]);
-        if (array_key_exists($keys[6], $arr)) $this->setStickerNumber($arr[$keys[6]]);
-        if (array_key_exists($keys[7], $arr)) $this->setTrackingUrl($arr[$keys[7]]);
-        if (array_key_exists($keys[8], $arr)) $this->setPrinted($arr[$keys[8]]);
-        if (array_key_exists($keys[9], $arr)) $this->setWeight($arr[$keys[9]]);
-        if (array_key_exists($keys[10], $arr)) $this->setCreatedAt($arr[$keys[10]]);
-        if (array_key_exists($keys[11], $arr)) $this->setUpdatedAt($arr[$keys[11]]);
+        if (array_key_exists($keys[1], $arr)) $this->setAccountId($arr[$keys[1]]);
+        if (array_key_exists($keys[2], $arr)) $this->setOrderProductId($arr[$keys[2]]);
+        if (array_key_exists($keys[3], $arr)) $this->setPickUpNumber($arr[$keys[3]]);
+        if (array_key_exists($keys[4], $arr)) $this->setFileName($arr[$keys[4]]);
+        if (array_key_exists($keys[5], $arr)) $this->setSequenceNumber($arr[$keys[5]]);
+        if (array_key_exists($keys[6], $arr)) $this->setParcelNumberId($arr[$keys[6]]);
+        if (array_key_exists($keys[7], $arr)) $this->setStickerNumber($arr[$keys[7]]);
+        if (array_key_exists($keys[8], $arr)) $this->setTrackingUrl($arr[$keys[8]]);
+        if (array_key_exists($keys[9], $arr)) $this->setPrinted($arr[$keys[9]]);
+        if (array_key_exists($keys[10], $arr)) $this->setWeight($arr[$keys[10]]);
+        if (array_key_exists($keys[11], $arr)) $this->setCreatedAt($arr[$keys[11]]);
+        if (array_key_exists($keys[12], $arr)) $this->setUpdatedAt($arr[$keys[12]]);
     }
 
     /**
@@ -1501,6 +1556,7 @@ abstract class TntOrderParcelResponse implements ActiveRecordInterface
         $criteria = new Criteria(TntOrderParcelResponseTableMap::DATABASE_NAME);
 
         if ($this->isColumnModified(TntOrderParcelResponseTableMap::ID)) $criteria->add(TntOrderParcelResponseTableMap::ID, $this->id);
+        if ($this->isColumnModified(TntOrderParcelResponseTableMap::ACCOUNT_ID)) $criteria->add(TntOrderParcelResponseTableMap::ACCOUNT_ID, $this->account_id);
         if ($this->isColumnModified(TntOrderParcelResponseTableMap::ORDER_PRODUCT_ID)) $criteria->add(TntOrderParcelResponseTableMap::ORDER_PRODUCT_ID, $this->order_product_id);
         if ($this->isColumnModified(TntOrderParcelResponseTableMap::PICK_UP_NUMBER)) $criteria->add(TntOrderParcelResponseTableMap::PICK_UP_NUMBER, $this->pick_up_number);
         if ($this->isColumnModified(TntOrderParcelResponseTableMap::FILE_NAME)) $criteria->add(TntOrderParcelResponseTableMap::FILE_NAME, $this->file_name);
@@ -1575,6 +1631,7 @@ abstract class TntOrderParcelResponse implements ActiveRecordInterface
      */
     public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
     {
+        $copyObj->setAccountId($this->getAccountId());
         $copyObj->setOrderProductId($this->getOrderProductId());
         $copyObj->setPickUpNumber($this->getPickUpNumber());
         $copyObj->setFileName($this->getFileName());
@@ -1671,6 +1728,7 @@ abstract class TntOrderParcelResponse implements ActiveRecordInterface
     public function clear()
     {
         $this->id = null;
+        $this->account_id = null;
         $this->order_product_id = null;
         $this->pick_up_number = null;
         $this->file_name = null;

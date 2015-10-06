@@ -1,44 +1,23 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: gbarral
- * Date: 06/07/15
- * Time: 10:54
- */
 
 namespace TNTFrance\Form;
 
-
 use Symfony\Component\Validator\Constraints\GreaterThan;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Thelia\Core\Translation\Translator;
 use Thelia\Form\BaseForm;
 use TNTFrance\Model\Config\TNTFranceConfigValue;
 use TNTFrance\TNTFrance;
 
+/**
+ * Prices and weights configuration form.
+ */
 class TNTPriceWeightForm extends BaseForm
 {
+    public function getName()
+    {
+        return 'tnt_price_weight_form';
+    }
 
-    /**
-     *
-     * in this function you add all the fields you need for your Form.
-     * Form this you have to call add method on $this->formBuilder attribute :
-     *
-     * $this->formBuilder->add("name", "text")
-     *   ->add("email", "email", array(
-     *           "attr" => array(
-     *               "class" => "field"
-     *           ),
-     *           "label" => "email",
-     *           "constraints" => array(
-     *               new \Symfony\Component\Validator\Constraints\NotBlank()
-     *           )
-     *       )
-     *   )
-     *   ->add('age', 'integer');
-     *
-     * @return null
-     */
     protected function buildForm()
     {
         $this->formBuilder
@@ -46,11 +25,11 @@ class TNTPriceWeightForm extends BaseForm
                 TNTFranceConfigValue::FREE_SHIPPING,
                 'integer',
                 [
-                    'label' => Translator::getInstance()->trans(
-                            'Free shipping',
-                            [],
-                            TNTFrance::MESSAGE_DOMAIN
-                        ),
+                    'label' => $this->translator->trans(
+                        'Free shipping',
+                        [],
+                        TNTFrance::MESSAGE_DOMAIN
+                    ),
                     'label_attr' => [
                         'for' => TNTFranceConfigValue::FREE_SHIPPING
                     ],
@@ -61,25 +40,25 @@ class TNTPriceWeightForm extends BaseForm
                 TNTFranceConfigValue::SURCHARGE_FUEL,
                 'number',
                 [
-                    'label' => Translator::getInstance()->trans(
-                            'Fuel surchage',
+                    'label' => $this->translator->trans(
+                        'Fuel surchage',
+                        [],
+                        TNTFrance::MESSAGE_DOMAIN
+                    ),
+                    'label_attr' => [
+                        'for' => TNTFranceConfigValue::SURCHARGE_FUEL,
+                        'description' => $this->translator->trans(
+                            'Based on the monthly average price of a liter of diesel at the pump released by the National Committee Road, for all of your domestic shipments.',
                             [],
                             TNTFrance::MESSAGE_DOMAIN
                         ),
-                    'label_attr' => [
-                        'for' => TNTFranceConfigValue::SURCHARGE_FUEL,
-                        'description' => Translator::getInstance()->trans(
-                                'Based on the monthly average price of a liter of diesel at the pump released by the National Committee Road, for all of your domestic shipments.',
-                                [],
-                                TNTFrance::MESSAGE_DOMAIN
-                            ),
-                        'helper' => Translator::getInstance()->trans(
-                                '(Around %default_price€ per expedition by default)',
-                                [
-                                    '%default_price' => 0.60
-                                ],
-                                TNTFrance::MESSAGE_DOMAIN
-                            )
+                        'helper' => $this->translator->trans(
+                            '(Around %default_price€ per expedition by default)',
+                            [
+                                '%default_price' => 0.60
+                            ],
+                            TNTFrance::MESSAGE_DOMAIN
+                        )
                     ],
                     'constraints' => [
                         new NotBlank()
@@ -91,20 +70,20 @@ class TNTPriceWeightForm extends BaseForm
                 TNTFranceConfigValue::SURCHARGE_SECURITY_FEE,
                 'number',
                 [
-                    'label' => Translator::getInstance()->trans(
-                            'Security fee',
-                            [],
-                            TNTFrance::MESSAGE_DOMAIN
-                        ),
+                    'label' => $this->translator->trans(
+                        'Security fee',
+                        [],
+                        TNTFrance::MESSAGE_DOMAIN
+                    ),
                     'label_attr' => [
                         'for' => TNTFranceConfigValue::SURCHARGE_SECURITY_FEE,
-                        'helper' => Translator::getInstance()->trans(
-                                '(%default_price€ per package by default)',
-                                [
-                                    '%default_price' => 0.36
-                                ],
-                                TNTFrance::MESSAGE_DOMAIN
-                            )
+                        'helper' => $this->translator->trans(
+                            '(%default_price€ per package by default)',
+                            [
+                                '%default_price' => 0.36
+                            ],
+                            TNTFrance::MESSAGE_DOMAIN
+                        )
                     ],
                     'data' => TNTFrance::getConfigValue(TNTFranceConfigValue::SURCHARGE_SECURITY_FEE)
                 ]
@@ -113,27 +92,25 @@ class TNTPriceWeightForm extends BaseForm
                 TNTFranceConfigValue::SURCHARGE_MULTI_PACKAGE,
                 'number',
                 [
-                    'label' => Translator::getInstance()->trans(
-                            'Multi package treatment',
+                    'label' => $this->translator->trans(
+                        'Multi package treatment',
+                        [],
+                        TNTFrance::MESSAGE_DOMAIN
+                    ),
+                    'label_attr' => [
+                        'for' => TNTFranceConfigValue::SURCHARGE_MULTI_PACKAGE,
+                        'description' => $this->translator->trans(
+                            'From the second package.',
                             [],
                             TNTFrance::MESSAGE_DOMAIN
                         ),
-                    'label_attr' => [
-                        'for' => TNTFranceConfigValue::SURCHARGE_MULTI_PACKAGE,
-                        'description' => Translator::getInstance()->trans(
-                                'From the second package.',
-                                [
-                                    '%default_price' => 0.50
-                                ],
-                                TNTFrance::MESSAGE_DOMAIN
-                            ),
-                        'helper' => Translator::getInstance()->trans(
-                                '(%default_price€ per package by default)',
-                                [
-                                    '%default_price' => 0.50
-                                ],
-                                TNTFrance::MESSAGE_DOMAIN
-                            )
+                        'helper' => $this->translator->trans(
+                            '(%default_price€ per package by default)',
+                            [
+                                '%default_price' => 0.50
+                            ],
+                            TNTFrance::MESSAGE_DOMAIN
+                        )
                     ],
                     'data' => TNTFrance::getConfigValue(TNTFranceConfigValue::SURCHARGE_MULTI_PACKAGE)
                 ]
@@ -142,20 +119,18 @@ class TNTPriceWeightForm extends BaseForm
                 TNTFranceConfigValue::SEPARATE_PRODUCT_IN_PACKAGE,
                 'integer',
                 [
-                    'label' => Translator::getInstance()->trans(
-                            'Do one package per product',
-                            [],
-                            TNTFrance::MESSAGE_DOMAIN
-                        ),
+                    'label' => $this->translator->trans(
+                        'Do one package per product',
+                        [],
+                        TNTFrance::MESSAGE_DOMAIN
+                    ),
                     'label_attr' => [
                         'for' => TNTFranceConfigValue::SEPARATE_PRODUCT_IN_PACKAGE,
-                        'description' => Translator::getInstance()->trans(
-                                'Allows you to send several packages even if the max weight is not reached.',
-                                [
-                                    '%default_price' => 0.50
-                                ],
-                                TNTFrance::MESSAGE_DOMAIN
-                            )
+                        'description' => $this->translator->trans(
+                            'Allows you to send several packages even if the max weight is not reached.',
+                            [],
+                            TNTFrance::MESSAGE_DOMAIN
+                        )
                     ],
                     'data' => TNTFrance::getConfigValue(TNTFranceConfigValue::SEPARATE_PRODUCT_IN_PACKAGE)
                 ]
@@ -164,25 +139,25 @@ class TNTPriceWeightForm extends BaseForm
                 TNTFranceConfigValue::OPTION_P_PAYMENT_BACK,
                 'number',
                 [
-                    'label' => Translator::getInstance()->trans(
-                            'Option payment back',
+                    'label' => $this->translator->trans(
+                        'Option payment back',
+                        [],
+                        TNTFrance::MESSAGE_DOMAIN
+                    ),
+                    'label_attr' => [
+                        'for' => TNTFranceConfigValue::OPTION_P_PAYMENT_BACK,
+                        'description' => $this->translator->trans(
+                            'Delivery against payment by check.',
                             [],
                             TNTFrance::MESSAGE_DOMAIN
                         ),
-                    'label_attr' => [
-                        'for' => TNTFranceConfigValue::OPTION_P_PAYMENT_BACK,
-                        'description' => Translator::getInstance()->trans(
-                                'Delivery against payment by check.',
-                                [],
-                                TNTFrance::MESSAGE_DOMAIN
-                            ),
-                        'helper' => Translator::getInstance()->trans(
-                                '(%default_price€ per expedition by default)',
-                                [
-                                    '%default_price' => 16.50
-                                ],
-                                TNTFrance::MESSAGE_DOMAIN
-                            )
+                        'helper' => $this->translator->trans(
+                            '(%default_price€ per expedition by default)',
+                            [
+                                '%default_price' => 16.50
+                            ],
+                            TNTFrance::MESSAGE_DOMAIN
+                        )
                     ],
                     'constraints' => [
                         new NotBlank()
@@ -194,25 +169,25 @@ class TNTPriceWeightForm extends BaseForm
                 TNTFranceConfigValue::OPTION_W_EXPEDITION_UNDER_PROTECTION,
                 'number',
                 [
-                    'label' => Translator::getInstance()->trans(
-                            'Option expedition under protection',
+                    'label' => $this->translator->trans(
+                        'Option expedition under protection',
+                        [],
+                        TNTFrance::MESSAGE_DOMAIN
+                    ),
+                    'label_attr' => [
+                        'for' => TNTFranceConfigValue::OPTION_W_EXPEDITION_UNDER_PROTECTION,
+                        'description' => $this->translator->trans(
+                            'For your sensitive goods, exclusive feature and enhanced for maximum safety, from pickup to delivery.',
                             [],
                             TNTFrance::MESSAGE_DOMAIN
                         ),
-                    'label_attr' => [
-                        'for' => TNTFranceConfigValue::OPTION_W_EXPEDITION_UNDER_PROTECTION,
-                        'description' => Translator::getInstance()->trans(
-                                'For your sensitive goods, exclusive feature and enhanced for maximum safety, from pickup to delivery.',
-                                [],
-                                TNTFrance::MESSAGE_DOMAIN
-                            ),
-                        'helper' => Translator::getInstance()->trans(
-                                '(%default_price€ per package by default)',
-                                [
-                                    '%default_price' => 3.60
-                                ],
-                                TNTFrance::MESSAGE_DOMAIN
-                            )
+                        'helper' => $this->translator->trans(
+                            '(%default_price€ per package by default)',
+                            [
+                                '%default_price' => 3.60
+                            ],
+                            TNTFrance::MESSAGE_DOMAIN
+                        )
                     ],
                     'constraints' => [
                         new NotBlank()
@@ -224,25 +199,25 @@ class TNTPriceWeightForm extends BaseForm
                 TNTFranceConfigValue::OPTION_D_RELAY_PACKAGE,
                 'number',
                 [
-                    'label' => Translator::getInstance()->trans(
-                            'Option relay package',
+                    'label' => $this->translator->trans(
+                        'Option relay package',
+                        [],
+                        TNTFrance::MESSAGE_DOMAIN
+                    ),
+                    'label_attr' => [
+                        'for' => TNTFranceConfigValue::OPTION_D_RELAY_PACKAGE,
+                        'description' => $this->translator->trans(
+                            'Package delivered in one of the 4,200 Relay Colis.',
                             [],
                             TNTFrance::MESSAGE_DOMAIN
                         ),
-                    'label_attr' => [
-                        'for' => TNTFranceConfigValue::OPTION_D_RELAY_PACKAGE,
-                        'description' => Translator::getInstance()->trans(
-                                'Package delivered in one of the 4,200 Relay Colis.',
-                                [],
-                                TNTFrance::MESSAGE_DOMAIN
-                            ),
-                        'helper' => Translator::getInstance()->trans(
-                                '(%default_price€ per package by default)',
-                                [
-                                    '%default_price' => 1.90
-                                ],
-                                TNTFrance::MESSAGE_DOMAIN
-                            )
+                        'helper' => $this->translator->trans(
+                            '(%default_price€ per package by default)',
+                            [
+                                '%default_price' => 1.90
+                            ],
+                            TNTFrance::MESSAGE_DOMAIN
+                        )
                     ],
                     'constraints' => [
                         new NotBlank()
@@ -254,25 +229,25 @@ class TNTPriceWeightForm extends BaseForm
                 TNTFranceConfigValue::OPTION_Z_HOME_DELIVERY,
                 'number',
                 [
-                    'label' => Translator::getInstance()->trans(
-                            'Option home delivery',
+                    'label' => $this->translator->trans(
+                        'Option home delivery',
+                        [],
+                        TNTFrance::MESSAGE_DOMAIN
+                    ),
+                    'label_attr' => [
+                        'for' => TNTFranceConfigValue::OPTION_Z_HOME_DELIVERY,
+                        'description' => $this->translator->trans(
+                            'Parcels delivered to the recipient (if absent or access problem: the package is automatically deposited into a Relais Colis).',
                             [],
                             TNTFrance::MESSAGE_DOMAIN
                         ),
-                    'label_attr' => [
-                        'for' => TNTFranceConfigValue::OPTION_Z_HOME_DELIVERY,
-                        'description' => Translator::getInstance()->trans(
-                                'Parcels delivered to the recipient (if absent or access problem: the package is automatically deposited into a Relais Colis).',
-                                [],
-                                TNTFrance::MESSAGE_DOMAIN
-                            ),
-                        'helper' => Translator::getInstance()->trans(
-                                '(%default_price€ per package by default)',
-                                [
-                                    '%default_price' => 2.90
-                                ],
-                                TNTFrance::MESSAGE_DOMAIN
-                            )
+                        'helper' => $this->translator->trans(
+                            '(%default_price€ per package by default)',
+                            [
+                                '%default_price' => 2.90
+                            ],
+                            TNTFrance::MESSAGE_DOMAIN
+                        )
                     ],
                     'constraints' => [
                         new NotBlank()
@@ -284,25 +259,25 @@ class TNTPriceWeightForm extends BaseForm
                 TNTFranceConfigValue::OPTION_E_WITHOUT_ANNOTATING,
                 'number',
                 [
-                    'label' => Translator::getInstance()->trans(
-                            'Option delivery without annotating',
+                    'label' => $this->translator->trans(
+                        'Option delivery without annotating',
+                        [],
+                        TNTFrance::MESSAGE_DOMAIN
+                    ),
+                    'label_attr' => [
+                        'for' => TNTFranceConfigValue::OPTION_E_WITHOUT_ANNOTATING,
+                        'description' => $this->translator->trans(
+                            'Contractual TNT option.',
                             [],
                             TNTFrance::MESSAGE_DOMAIN
                         ),
-                    'label_attr' => [
-                        'for' => TNTFranceConfigValue::OPTION_E_WITHOUT_ANNOTATING,
-                        'description' => Translator::getInstance()->trans(
-                                'Contractual TNT option.',
-                                [],
-                                TNTFrance::MESSAGE_DOMAIN
-                            ),
-                        'helper' => Translator::getInstance()->trans(
-                                '(%default_price€ per expedition by default)',
-                                [
-                                    '%default_price' => 0
-                                ],
-                                TNTFrance::MESSAGE_DOMAIN
-                            )
+                        'helper' => $this->translator->trans(
+                            '(%default_price€ per expedition by default)',
+                            [
+                                '%default_price' => 0
+                            ],
+                            TNTFrance::MESSAGE_DOMAIN
+                        )
                     ],
                     'constraints' => [
                         new NotBlank()
@@ -314,20 +289,18 @@ class TNTPriceWeightForm extends BaseForm
                 TNTFranceConfigValue::PRICE_ONE_KG,
                 'collection',
                 [
-                    'type'         => 'number',
-                    'label'        => Translator::getInstance()->trans(
-                            'Price',
-                            [],
-                            TNTFrance::MESSAGE_DOMAIN
-                        ),
-                    'allow_add'    => true,
+                    'type' => 'number',
+                    'label' => $this->translator->trans(
+                        'Price',
+                        [],
+                        TNTFrance::MESSAGE_DOMAIN
+                    ),
+                    'allow_add' => true,
                     'allow_delete' => true,
-                    'options'      => [
+                    'options' => [
                         'constraints' => [
                             new NotBlank(),
-                            new GreaterThan(
-                                array('value' => 0)
-                            )
+                            new GreaterThan(['value' => 0]),
                         ]
                     ]
                 ]
@@ -336,32 +309,21 @@ class TNTPriceWeightForm extends BaseForm
                 TNTFranceConfigValue::PRICE_KG_SUP,
                 'collection',
                 [
-                    'type'         => 'number',
-                    'label'        => Translator::getInstance()->trans(
-                            'Price kg sup',
-                            [],
-                            TNTFrance::MESSAGE_DOMAIN
-                        ),
-                    'allow_add'    => true,
+                    'type' => 'number',
+                    'label' => $this->translator->trans(
+                        'Price kg sup',
+                        [],
+                        TNTFrance::MESSAGE_DOMAIN
+                    ),
+                    'allow_add' => true,
                     'allow_delete' => true,
-                    'options'      => [
+                    'options' => [
                         'constraints' => [
                             new NotBlank(),
-                            new GreaterThan(
-                                array('value' => 0)
-                            )
+                            new GreaterThan(['value' => 0]),
                         ]
                     ]
                 ]
-            )
-        ;
-    }
-
-    /**
-     * @return string the name of you form. This name must be unique
-     */
-    public function getName()
-    {
-        return 'tnt_price_weight_form';
+            );
     }
 }

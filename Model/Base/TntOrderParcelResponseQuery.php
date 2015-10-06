@@ -23,6 +23,7 @@ use Thelia\Model\OrderProduct;
  *
  *
  * @method     ChildTntOrderParcelResponseQuery orderById($order = Criteria::ASC) Order by the id column
+ * @method     ChildTntOrderParcelResponseQuery orderByAccountId($order = Criteria::ASC) Order by the account_id column
  * @method     ChildTntOrderParcelResponseQuery orderByOrderProductId($order = Criteria::ASC) Order by the order_product_id column
  * @method     ChildTntOrderParcelResponseQuery orderByPickUpNumber($order = Criteria::ASC) Order by the pick_up_number column
  * @method     ChildTntOrderParcelResponseQuery orderByFileName($order = Criteria::ASC) Order by the file_name column
@@ -36,6 +37,7 @@ use Thelia\Model\OrderProduct;
  * @method     ChildTntOrderParcelResponseQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
  * @method     ChildTntOrderParcelResponseQuery groupById() Group by the id column
+ * @method     ChildTntOrderParcelResponseQuery groupByAccountId() Group by the account_id column
  * @method     ChildTntOrderParcelResponseQuery groupByOrderProductId() Group by the order_product_id column
  * @method     ChildTntOrderParcelResponseQuery groupByPickUpNumber() Group by the pick_up_number column
  * @method     ChildTntOrderParcelResponseQuery groupByFileName() Group by the file_name column
@@ -60,6 +62,7 @@ use Thelia\Model\OrderProduct;
  * @method     ChildTntOrderParcelResponse findOneOrCreate(ConnectionInterface $con = null) Return the first ChildTntOrderParcelResponse matching the query, or a new ChildTntOrderParcelResponse object populated from the query conditions when no match is found
  *
  * @method     ChildTntOrderParcelResponse findOneById(int $id) Return the first ChildTntOrderParcelResponse filtered by the id column
+ * @method     ChildTntOrderParcelResponse findOneByAccountId(int $account_id) Return the first ChildTntOrderParcelResponse filtered by the account_id column
  * @method     ChildTntOrderParcelResponse findOneByOrderProductId(int $order_product_id) Return the first ChildTntOrderParcelResponse filtered by the order_product_id column
  * @method     ChildTntOrderParcelResponse findOneByPickUpNumber(int $pick_up_number) Return the first ChildTntOrderParcelResponse filtered by the pick_up_number column
  * @method     ChildTntOrderParcelResponse findOneByFileName(string $file_name) Return the first ChildTntOrderParcelResponse filtered by the file_name column
@@ -73,6 +76,7 @@ use Thelia\Model\OrderProduct;
  * @method     ChildTntOrderParcelResponse findOneByUpdatedAt(string $updated_at) Return the first ChildTntOrderParcelResponse filtered by the updated_at column
  *
  * @method     array findById(int $id) Return ChildTntOrderParcelResponse objects filtered by the id column
+ * @method     array findByAccountId(int $account_id) Return ChildTntOrderParcelResponse objects filtered by the account_id column
  * @method     array findByOrderProductId(int $order_product_id) Return ChildTntOrderParcelResponse objects filtered by the order_product_id column
  * @method     array findByPickUpNumber(int $pick_up_number) Return ChildTntOrderParcelResponse objects filtered by the pick_up_number column
  * @method     array findByFileName(string $file_name) Return ChildTntOrderParcelResponse objects filtered by the file_name column
@@ -172,7 +176,7 @@ abstract class TntOrderParcelResponseQuery extends ModelCriteria
      */
     protected function findPkSimple($key, $con)
     {
-        $sql = 'SELECT ID, ORDER_PRODUCT_ID, PICK_UP_NUMBER, FILE_NAME, SEQUENCE_NUMBER, PARCEL_NUMBER_ID, STICKER_NUMBER, TRACKING_URL, PRINTED, WEIGHT, CREATED_AT, UPDATED_AT FROM tnt_order_parcel_response WHERE ID = :p0';
+        $sql = 'SELECT ID, ACCOUNT_ID, ORDER_PRODUCT_ID, PICK_UP_NUMBER, FILE_NAME, SEQUENCE_NUMBER, PARCEL_NUMBER_ID, STICKER_NUMBER, TRACKING_URL, PRINTED, WEIGHT, CREATED_AT, UPDATED_AT FROM tnt_order_parcel_response WHERE ID = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -300,6 +304,47 @@ abstract class TntOrderParcelResponseQuery extends ModelCriteria
         }
 
         return $this->addUsingAlias(TntOrderParcelResponseTableMap::ID, $id, $comparison);
+    }
+
+    /**
+     * Filter the query on the account_id column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByAccountId(1234); // WHERE account_id = 1234
+     * $query->filterByAccountId(array(12, 34)); // WHERE account_id IN (12, 34)
+     * $query->filterByAccountId(array('min' => 12)); // WHERE account_id > 12
+     * </code>
+     *
+     * @param     mixed $accountId The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return ChildTntOrderParcelResponseQuery The current query, for fluid interface
+     */
+    public function filterByAccountId($accountId = null, $comparison = null)
+    {
+        if (is_array($accountId)) {
+            $useMinMax = false;
+            if (isset($accountId['min'])) {
+                $this->addUsingAlias(TntOrderParcelResponseTableMap::ACCOUNT_ID, $accountId['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($accountId['max'])) {
+                $this->addUsingAlias(TntOrderParcelResponseTableMap::ACCOUNT_ID, $accountId['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        return $this->addUsingAlias(TntOrderParcelResponseTableMap::ACCOUNT_ID, $accountId, $comparison);
     }
 
     /**

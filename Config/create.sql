@@ -7,6 +7,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 CREATE TABLE IF NOT EXISTS `tnt_order_parcel_response`
 (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `account_id` INTEGER,
     `order_product_id` INTEGER NOT NULL,
     `pick_up_number` INTEGER NOT NULL,
     `file_name` VARCHAR(255),

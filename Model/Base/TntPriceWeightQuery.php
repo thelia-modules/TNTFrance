@@ -141,8 +141,8 @@ abstract class TntPriceWeightQuery extends ModelCriteria
         }
         $this->basePreSelect($con);
         if ($this->formatter || $this->modelAlias || $this->with || $this->select
-            || $this->selectColumns || $this->asColumns || $this->selectModifiers
-            || $this->map || $this->having || $this->joins) {
+         || $this->selectColumns || $this->asColumns || $this->selectModifiers
+         || $this->map || $this->having || $this->joins) {
             return $this->findPkComplex($key, $con);
         } else {
             return $this->findPkSimple($key, $con);
@@ -734,8 +734,8 @@ abstract class TntPriceWeightQuery extends ModelCriteria
      * @throws PropelException Any exceptions caught during processing will be
      *         rethrown wrapped into a PropelException.
      */
-    public function delete(ConnectionInterface $con = null)
-    {
+     public function delete(ConnectionInterface $con = null)
+     {
         if (null === $con) {
             $con = Propel::getServiceContainer()->getWriteConnection(TntPriceWeightTableMap::DATABASE_NAME);
         }
@@ -753,7 +753,7 @@ abstract class TntPriceWeightQuery extends ModelCriteria
             $con->beginTransaction();
 
 
-            TntPriceWeightTableMap::removeInstanceFromPool($criteria);
+        TntPriceWeightTableMap::removeInstanceFromPool($criteria);
 
             $affectedRows += ModelCriteria::delete($con);
             TntPriceWeightTableMap::clearRelatedInstancePool();

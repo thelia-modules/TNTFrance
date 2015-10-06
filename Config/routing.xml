@@ -66,6 +66,14 @@
     <route id="tntfrance.configuration.save" path="/admin/module/TNTFrance" methods="post">
         <default key="_controller">TNTFrance:TNTFranceConfig:save</default>
     </route>
+    <route id="tntfrance.configuration.account" path="/admin/module/TNTFrance/account/{id}" methods="get">
+        <default key="_controller">TNTFrance:TNTFranceConfig:account</default>
+        <default key="id" xsi:nil="true"/>
+    </route>
+    <route id="tntfrance.configuration.account.save" path="/admin/module/TNTFrance/account/{id}" methods="post">
+        <default key="_controller">TNTFrance:TNTFranceConfig:saveAccount</default>
+        <default key="id" xsi:nil="true"/>
+    </route>
 
     <route id="tntfrance.front.set_delivery_address" path="/module/TNTFrance/setDeliveryAddress" methods="get">
         <default key="_controller">TNTFrance:TNTFranceFront:setDeliveryAddress</default>

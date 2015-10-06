@@ -1,0 +1,27 @@
+{* render a simple text or checkbox field *}
+{function render_config_form_field}
+    {form_field form=$form field=$field}
+        <div class="form-group {if $error}has-error{/if}">
+            <label class="control-label" for="{$label_attr.for}">
+                {if $type == "checkbox"}
+                    <input type="checkbox" name="{$name}" id="{$label_attr.for}" {if $value}checked{/if} />
+                {/if}
+                {$label}
+                {if $required}<span class="required">*</span>{/if}
+
+                {form_error form=$form field=$field}
+                    <br />
+                    <span class="error">{$message}</span>
+                {/form_error}
+            </label>
+
+            {if $type != "checkbox"}
+                <input type="text" class="form-control" name="{$name}" id="{$label_attr.for}" value="{$value}" />
+            {/if}
+
+            {if ! empty($label_attr.help)}
+                <span class="help-block">{$label_attr.help}</span>
+            {/if}
+        </div>
+    {/form_field}
+{/function}

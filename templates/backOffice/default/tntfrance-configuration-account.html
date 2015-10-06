@@ -1,0 +1,56 @@
+{extends file="admin-layout.tpl"}
+
+{block name="no-return-functions"}
+    {$admin_current_location = 'modules'}
+{/block}
+
+{block name="page-title"}{intl d="tntfrance.bo.default" l='TNTFrance configuration'}{/block}
+
+{block name="check-resource"}admin.module{/block}
+{block name="check-access"}view{/block}
+{block name="check-module"}TNTFrance{/block}
+
+{block name="main-content"}
+    <div class="container" id="wrapper">
+        <ul class="breadcrumb">
+            <li><a href="{url path='/admin'}">{intl l="Home" d="tntfrance.bo.default"}</a></li>
+            <li><a href="{url path='/admin/modules'}">{intl l="Modules" d="tntfrance.bo.default"}</a></li>
+            <li>
+                <a href="{url path='/admin/module/TNTFrance'}">
+                    {intl l="TNTFrance configuration" d="tntfrance.bo.default"}
+                </a>
+            </li>
+            <li>{intl l="TNT account" d="tntfrance.bo.default"} - {$account.label}</li>
+        </ul>
+
+        <div class="general-block-decorator">
+            <div class="title title-without-tabs">
+                {intl l="TNT account" d="tntfrance.bo.default"}  - {$account.label}
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    {if $success}
+                        <div class="alert alert-success">
+                            {intl l="Configuration correctly saved" d="tntfrance.bo.default"}
+                        </div>
+                    {/if}
+
+                    {if $general_error}
+                        <div class="alert alert-danger">
+                            {$general_error}
+                        </div>
+                    {/if}
+
+                    {include file="includes/configuration-account.html"}
+                </div>
+            </div>
+        </div>
+    </div>
+{/block}
+
+{block name="javascript-initialization"}
+    {javascripts source="TNTFrance" file="assets/js/configuration-account.js"}
+        <script type="text/javascript" src="{$asset_url}"></script>
+    {/javascripts}
+{/block}

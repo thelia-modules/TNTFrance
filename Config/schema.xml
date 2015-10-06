@@ -12,6 +12,7 @@
 
     <table name="tnt_order_parcel_response" namespace="TNTFrance\Model">
         <column autoIncrement="true" name="id" primaryKey="true" required="true" type="INTEGER" />
+        <column name="account_id" required="false" type="INTEGER" />
         <column name="order_product_id" required="true" type="INTEGER" />
         <column name="pick_up_number" required="true" type="INTEGER" />
         <column name="file_name" type="VARCHAR" />

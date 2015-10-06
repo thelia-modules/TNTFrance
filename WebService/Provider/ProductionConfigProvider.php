@@ -25,6 +25,22 @@ use TNTFrance\WebService\Model\TNTSender;
  */
 class ProductionConfigProvider implements ConfigProviderInterface
 {
+    /** @var int */
+    protected $accountId;
+
+    public function __construct()
+    {
+        $this->accountId = TNTFrance::getDefaultAccountId();
+    }
+
+    public function setAccountId($accountId = null)
+    {
+        if ($accountId === null) {
+            $this->accountId = TNTFrance::getDefaultAccountId();
+        } else {
+            $this->accountId = $accountId;
+        }
+    }
 
     public function getWsdlUrl()
     {
@@ -34,17 +50,17 @@ class ProductionConfigProvider implements ConfigProviderInterface
 
     public function getAccountNumber()
     {
-        return TNTFrance::getConfigValue(TNTFranceConfigValue::ACCOUNT_NUMBER);
+        return TNTFrance::getAccountConfigValue($this->accountId, TNTFranceConfigValue::ACCOUNT_NUMBER);
     }
 
     public function getUsername()
     {
-        return TNTFrance::getConfigValue(TNTFranceConfigValue::USERNAME);
+        return TNTFrance::getAccountConfigValue($this->accountId, TNTFranceConfigValue::USERNAME);
     }
 
     public function getPassword()
     {
-        return TNTFrance::getConfigValue(TNTFranceConfigValue::PASSWORD);
+        return TNTFrance::getAccountConfigValue($this->accountId, TNTFranceConfigValue::PASSWORD);
     }
 
     public function getSender()
@@ -53,16 +69,36 @@ class ProductionConfigProvider implements ConfigProviderInterface
         $sender
             ->setType('ENTERPRISE')
             ->setTypeId('')
-            ->setName(TNTFrance::getConfigValue(TNTFranceConfigValue::SENDER_NAME))
-            ->setAddress1(TNTFrance::getConfigValue(TNTFranceConfigValue::SENDER_ADDRESS1))
-            ->setAddress2(TNTFrance::getConfigValue(TNTFranceConfigValue::SENDER_ADDRESS2))
-            ->setZipCode(TNTFrance::getConfigValue(TNTFranceConfigValue::SENDER_ZIP_CODE))
-            ->setCity(TNTFrance::getConfigValue(TNTFranceConfigValue::SENDER_CITY))
-            ->setContactLastName(TNTFrance::getConfigValue(TNTFranceConfigValue::CONTACT_LASTNAME))
-            ->setContactFirstName(TNTFrance::getConfigValue(TNTFranceConfigValue::CONTACT_FIRSTNAME))
-            ->setEmailAddress(TNTFrance::getConfigValue(TNTFranceConfigValue::CONTACT_EMAIL))
+            ->setName(
+                TNTFrance::getAccountConfigValue($this->accountId, TNTFranceConfigValue::SENDER_NAME)
+            )
+            ->setAddress1(
+                TNTFrance::getAccountConfigValue($this->accountId, TNTFranceConfigValue::SENDER_ADDRESS1)
+            )
+            ->setAddress2(
+                TNTFrance::getAccountConfigValue($this->accountId, TNTFranceConfigValue::SENDER_ADDRESS2)
+            )
+            ->setZipCode(
+                TNTFrance::getAccountConfigValue($this->accountId, TNTFranceConfigValue::SENDER_ZIP_CODE)
+            )
+            ->setCity(
+                TNTFrance::getAccountConfigValue($this->accountId, TNTFranceConfigValue::SENDER_CITY)
+            )
+            ->setContactLastName(
+                TNTFrance::getAccountConfigValue($this->accountId, TNTFranceConfigValue::CONTACT_LASTNAME)
+            )
+            ->setContactFirstName(
+                TNTFrance::getAccountConfigValue($this->accountId, TNTFranceConfigValue::CONTACT_FIRSTNAME)
+            )
+            ->setEmailAddress(
+                TNTFrance::getAccountConfigValue($this->accountId, TNTFranceConfigValue::CONTACT_EMAIL)
+            )
             ->setPhoneNumber(
-                str_replace(' ', '', TNTFrance::getConfigValue(TNTFranceConfigValue::CONTACT_PHONE))
+                str_replace(
+                    ' ',
+                    '',
+                    TNTFrance::getAccountConfigValue($this->accountId, TNTFranceConfigValue::CONTACT_PHONE)
+                )
             )
             ->setFaxNumber('');
 
@@ -71,7 +107,7 @@ class ProductionConfigProvider implements ConfigProviderInterface
 
     public function getNotification()
     {
-        return TNTFrance::getConfigValue('notification_emails');
+        return TNTFrance::getAccountConfigValue($this->accountId, TNTFranceConfigValue::NOTIFICATION_EMAILS);
     }
 
     public function getShippingDate()
@@ -104,8 +140,6 @@ class ProductionConfigProvider implements ConfigProviderInterface
     }
 
 
-
-
     public function getLabelFormat()
     {
         return TNTFrance::getConfigValue(TNTFranceConfigValue::LABEL_FORMAT, 'STDA4');
@@ -118,11 +152,16 @@ class ProductionConfigProvider implements ConfigProviderInterface
         $pickUpRequest
             ->setMedia('EMAIL')
             ->setPhoneNumber(
-                str_replace(' ', '', TNTFrance::getConfigValue(TNTFranceConfigValue::CONTACT_PHONE))
+                str_replace(
+                    ' ',
+                    '',
+                    TNTFrance::getAccountConfigValue($this->accountId, TNTFranceConfigValue::CONTACT_PHONE)
+                )
             )
             ->setClosingTime('17:00')
-            ->setEmailAddress(TNTFrance::getConfigValue(TNTFranceConfigValue::CONTACT_EMAIL))
-        ;
+            ->setEmailAddress(
+                TNTFrance::getAccountConfigValue($this->accountId, TNTFranceConfigValue::CONTACT_EMAIL)
+            );
 
         return $pickUpRequest;
     }

@@ -719,17 +719,17 @@ abstract class TntPriceWeight implements ActiveRecordInterface
      */
     public function hasOnlyDefaultValues()
     {
-        if ($this->weight !== 0) {
-            return false;
-        }
+            if ($this->weight !== 0) {
+                return false;
+            }
 
-        if ($this->price !== 0) {
-            return false;
-        }
+            if ($this->price !== 0) {
+                return false;
+            }
 
-        if ($this->price_kg_sup !== 0) {
-            return false;
-        }
+            if ($this->price_kg_sup !== 0) {
+                return false;
+            }
 
         // otherwise, everything was equal, so return TRUE
         return true;
@@ -747,7 +747,7 @@ abstract class TntPriceWeight implements ActiveRecordInterface
      * @param int     $startcol  0-based offset column which indicates which restultset column to start with.
      * @param boolean $rehydrate Whether this object is being re-hydrated from the database.
      * @param string  $indexType The index type of $row. Mostly DataFetcher->getIndexType().
-    One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_STUDLYPHPNAME
+                                  One of the class type constants TableMap::TYPE_PHPNAME, TableMap::TYPE_STUDLYPHPNAME
      *                            TableMap::TYPE_COLNAME, TableMap::TYPE_FIELDNAME, TableMap::TYPE_NUM.
      *
      * @return int             next starting column
@@ -1033,7 +1033,7 @@ abstract class TntPriceWeight implements ActiveRecordInterface
             throw new PropelException('Cannot insert a value for auto-increment primary key (' . TntPriceWeightTableMap::ID . ')');
         }
 
-        // check the columns in natural order for more readable SQL queries
+         // check the columns in natural order for more readable SQL queries
         if ($this->isColumnModified(TntPriceWeightTableMap::ID)) {
             $modifiedColumns[':p' . $index++]  = 'ID';
         }

@@ -24,133 +24,32 @@
         </tr>
         </thead>
         <tbody>
-        {form_field form=$form field="surcharge_fuel"}
-        <tr>
-            <td>
-                <label for="{$label_attr.for}">{$label}</label>
-            </td>
-            <td>
-                <label for="{$label_attr.for}">{$label_attr.description}</label>
-            </td>
-            <td>
-                <input type="number" step="0.01" name="{$name}" id="{$label_attr.for}" value="{if $value}{$value}{else}0{/if}" />
-                <div class="help-block">{$label_attr.helper}</div>
-            </td>
-        </tr>
-        {/form_field}
-        {form_field form=$form field="surcharge_security_fee"}
-        <tr>
-            <td>
-                <label for="{$label_attr.for}">{$label}</label>
-            </td>
-            <td>
-                <label for="{$label_attr.for}">{$label_attr.description}</label>
-            </td>
-            <td>
-                <input type="number" step="0.01" name="{$name}" id="{$label_attr.for}" value="{if $value}{$value}{else}0{/if}" />
-                <div class="help-block">{$label_attr.helper}</div>
-            </td>
-        </tr>
-        {/form_field}
-        {form_field form=$form field="surcharge_multi_package"}
-        <tr>
-            <td>
-                <label for="{$label_attr.for}">{$label}</label>
-            </td>
-            <td>
-                <label for="{$label_attr.for}">{$label_attr.description}</label>
-            </td>
-            <td>
-                <input type="number" step="0.01" name="{$name}" id="{$label_attr.for}" value="{if $value}{$value}{else}0{/if}" />
-                <div class="help-block">{$label_attr.helper}</div>
-            </td>
-        </tr>
-        {/form_field}
-        {form_field form=$form field="separate_product_in_package"}
-        <tr>
-            <td>
-                <label for="{$label_attr.for}">{$label}</label>
-            </td>
-            <td>
-                <label for="{$label_attr.for}">{$label_attr.description}</label>
-            </td>
-            <td>
-                <div class="make-switch switch-small module-activation" data-id="{$name}" data-on="success" data-off="danger" data-on-label="<i class='glyphicon glyphicon-ok-circle'></i>" data-off-label="<i class='glyphicon glyphicon-remove-circle'></i>">
-                    <input id="{$label_attr.for}" name="{$name}" type="checkbox" value="1" {if $value == 1}checked{/if} />
-                </div>
-            </td>
-        </tr>
-        {/form_field}
-        {form_field form=$form field="option_payment_back"}
-        <tr>
-            <td>
-                <label for="{$label_attr.for}">{$label}</label>
-            </td>
-            <td>
-                <label for="{$label_attr.for}">{$label_attr.description}</label>
-            </td>
-            <td>
-                <input type="number" step="0.01" name="{$name}" id="{$label_attr.for}" value="{if $value}{$value}{else}0{/if}" />
-                <div class="help-block">{$label_attr.helper}</div>
-            </td>
-        </tr>
-        {/form_field}
-        {form_field form=$form field="option_expedition_under_protection"}
-        <tr>
-            <td>
-                <label for="{$label_attr.for}">{$label}</label>
-            </td>
-            <td>
-                <label for="{$label_attr.for}">{$label_attr.description}</label>
-            </td>
-            <td>
-                <input type="number" step="0.01" name="{$name}" id="{$label_attr.for}" value="{if $value}{$value}{else}0{/if}" />
-                <div class="help-block">{$label_attr.helper}</div>
-            </td>
-        </tr>
-        {/form_field}
-        {form_field form=$form field="option_relay_package"}
-        <tr>
-            <td>
-                <label for="{$label_attr.for}">{$label}</label>
-            </td>
-            <td>
-                <label for="{$label_attr.for}">{$label_attr.description}</label>
-            </td>
-            <td>
-                <input type="number" step="0.01" name="{$name}" id="{$label_attr.for}" value="{if $value}{$value}{else}0{/if}" />
-                <div class="help-block">{$label_attr.helper}</div>
-            </td>
-        </tr>
-        {/form_field}
-        {form_field form=$form field="option_home_delivery"}
-        <tr>
-            <td>
-                <label for="{$label_attr.for}">{$label}</label>
-            </td>
-            <td>
-                <label for="{$label_attr.for}">{$label_attr.description}</label>
-            </td>
-            <td>
-                <input type="number" step="0.01" name="{$name}" id="{$label_attr.for}" value="{if $value}{$value}{else}0{/if}" />
-                <div class="help-block">{$label_attr.helper}</div>
-            </td>
-        </tr>
-        {/form_field}
-        {form_field form=$form field="option_without_annotating"}
-        <tr>
-            <td>
-                <label for="{$label_attr.for}">{$label}</label>
-            </td>
-            <td>
-                <label for="{$label_attr.for}">{$label_attr.description}</label>
-            </td>
-            <td>
-                <input type="number" step="0.01" name="{$name}" id="{$label_attr.for}" value="{if $value}{$value}{else}0{/if}" />
-                <div class="help-block">{$label_attr.helper}</div>
-            </td>
-        </tr>
-        {/form_field}
+        {function render_surcharge_form_field}
+            {form_field form=$form field=$field}
+                <tr>
+                    <td>
+                        <label for="{$label_attr.for}">{$label}</label>
+                    </td>
+                    <td>
+                        <label for="{$label_attr.for}">{$label_attr.description}</label>
+                    </td>
+                    <td>
+                        <input type="number" step="0.01" name="{$name}" id="{$label_attr.for}" value="{if $value}{$value}{else}0{/if}" />
+                        <div class="help-block">{$label_attr.helper}</div>
+                    </td>
+                </tr>
+            {/form_field}
+        {/function}
+
+        {render_surcharge_form_field form=$form field="surcharge_fuel"}
+        {render_surcharge_form_field form=$form field="surcharge_security_fee"}
+        {render_surcharge_form_field form=$form field="surcharge_multi_package"}
+        {render_surcharge_form_field form=$form field="separate_product_in_package"}
+        {render_surcharge_form_field form=$form field="option_payment_back"}
+        {render_surcharge_form_field form=$form field="option_expedition_under_protection"}
+        {render_surcharge_form_field form=$form field="option_relay_package"}
+        {render_surcharge_form_field form=$form field="option_home_delivery"}
+        {render_surcharge_form_field form=$form field="option_without_annotating"}
         </tbody>
     </table>
     {loop name="area" type="area" backend_context="1"}

@@ -1,4 +1,5 @@
 <form id="" action="{url path="/admin/module/TNTFrance/orders"}" method="post">
+    <input type="hidden" name="account_id" value="{$account_id}">
 
     <div class="table-responsive">
 
@@ -152,7 +153,10 @@
                     <div class="form-inline actions u-padding-bottom u-padding-top">
                         <label>{intl l="Pick up date"}</label>&nbsp;:&nbsp;
                         <input type="text" name="create-date" class="form-control datetime-picker" placeholder="{intl l='Date pick up'}" />
-                        <button type="submit" name="action" value="create" class="js-create-paid btn btn-sm btn-default btn-info" title="{intl l='Ask pick up'}">{intl l='Ask pick up'} <span class="glyphicon glyphicon-ok"></span></button>
+                        <button type="submit" name="action" value="create" class="js-create-paid btn btn-sm btn-default btn-info" title="{intl l='Ask pick up (%account_label)' account_label=$account_label}">
+                            {intl l='Ask pick up (%account_label)' account_label=$account_label}
+                            <span class="glyphicon glyphicon-ok"></span>
+                        </button>
                     </div>
                     {/if}
                 </td>

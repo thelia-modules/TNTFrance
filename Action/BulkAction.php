@@ -97,11 +97,10 @@ class BulkAction implements EventSubscriberInterface
 
     }
 
-    protected function getWSCreateExpedition($order, $data, $shippingDate = null, $allInOne = true)
+    protected function getWSCreateExpedition($order, $data, $shippingDate = null, $allInOne = true, $accountId = null)
     {
-
         /** @var CreateExpedition $ws */
-        $ws = $this->wsFactory->get('createExpedition');
+        $ws = $this->wsFactory->get('createExpedition', $accountId);
 
         $receiver = ReceiverBuilder::getFromOrder($order);
 
@@ -115,20 +114,24 @@ class BulkAction implements EventSubscriberInterface
             ->setReceiver($receiver)
         ;
 
-
-
         return $ws;
     }
     
     public function createExpedition(TNTFranceCreateExpeditionEvent $event)
     {
-
+        $accountId = $event->getAccountId();
         $order = $event->getOrder();
 
         if (null !== $order) {
 
             $tntData = TNTFrance::getExtraOrderData($order->getId(), false);
-            $ws = $this->getWSCreateExpedition($order, $tntData, $event->getShippingDate(), $event->getAllInOne());
+            $ws = $this->getWSCreateExpedition(
+                $order,
+                $tntData,
+                $event->getShippingDate(),
+                $event->getAllInOne(),
+                $accountId
+            );
 
             /* @var TNTExpedition $tntExpedition */
             $tntExpedition = $ws->exec();
@@ -163,6 +166,7 @@ class BulkAction implements EventSubscriberInterface
                             }
                         }
                         (new TntOrderParcelResponse())
+                            ->setAccountId($accountId)
                             ->setOrderProductId($orderProduct->getId())
                             ->setFileName($fileName)
                             ->setPickUpNumber($tntData['pickUpNumber'])

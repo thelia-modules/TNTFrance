@@ -10,6 +10,7 @@
             -->
         <form name="tntfrance.configuration" class="TNTFrance\Form\TNTFranceConfigForm"/>
         <form name="tntfrance.price.weight" class="TNTFrance\Form\TNTPriceWeightForm"/>
+        <form name="tntfrance.configuration.account" class="TNTFrance\Form\TNTFranceAccountConfigForm"/>
     </forms>
     <commands>
         <!--

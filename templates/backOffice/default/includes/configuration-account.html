@@ -1,0 +1,39 @@
+{include file='includes/functions/render-config-fields.html'}
+
+{form name="tntfrance.configuration.account"}
+<form id="account_configuration_form" action="{url path=$current_url}" method="post">
+    {include "includes/inner-form-toolbar.html" hide_flags = 1 close_url={url path='/admin/modules'}}
+
+    {form_hidden_fields form=$form}
+
+    {call render_config_form_field form=$form field="account_label"}
+
+    {call render_config_form_field form=$form field="account_number"}
+
+    {call render_config_form_field form=$form field="username"}
+
+    {call render_config_form_field form=$form field="password"}
+
+    {call render_config_form_field form=$form field="sender_name"}
+
+    {call render_config_form_field form=$form field="sender_address1"}
+
+    {call render_config_form_field form=$form field="sender_address2"}
+
+    {call render_config_form_field form=$form field="sender_zip_code"}
+
+    {call render_config_form_field form=$form field="sender_city"}
+
+    {call render_config_form_field form=$form field="contact_lastname"}
+
+    {call render_config_form_field form=$form field="contact_firstname"}
+
+    {call render_config_form_field form=$form field="contact_email"}
+
+    {call render_config_form_field form=$form field="contact_phone"}
+
+    {call render_config_form_field form=$form field="notification_emails"}
+
+    {call render_config_form_field form=$form field="notification_success"}
+</form>
+{/form}
