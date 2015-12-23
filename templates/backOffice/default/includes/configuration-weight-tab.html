@@ -14,13 +14,13 @@
     {/form_field}
 
     <div id="no_free_shipping">
-    <label class="title">{intl l="Surchages" d="tntfrance.bo.default"}</label>&nbsp;:
+    <label class="title">{intl d='tntfrance.bo.default' l="Surchages"}</label>&nbsp;:
     <table class="table">
         <thead>
         <tr>
-            <th class="title">{intl l="Title" d="tntfrance.bo.default"}</th>
-            <th class="title">{intl l="Description" d="tntfrance.bo.default"}</th>
-            <th class="title">{intl l="Amount" d="tntfrance.bo.default"}</th>
+            <th class="title">{intl d='tntfrance.bo.default' l="Title"}</th>
+            <th class="title">{intl d='tntfrance.bo.default' l="Description"}</th>
+            <th class="title">{intl d='tntfrance.bo.default' l="Amount"}</th>
         </tr>
         </thead>
         <tbody>
@@ -155,7 +155,7 @@
     </table>
     {loop name="area" type="area" backend_context="1"}
         {ifloop rel="tnt-price-weight"}
-        <label class="title">{intl l="Contracted rates" d="tntfrance.bo.default"}</label>&nbsp;:
+        <label class="title">{intl d='tntfrance.bo.default' l="Contracted rates"}</label>&nbsp;:
         <table class="table">
             <thead>
             <tr>
@@ -170,7 +170,7 @@
             </thead>
             <tbody>
             <tr>
-                <td>{intl l="1 kg" d="tntfrance.bo.default"}</td>
+                <td>{intl d='tntfrance.bo.default' l="1 kg"}</td>
                 {foreach from=$array_tnt_price_weight item=tnt_price_weight}
                 <td>
                     {form_field form=$form field="price" value_key=$tnt_price_weight.id}
@@ -180,7 +180,7 @@
                 {/foreach}
             </tr>
             <tr>
-                <td>{intl l="kg sup" d="tntfrance.bo.default"}</td>
+                <td>{intl d='tntfrance.bo.default' l="kg sup"}</td>
                 {foreach from=$array_tnt_price_weight item=tnt_price_weight}
                 <td>
                     {form_field form=$form field="price_kg_sup" value_key=$tnt_price_weight.id}
@@ -192,11 +192,11 @@
             </tbody>
         </table>
 
-        <label class="title">{intl l="Grid developed for guidance" d="tntfrance.bo.default"}</label>&nbsp;({intl l="calculated on contracted rates above" d="tntfrance.bo.default"})
+        <label class="title">{intl d='tntfrance.bo.default' l="Grid developed for guidance"}</label>&nbsp;({intl d='tntfrance.bo.default' l="calculated on contracted rates above"})
         <table class="table">
             <thead>
             <tr>
-                <th class="col-md-1">{intl l="Weight, kg" d="tntfrance.bo.default"}</th>
+                <th class="col-md-1">{intl d='tntfrance.bo.default' l="Weight, kg"}</th>
                 {foreach from=$array_tnt_price_weight item=tnt_price_weight}
                 <th>
                     {$tnt_price_weight.label}
@@ -207,7 +207,7 @@
             <tbody>
             {for $count=1 to 30}
             <tr>
-                <td>{$count}&nbsp;{intl l="kg"}</td>
+                <td>{$count}&nbsp;{intl d='tntfrance.bo.default' l="kg"}</td>
                 {foreach from=$array_tnt_price_weight item=tnt_price_weight}
                 <td>
                     {math equation="p + (c - 1) * k" p=$tnt_price_weight.price c=$count k=$tnt_price_weight.price_kg_sup}€
