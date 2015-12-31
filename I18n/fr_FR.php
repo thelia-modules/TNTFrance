@@ -2,9 +2,9 @@
 
 return array(
     '%tracking-number% will be replaced by the real tracking number' => '%tracking-number% sera remplacé par le vrai numéro de suivi.',
-    '(Around %default_price€ per expedition by default)' => '(Environ %default_price€ par défaut par expédition)',
     '(%default_price€ per expedition by default)' => '(%default_price€ par défaut par expédition)',
     '(%default_price€ per package by default)' => '(%default_price€ par défaut par colis)',
+    '(Around %default_price€ per expedition by default)' => '(Environ %default_price€ par défaut par expédition)',
     'Allows you to send several packages even if the max weight is not reached.' => 'Vous permet d\'envoyer plusieurs colis même si le poids max n\'est pas atteinds.',
     'Based on the monthly average price of a liter of diesel at the pump released by the National Committee Road, for all of your domestic shipments.' => 'Basée sur la moyenne mensuelle du prix du litre de gazole à la pompe publiée par le Comité National Routier, pour l\'ensemble de vos expéditions nationales.',
     'City' => 'Ville',
@@ -45,6 +45,8 @@ return array(
     'Parcels delivered to the recipient (if absent or access problem: the package is automatically deposited into a Relais Colis).' => 'Colis remis au destinataire (si absent ou problème d\'accès : le colis est automatiquement déposé dans un Relais Colis).',
     'Password' => 'Mot de passe',
     'Phone number is too long' => 'le numéro de téléphone est trop long',
+    'Price' => 'Prix',
+    'Price kg sup' => 'Prix supplémentaire par kg',
     'Print format, options' => 'options d\'impression',
     'Regular pickup' => 'Ramassage régulier',
     'Security fee' => 'Redevance sécurité',

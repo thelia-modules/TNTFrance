@@ -10,11 +10,14 @@ use Propel\Runtime\Connection\ConnectionInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Thelia\Core\Event\Cart\CartEvent;
 use Thelia\Core\HttpFoundation\Request;
+use Thelia\Core\HttpFoundation\Session\Session;
 use Thelia\Core\Translation\Translator;
 use Thelia\Install\Database;
 use Thelia\Model\AddressQuery;
+use Thelia\Model\Cart;
 use Thelia\Model\ConfigQuery;
 use Thelia\Model\Country;
+use Thelia\Model\Customer;
 use Thelia\Model\LangQuery;
 use Thelia\Model\Message;
 use Thelia\Model\MessageQuery;
@@ -138,11 +141,8 @@ class TNTFrance extends AbstractDeliveryModule
 
         //If no postage price exists, save the defaults one
         if (null == $tntPriceWeight = TntPriceWeightQuery::create()->findOne()) {
-
             foreach (self::getPrices() as $areaId => $tntProducts) {
-
                 foreach ($tntProducts as $productCode => $tntProduct) {
-
                     $tntPriceWeight = new TntPriceWeight();
                     $tntPriceWeight
                         ->setAreaId($areaId)
@@ -173,27 +173,24 @@ class TNTFrance extends AbstractDeliveryModule
     public function isValidDelivery(Country $country)
     {
         $isValid = true;
-        // We just check the country and weight
-        // the address could not be a valid address for TNT at this moment cp - city
+
+        // The module is only valid for France at the moment
         if ('FR' !== $country->getIsoalpha2()) {
             $isValid = false;
         }
 
-        /** @var \Thelia\Model\Customer $customer */
-        if (null != $customer = $this->getRequest()->getSession()->getCustomerUser()) {
-            //If INDIVIDUAL service exist, be sure that the customer has no company
-            if (1 == TNTFrance::getConfigValue(TNTFranceConfigValue::USE_INDIVIDUAL, 0)) {
+        /** @var Customer $customer */
+        if ($isValid && null != $customer = $this->getRequest()->getSession()->getCustomerUser()) {
+            $customerCompany = $customer->getDefaultAddress()->getCompany();
 
-                if (null != $customer->getDefaultAddress()->getCompany() &&
-                    $customer->getDefaultAddress()->getCompany() != "") {
+            // If customer default delivery address is not a company, check that USE_INDIVIDUAL is allowed
+            if (empty($customerCompany)) {
+                if (0 == TNTFrance::getConfigValue(TNTFranceConfigValue::USE_INDIVIDUAL, 0)) {
                     $isValid = false;
                 }
-            }
-
-            //If ENTERPRISE service exist, be sure that the customer has a company
-            if (1 == TNTFrance::getConfigValue(TNTFranceConfigValue::USE_ENTERPRISE, 0)) {
-                if (null == $customer->getDefaultAddress()->getCompany() &&
-                    $customer->getDefaultAddress()->getCompany() == "") {
+                // If customer default delivery address is a company, check that USE_ENTERPRISE is allowed
+            } else {
+                if (0 == TNTFrance::getConfigValue(TNTFranceConfigValue::USE_ENTERPRISE, 0)) {
                     $isValid = false;
                 }
             }
@@ -218,10 +215,13 @@ class TNTFrance extends AbstractDeliveryModule
         $freeShipping = intval(self::getConfigValue(TNTFranceConfigValue::FREE_SHIPPING));
 
         if (0 == $freeShipping) {
-            $data = TNTFrance::getExtraOrderData($this->getRequest()->getSession()->getSessionCart()->getId(), true);
+            /** @var Cart $sessionCart */
+            $sessionCart = $this->getRequest()->getSession()->getSessionCart($this->getDispatcher());
+
+            $data = TNTFrance::getExtraOrderData($sessionCart->getId(), true);
 
             if (array_key_exists('tnt_serviceCode', $data)) {
-                $cartEvent = new CartEvent($this->getRequest()->getSession()->getSessionCart($this->getDispatcher()));
+                $cartEvent = new CartEvent($sessionCart);
                 $this->getDispatcher()->dispatch(OrderAction::TNT_CALCUL_CART_WEIGHT, $cartEvent);
 
                 $postage->setAmount(
@@ -232,7 +232,6 @@ class TNTFrance extends AbstractDeliveryModule
                     )
                 );
             }
-
         }
 
         return $postage->getAmount();
@@ -269,7 +268,6 @@ class TNTFrance extends AbstractDeliveryModule
             if (null != $tntPriceWeight = TntPriceWeightQuery::create()
                     ->filterByTntProductCode($productCode)
                     ->findOne()) {
-
                 $price = $tntPriceWeight->getPrice() + (floor($weight) - 1) * $tntPriceWeight->getPriceKgSup();
 
                 //Package SURCHARGES
@@ -283,7 +281,6 @@ class TNTFrance extends AbstractDeliveryModule
 
                 //If there is an option_code and this option aply to each package
                 if (null != $optionCode && in_array($optionCode, ['W', 'D', 'Z'])) {
-
                     switch ($optionCode) {
                         //option_expedition_under_protection
                         case 'W':
@@ -335,13 +332,17 @@ class TNTFrance extends AbstractDeliveryModule
     /**
      * Retrieve delivery address associated to the order or the default address of the customer
      *
+     * @param Request $request the request
      * @return null|\Thelia\Model\Address
      */
     public static function getCartDeliveryAddress(Request $request)
     {
         $address = null;
+
+        /** @var Session $session */
         $session = $request->getSession();
 
+        /** @var Customer $customer */
         if (null !== $customer = $session->getCustomerUser()) {
             if (null !== $session->getOrder()
                 && null !== $session->getOrder()->getChoosenDeliveryAddress()
@@ -410,7 +411,6 @@ class TNTFrance extends AbstractDeliveryModule
         for ($i = 1; $i <= $days; $i++) {
             // if hour > 15h, next day
             if ($i == 1 && date("G") >= 15) {
-
                 $disabledDates[] = date('Y-m-d', $date);
                 $date += $dayTime;
                 continue;

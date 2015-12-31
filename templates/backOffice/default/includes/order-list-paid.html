@@ -13,7 +13,7 @@
             <thead>
             <tr>
                 <th class="object-title text-center">
-                    <input type="checkbox" name="order_id" class="js-order-selection" data-target=".js-order-selection-paid" value="1" title="{intl l="Select all"}" />
+                    <input type="checkbox" name="order_id" class="js-order-selection" data-target=".js-order-selection-paid" value="1" title="{intl d='tntfrance.bo.default' l="Select all"}" />
                 </th>
 
                 <th class="object-title">
@@ -23,7 +23,7 @@
                         reverse_order='id-reverse'
                         path={url path='/admin/orders'}
                         request_parameter_name='orders_order'
-                        label="{intl l='ID'}"
+                        label="{intl d='tntfrance.bo.default' l='ID'}"
                     }</th>
 
                 <th class="object-title">
@@ -33,9 +33,9 @@
                         reverse_order='reference-reverse'
                         path={url path='/admin/orders'}
                         request_parameter_name='orders_order'
-                        label="{intl l='Reference'}"
+                        label="{intl d='tntfrance.bo.default' l='Reference'}"
                     } </th>
-                <th class="object-title">{intl l="Weight"}</th>
+                <th class="object-title">{intl d='tntfrance.bo.default' l="Weight"}</th>
                 <th class="object-title">
                     {admin_sortable_header
                         current_order=$orders_order
@@ -43,7 +43,7 @@
                         reverse_order='create-date-reverse'
                         path={url path='/admin/orders'}
                         request_parameter_name='orders_order'
-                        label="{intl l='Date & Hour'}"
+                        label="{intl d='tntfrance.bo.default' l='Date & Hour'}"
                     } </th>
 
                 <th class="object-title">
@@ -53,18 +53,18 @@
                         reverse_order='customer-name-reverse'
                         path={url path='/admin/orders'}
                         request_parameter_name='orders_order'
-                        label="{intl l='Cutomer Name'}"
+                        label="{intl d='tntfrance.bo.default' l='Cutomer Name'}"
                     } </th>
 
-                <th>{intl l="Group products in packages"}</th>
+                <th>{intl d='tntfrance.bo.default' l="Group products in packages"}</th>
                 <th>
-                    {intl l="Number of packages"}
+                    {intl d='tntfrance.bo.default' l="Number of packages"}
                     {loop name="module-config" type="module-config" module="TNTFrance" variable="max_weight_package"}
-                        ({$VALUE}{intl l="kg"})
+                        ({$VALUE}{intl d='tntfrance.bo.default' l="kg"})
                     {/loop}
                 </th>
 
-                <th class="object-title text-right">{intl l='Amount'}</th>
+                <th class="object-title text-right">{intl d='tntfrance.bo.default' l='Amount'}</th>
 
                 <th class="object-title text-center">
                     {admin_sortable_header
@@ -73,7 +73,7 @@
                         reverse_order='status-reverse'
                         path={url path='/admin/orders'}
                         request_parameter_name='orders_order'
-                        label="{intl l='Status'}"
+                        label="{intl d='tntfrance.bo.default' l='Status'}"
                     } </th>
             </tr>
             </thead>
@@ -98,17 +98,17 @@
 
             <tr>
                 <td>
-                    <input type="checkbox" name="order-selection[]" id="order-selection-{$ID}" class="js-order-selection js-order-selection-paid order-selection-{$ID}" data-target=".js-order-product-{$ID}" value="{$ID}" title="{intl l="Select"}" />
+                    <input type="checkbox" name="order-selection[]" id="order-selection-{$ID}" class="js-order-selection js-order-selection-paid order-selection-{$ID}" data-target=".js-order-product-{$ID}" value="{$ID}" title="{intl d='tntfrance.bo.default' l="Select"}" />
                 </td>
                 <td><a href="{url path="/admin/order/update/$ID"}">{$ID}</a></td>
                 <td><a href="{url path="/admin/order/update/$ID"}">{$REF}</a></td>
-                <td>{order_total_weight order_id=$ID}{intl l="kg"}</td>
+                <td>{order_total_weight order_id=$ID}{intl d='tntfrance.bo.default' l="kg"}</td>
                 <td>{format_date date=$CREATE_DATE}</td>
                 <td><a href="{url path='/admin/customer/update' customer_id=$CUSTOMER}">{$orderInvoiceFirstName|ucwords} {$orderInvoiceLastName|upper}</a></td>
                 <td>
-                    <label for="order-all-in-one[{$ID}]-1">{intl l="Yes"}</label>&nbsp;
+                    <label for="order-all-in-one[{$ID}]-1">{intl d='tntfrance.bo.default' l="Yes"}</label>&nbsp;
                     <input type="radio" id="order-all-in-one[{$ID}]-1" class="all-in-one" data-order="{$ID}" name="order-all-in-one[{$ID}]" value="1" checked />&nbsp;
-                    <label for="order-all-in-one[{$ID}]-0">{intl l="No"}</label>&nbsp;
+                    <label for="order-all-in-one[{$ID}]-0">{intl d='tntfrance.bo.default' l="No"}</label>&nbsp;
                     <input type="radio" id="order-all-in-one[{$ID}]-0" class="all-in-one" data-order="{$ID}" name="order-all-in-one[{$ID}]" value="0" />
                 </td>
                 <td><input type="text" id="order-package-{$ID}" value="{order_number_package order_id=$ID}" name="order-package[{$ID}]" /></td>
@@ -124,10 +124,10 @@
                 <tr class="tr-order-product-{$_order_id_} hidden">
                     <td></td>
                     <td>
-                        <input type="checkbox" name="order-product-selection[{$_order_id_}][]" class="js-order-selection-paid js-order-product js-order-product-{$_order_id_}" data-order="{$_order_id_}" value="{$ID}" title="{intl l='Select'}" />
+                        <input type="checkbox" name="order-product-selection[{$_order_id_}][]" class="js-order-selection-paid js-order-product js-order-product-{$_order_id_}" data-order="{$_order_id_}" value="{$ID}" title="{intl d='tntfrance.bo.default' l='Select'}" />
                     </td>
                     <td><a href="{url path="/admin/order/update/$_order_id_"}">{$PRODUCT_SALE_ELEMENTS_REF}</a></td>
-                    <td>{{math equation="x * y" x=$QUANTITY y=$WEIGHT}|round:2}{intl l="kg"}</td>
+                    <td>{{math equation="x * y" x=$QUANTITY y=$WEIGHT}|round:2}{intl d='tntfrance.bo.default' l="kg"}</td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -150,9 +150,9 @@
                 <td colspan="100">
                     {if $orders_paid_id}
                     <div class="form-inline actions u-padding-bottom u-padding-top">
-                        <label>{intl l="Pick up date"}</label>&nbsp;:&nbsp;
-                        <input type="text" name="create-date" class="form-control datetime-picker" placeholder="{intl l='Date pick up'}" />
-                        <button type="submit" name="action" value="create" class="js-create-paid btn btn-sm btn-default btn-info" title="{intl l='Ask pick up'}">{intl l='Ask pick up'} <span class="glyphicon glyphicon-ok"></span></button>
+                        <label>{intl d='tntfrance.bo.default' l="Pick up date"}</label>&nbsp;:&nbsp;
+                        <input type="text" name="create-date" class="form-control datetime-picker" placeholder="{intl d='tntfrance.bo.default' l='Date pick up'}" />
+                        <button type="submit" name="action" value="create" class="js-create-paid btn btn-sm btn-default btn-info" title="{intl d='tntfrance.bo.default' l='Ask pick up'}">{intl d='tntfrance.bo.default' l='Ask pick up'} <span class="glyphicon glyphicon-ok"></span></button>
                     </div>
                     {/if}
                 </td>
@@ -178,7 +178,7 @@
             <tr>
                 <td colspan="8">
                     <div class="alert alert-info">
-                        {intl l='You have no orders for the moment.'}
+                        {intl d='tntfrance.bo.default' l='You have no orders for the moment.'}
                     </div>
                 </td>
             </tr>

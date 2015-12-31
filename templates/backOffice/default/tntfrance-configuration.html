@@ -13,14 +13,14 @@
 {block name="main-content"}
     <div class="container" id="wrapper">
         <ul class="breadcrumb">
-            <li><a href="{url path='/admin'}">{intl l="Home" d="tntfrance.bo.default"}</a></li>
-            <li><a href="{url path='/admin/modules'}">{intl l="Modules" d="tntfrance.bo.default"}</a></li>
-            <li>{intl l="TNTFrance configuration" d="tntfrance.bo.default"}</li>
+            <li><a href="{url path='/admin'}">{intl d='tntfrance.bo.default' l="Home"}</a></li>
+            <li><a href="{url path='/admin/modules'}">{intl d='tntfrance.bo.default' l="Modules"}</a></li>
+            <li>{intl d='tntfrance.bo.default' l="TNTFrance configuration"}</li>
         </ul>
 
         <div class="general-block-decorator">
             <div class="title title-without-tabs">
-                {intl l="Configure tntfrance" d="tntfrance.bo.default"}
+                {intl d='tntfrance.bo.default' l="Configure tntfrance"}
             </div>
 
             <div class="row">
@@ -28,7 +28,7 @@
 
                     {if $success}
                     <div class="alert alert-success">
-                        {intl l="Configuration correctly saved" d="tntfrance.bo.default"}
+                        {intl d='tntfrance.bo.default' l="Configuration correctly saved"}
                     </div>
                     {/if}
 
@@ -39,8 +39,8 @@
                     {/if}
 
                     <ul class="nav nav-tabs" id="tabbed-menu">
-                        <li class="{if $smarty.get.current_tab == general || !$smarty.get.current_tab}active{/if}"><a href="#general" data-toggle="tab">{intl l="General" d="tntfrance.bo.default"}</a></li>
-                        <li class="{if $smarty.get.current_tab == weight}active{/if}"><a href="#weight" data-toggle="tab">{intl l="Prices and weights" d="tntfrance.bo.default"}</a></li>
+                        <li class="{if $smarty.get.current_tab == general || !$smarty.get.current_tab}active{/if}"><a href="#general" data-toggle="tab">{intl d='tntfrance.bo.default' l="General"}</a></li>
+                        <li class="{if $smarty.get.current_tab == weight}active{/if}"><a href="#weight" data-toggle="tab">{intl d='tntfrance.bo.default' l="Prices and weights"}</a></li>
                     </ul>
 
                     <div class="tab-content">
